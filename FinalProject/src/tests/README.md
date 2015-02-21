@@ -6,7 +6,8 @@
 ```java
 TestCase test = new ExampleTest();
 ```  
-to ```java
+to 
+```java
 TestCase test = new YourTestClass();
 ```
 4.	Run TestMain
