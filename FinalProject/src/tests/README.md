@@ -17,7 +17,8 @@ TestCase test = new YourTestClass();
 
 ```java
 System.out.println()
-``` will print to the console when you run tests, assuming it is
+``` 
+will print to the console when you run tests, assuming it is
 connected properly.
 
 ### Mac:
