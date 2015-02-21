@@ -34,6 +34,10 @@ public class MovingWindow {
 	}
 	
 	public double median() {
+		// Returns 0 if the moving window is not full yet.
+		if (!isFull()) {
+			return 0.0;
+		}
 		Double[] windowArray = (Double[]) window.toArray(new Double[window.size()]);
 		
 		Arrays.sort(windowArray);
