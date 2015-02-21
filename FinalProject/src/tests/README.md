@@ -1,8 +1,8 @@
 # Procedure for creating a test:
 
-1.	Make a test class extending TestCase
-2.	Override the function runTest, which will act as your main
-3.	Go into TestMain.java, Modify line 26 from: 
+-	Make a test class extending TestCase
+-	Override the function runTest, which will act as your main
+-	Go into TestMain.java, Modify line 26 from: 
 ```java
 TestCase test = new ExampleTest();
 ```  
@@ -10,7 +10,7 @@ to
 ```java
 TestCase test = new YourTestClass();
 ```
-4.	Run TestMain
+-	Run TestMain
 
 
 # Procedure for getting data from the NXT:
