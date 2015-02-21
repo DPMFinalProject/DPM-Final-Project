@@ -7,3 +7,6 @@
 *.war
 *.ear
 
+# LeJOS related files
+*.nxd
+*.nxj
