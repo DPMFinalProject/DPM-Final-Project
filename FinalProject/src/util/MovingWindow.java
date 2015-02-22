@@ -24,6 +24,11 @@ public class MovingWindow {
 		maxWindowSize = size;
 	}
 	
+	/**
+	 * 	Adds a new entry to the end of the list, and removes the oldest element
+	 * 	if the window was already full.
+	 * @param entry
+	 */
 	public void add(double entry) {
 		if (window.size() == maxWindowSize) {
 			window.remove(0);
@@ -33,6 +38,10 @@ public class MovingWindow {
 		}
 	}
 	
+	/**
+	 * Finds the median value in the moving window.
+	 * @return Returns the median, or 0 if the window is not full yet.
+	 */
 	public double median() {
 		// Returns 0 if the moving window is not full yet.
 		if (!isFull()) {
@@ -55,6 +64,10 @@ public class MovingWindow {
 		}
 	}
 	
+	/**
+	 * 	Finds the mean of the moving window.
+	 * @return	Returns the mean.
+	 */
 	public double mean() {
 		double result = 0;
 		
@@ -65,6 +78,10 @@ public class MovingWindow {
 		return result/window.size();
 	}
 	
+	/**
+	 * 	Computes the standard deviation inside of the moving window.
+	 * @return The standard deviation.
+	 */
 	public double stdDev() {
 		double mean = mean();
 		
@@ -76,7 +93,21 @@ public class MovingWindow {
 		return Math.sqrt(variance / (window.size() - 1));
 	}
 	
-	public boolean isSizeEven() {
+	/**
+	 * Checks to see if the window is filled with a specific value.
+	 * @param constant	The value that is being verified (typically an outlier)
+	 * @return	Returns true if all of the elements in the list are the provided constant 
+	 */
+	public boolean isConstant(double constant) {
+		for (double value : window) {
+			if (value != constant) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean isSizeEven() {
 		return (maxWindowSize % 2) == 0;
 	}
 	
