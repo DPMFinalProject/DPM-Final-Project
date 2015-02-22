@@ -94,6 +94,15 @@ public class MovingWindow {
 	}
 	
 	/**
+	 * 	Computes the discrete derivative of the last two entries.
+	 * @return The discrete derivative.
+	 */
+	public double discreteDerivative() {
+		
+		return window.get(window.size()-1) - window.get(window.size()-2);
+	}
+	
+	/**
 	 * Checks to see if the window is filled with a specific value.
 	 * @param constant	The value that is being verified (typically an outlier)
 	 * @return	Returns true if all of the elements in the list are the provided constant 
