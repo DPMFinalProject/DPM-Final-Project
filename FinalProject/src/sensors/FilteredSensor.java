@@ -12,10 +12,10 @@ import sensors.filters.Filter;
 
 /**
  * @author Oleg
- *
+ *	Abstract class providing the definition of a LeJOS API sensor wrapper.
  */
 public abstract class FilteredSensor {
-	protected Filter filter;
+	protected Filter[] filters;
 	
 	public abstract double getFilteredData();
 }

@@ -12,7 +12,7 @@ import util.MovingWindow;
 
 /**
  * @author Oleg
- *
+ *	Formalization of filter provided in lab 1 that removes non consecutive false positives.
  */
 public class OutlierFilter extends Filter {
 	private MovingWindow window;

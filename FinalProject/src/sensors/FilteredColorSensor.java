@@ -3,30 +3,28 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	FilteredUltrasonicSensor.java
- *	Created On:	Feb 20, 2015
+ *	FilteredLightSensor.java
+ *	Created On:	Feb 24, 2015
  */
 package sensors;
 
 import sensors.filters.Filter;
-import lejos.nxt.SensorPort;
-import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.ColorSensor;
 
 /**
  * @author Oleg
  *	Wrapper around the LeJOS ultrasonic class adding filtering capabilities.
  */
-public class FilteredUltrasonicSensor extends FilteredSensor {
-	UltrasonicSensor sensor;
+public class FilteredColorSensor extends FilteredSensor {
+	ColorSensor sensor;
 	
-	public FilteredUltrasonicSensor(SensorPort port, Filter... filters) {
+	public FilteredColorSensor(Filter... filters) {
 		this.filters = filters;
-		sensor = new UltrasonicSensor(port);
 	}
 
 	@Override
 	public double getFilteredData() {
-		double distance = sensor.getDistance();
+		double distance = sensor.getLightValue();
 		double result;
 		
 		if (filters == null) {
