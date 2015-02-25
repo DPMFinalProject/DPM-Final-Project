@@ -79,6 +79,21 @@ public class MovingWindow {
 	}
 	
 	/**
+	 * 	Calculates a weighted average based on a given array of coefficients
+	 * @param 	weighting coefficients
+	 * @return	Returns the weightedAverage.
+	 */
+	public double weightedAverage(double[] weightingCoefs) {
+		double result = 0;
+		
+		for (int i=0; i<window.size();i++) {
+			result += (window.get(i)*weightingCoefs[i]);
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * 	Computes the standard deviation inside of the moving window.
 	 * @return The standard deviation.
 	 */

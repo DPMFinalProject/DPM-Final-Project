@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	MovingAverageFilter.java
+ *	DifferentialFilter.java
  *	Created On:	Feb 22, 2015
  */
 package sensors.filters;
