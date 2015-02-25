@@ -16,11 +16,10 @@ import lejos.nxt.comm.RConsole;
 
 /**
  * @author Oleg
- *	Wrapper for test execution, ensures that no resource leaks occur
+ *	Test execution main class, ensures that no resource leaks occur
  *	Class is abstract to prevent instantiation.
  */
 public class TestMain {
-
 
 	private static void execute(String[] args) {
 		TestCase test = new ExampleTest();

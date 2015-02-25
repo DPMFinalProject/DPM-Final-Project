@@ -9,3 +9,8 @@ The goal of this project is to create an autonomous robot who will navigate arou
 * Michael Maatouk
 * Auguste Lalande
 * Gabriel Gibeault-Girard
+
+## Testing Procedure
+
+Refer to [this page](https://github.com/DPMFinalProject/DPM-Final-Project/tree/master/FinalProject/src/tests)
+for the procedure to follow in creating test cases.
