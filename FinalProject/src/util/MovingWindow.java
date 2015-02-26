@@ -113,7 +113,10 @@ public class MovingWindow {
 	 * @return The discrete derivative.
 	 */
 	public double discreteDerivative() {
-		
+		if(window.size()< maxWindowSize)
+		{
+			return 0.0;
+		}
 		return window.get(window.size()-1) - window.get(window.size()-2);
 	}
 	

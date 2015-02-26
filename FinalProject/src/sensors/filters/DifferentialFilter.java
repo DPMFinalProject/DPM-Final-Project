@@ -17,8 +17,8 @@ import util.MovingWindow;
 public class DifferentialFilter extends Filter {
 	private MovingWindow window;
 	
-	public DifferentialFilter() {
-		window = new MovingWindow(2);
+	public DifferentialFilter(int windowSize) {
+		window = new MovingWindow(windowSize);
 	}
 	
 	@Override
