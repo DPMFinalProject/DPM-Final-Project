@@ -2,6 +2,8 @@
 
 The goal of this project is to create an autonomous robot who will navigate around a field, avoiding obstacles and lauching projectiles at some targets.
 
+The javadocs for the code are located [here](http://dpmfinalproject.github.io/DPM-Final-Project/)
+
 ## Members
 * Gregory Brookes
 * Oleg Zhilin
