@@ -11,8 +11,8 @@ package sensors.filters;
 import util.MovingWindow;
 
 /**
- * @author Auguste
  *	A Filter that uses the discrete derivative to detect sudden changes in sensor input
+ * @author Auguste
  */
 public class DifferentialFilter extends Filter {
 	private MovingWindow window;

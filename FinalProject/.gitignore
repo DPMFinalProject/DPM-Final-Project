@@ -10,3 +10,8 @@
 # LeJOS related files
 *.nxd
 *.nxj
+
+# Javadocs
+doc/
+*.html
+*.css

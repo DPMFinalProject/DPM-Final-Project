@@ -12,9 +12,9 @@ import util.MovingWindow;
 import lejos.util.Matrix;
 
 /**
- * @author Auguste
  *	A Filter that uses a weighted moving average using convolution coefficients 
  *	with the aim of having a faster and more effective smoothing out of signal noise
+ * @author Auguste
  */
 public class SavitzkyGolay extends Filter {
 	private MovingWindow window;

@@ -11,11 +11,32 @@ package sensors;
 import sensors.filters.Filter;
 
 /**
+ * Abstract class providing the definition of a LeJOS API sensor wrapper.
  * @author Oleg
- *	Abstract class providing the definition of a LeJOS API sensor wrapper.
  */
 public abstract class FilteredSensor {
 	protected Filter[] filters;
 	
+	public FilteredSensor(Filter... filters) {
+		this.filters = filters;
+	}
+	
+	/**
+	 * Returns data specific for the sensor used.
+	 * @return	Filtered data, the nature of which is dependent on the sensor.
+	 */
 	public abstract double getFilteredData();
+	
+	protected double applyFilters(double signal) {
+		double result = signal;
+		
+		// Apply all filters in the order they were provided.
+		if (filters != null) {
+			for (Filter f : filters) {
+				result = f.filter(result);
+			}
+		}
+		
+		return result;
+	}
 }

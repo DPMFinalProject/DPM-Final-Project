@@ -14,25 +14,19 @@ import lejos.nxt.NXTRegulatedMotor;
 /**
  * @author Oleg
  *	This class provides abstraction from the robot's driving functionality.
- *	It currently assumes two motors are used for the wheels and needs to be reviewed.
  */
 public class Driver {
-	private NXTRegulatedMotor leftMotor = Motor.A;
-	private NXTRegulatedMotor rightMotor = Motor.B;
-	
-	// placeholders
-	private static double radius = 2.1, width = 16.1;
-	
-	// Random values
-	private int FWD_SPEED = 200;
-	private int FWD_ACCEL = 200;
-	private int TURN_SPEED = 100;
+	private final int FWD_SPEED;
+	private final int FWD_ACCEL;
+	private final int TURN_SPEED;
 	
 	public static enum Direction {
 		LEFT, RIGHT, FWD, BACK
 	}
 	
-	public Driver() {}
+	public Driver() {
+		this(100, 100, 100);
+	}
 	
 	public Driver(int fwdSpeed, int fwdAccel, int turnSpeed) {
 		FWD_SPEED = fwdSpeed;
@@ -51,15 +45,7 @@ public class Driver {
 			return;
 		}
 		
-		setSpeed(FWD_SPEED);
-		
-		if (direction == Direction.FWD) {
-			leftMotor.forward();
-			rightMotor.forward();
-		} else {
-			leftMotor.backward();
-			rightMotor.backward();
-		}
+		throw new UnsupportedOperationException();
 	}
 	
 	/**
@@ -67,10 +53,7 @@ public class Driver {
 	 * @param distance	The distance by which to move, in cm
 	 */
 	public void move(double distance) {
-		setSpeed(FWD_SPEED);
-		
-		leftMotor.rotate(convertDistance(radius, distance), true);
-		rightMotor.rotate(convertDistance(radius, distance), false);
+		throw new UnsupportedOperationException();
 	}
 	
 	/**
@@ -84,16 +67,7 @@ public class Driver {
 			return;
 		}
 		
-		stop();	// Interrupt all previous movement
-		setSpeed(TURN_SPEED);
-		
-		if (direction == Direction.LEFT) {
-			leftMotor.backward();
-			rightMotor.forward();
-		} else {
-			rightMotor.backward();
-			leftMotor.forward();
-		}
+		throw new UnsupportedOperationException();
 	}
 	
 	/**
@@ -108,31 +82,18 @@ public class Driver {
 			return;
 		}
 		
-		stop();	// Interrupt all previous movement
-		setSpeed(TURN_SPEED);
-		
-		if (direction == Direction.LEFT) {
-			leftMotor.rotate(-convertAngle(radius, width, angle), true);
-			rightMotor.rotate(convertAngle(radius, width, angle), false);
-		} else {
-			leftMotor.rotate(convertAngle(radius, width, angle), true);
-			rightMotor.rotate(-convertAngle(radius, width, angle), false);
-		}
+		throw new UnsupportedOperationException();
 	}
 	
 	/**
 	 * 	Stops any movement.
 	 */
 	public void stop() {
-		leftMotor.flt();
-		rightMotor.flt();
-		leftMotor.stop();
-		rightMotor.stop();
+		throw new UnsupportedOperationException();
 	}
 	
 	private void setSpeed(int speed) {
-		leftMotor.setSpeed(speed);
-		rightMotor.setSpeed(speed);
+		throw new UnsupportedOperationException();
 	}
 	
 	// Utility methods provided in lab 2

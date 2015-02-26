@@ -11,8 +11,8 @@ package sensors.filters;
 import util.MovingWindow;
 
 /**
+ * 	A Filter that uses a moving average with the aim of smoothing out signal noise
  * @author Oleg
- *	A Filter that uses a moving average with the aim of smoothing out signal noise
  */
 public class AveragingFilter extends Filter {
 	private MovingWindow window;
