@@ -13,3 +13,5 @@
 
 # Javadocs
 doc/
+*.html
+*.css
