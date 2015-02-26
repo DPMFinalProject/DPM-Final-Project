@@ -12,8 +12,8 @@ import sensors.filters.Filter;
 import lejos.nxt.ColorSensor;
 
 /**
+ * Wrapper around the LeJOS ultrasonic class adding filtering capabilities.
  * @author Oleg
- *	Wrapper around the LeJOS ultrasonic class adding filtering capabilities.
  */
 public class FilteredColorSensor extends FilteredSensor {
 	ColorSensor sensor;

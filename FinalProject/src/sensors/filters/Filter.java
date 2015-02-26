@@ -9,8 +9,8 @@
 package sensors.filters;
 
 /**
+ *  Provides a basic definition of a filter.
  * @author Oleg
- *	Provides a basic definition of a filter.
  */
 public abstract class Filter {
 	public abstract double filter (double value);

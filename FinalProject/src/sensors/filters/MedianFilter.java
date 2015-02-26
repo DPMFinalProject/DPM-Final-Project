@@ -11,9 +11,9 @@ package sensors.filters;
 import util.MovingWindow;
 
 /**
- * @author Oleg
  *	This filter takes the median inside of a moving window.
  *	Be aware that an even-sized filter takes the average of the two middle values.
+ * @author Oleg
  */
 public class MedianFilter extends Filter {
 	private MovingWindow window;

@@ -13,8 +13,8 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
 /**
+ * Wrapper around the LeJOS ultrasonic class adding filtering capabilities.
  * @author Oleg
- *	Wrapper around the LeJOS ultrasonic class adding filtering capabilities.
  */
 public class FilteredUltrasonicSensor extends FilteredSensor {
 	UltrasonicSensor sensor;

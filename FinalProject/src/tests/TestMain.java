@@ -15,9 +15,9 @@ import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
 
 /**
- * @author Oleg
  *	Test execution main class, ensures that no resource leaks occur
  *	Class is abstract to prevent instantiation.
+ * @author Oleg
  */
 public class TestMain {
 

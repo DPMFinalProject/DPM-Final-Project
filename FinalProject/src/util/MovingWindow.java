@@ -12,9 +12,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
- * @author Oleg
- *	Represents a moving window of doubles with methods allowing statistical
+ *  Represents a moving window of doubles with methods allowing statistical
  *	calculations
+ * @author Oleg
  */
 public class MovingWindow {
 	LinkedList<Double> window = new LinkedList<Double>();
