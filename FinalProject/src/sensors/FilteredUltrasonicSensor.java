@@ -20,23 +20,14 @@ public class FilteredUltrasonicSensor extends FilteredSensor {
 	UltrasonicSensor sensor;
 	
 	public FilteredUltrasonicSensor(SensorPort port, Filter... filters) {
-		this.filters = filters;
+		super(filters);
 		sensor = new UltrasonicSensor(port);
 	}
 
 	@Override
 	public double getFilteredData() {
 		double distance = sensor.getDistance();
-		double result;
 		
-		if (filters == null) {
-			return distance;
-		} else {
-			result = distance;
-			for (Filter f : filters) {
-				result = f.filter(result);
-			}
-			return result;
-		}
+		return applyFilters(distance);
 	}
 }
