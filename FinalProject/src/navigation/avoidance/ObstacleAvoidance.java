@@ -6,12 +6,15 @@
  *	ObstacleAvoidance.java
  *	Created On:	Feb 26, 2015
  */
-package navigation;
+package navigation.avoidance;
 
 /**
  * Provides the logic to bypass obstacles.
  * @author Oleg
  */
-public class ObstacleAvoidance {
-
+public abstract class ObstacleAvoidance {
+	/**
+	 *	Executes an obstacle avoidance maneuver.
+	 */
+	public abstract void avoid();
 }

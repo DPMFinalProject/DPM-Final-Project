@@ -6,12 +6,16 @@
  *	Localization.java
  *	Created On:	Feb 26, 2015
  */
-package navigation;
+package navigation.localization;
 
 /**
  * Identifies the absolute position of the robot.
  * @author Oleg
  */
-public class Localization {
-
+public abstract class Localization {
+	
+	/**
+	 * 	Updates the odometer with the correct absolute x, y and theta values. 
+	 */
+	public abstract void doLocalization();
 }
