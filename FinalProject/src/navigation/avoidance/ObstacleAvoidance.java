@@ -8,11 +8,14 @@
  */
 package navigation.avoidance;
 
+import navigation.Driver;
+
 /**
  * Provides the logic to bypass obstacles.
  * @author Oleg
  */
 public abstract class ObstacleAvoidance {
+	Driver driver;
 	/**
 	 *	Executes an obstacle avoidance maneuver.
 	 */

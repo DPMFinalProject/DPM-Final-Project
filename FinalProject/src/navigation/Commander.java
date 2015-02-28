@@ -15,7 +15,9 @@ import util.ResourceManager;
  * 	@author Oleg
  */
 public class Commander {
+	private Navigation nav;
 	
+	// This is the main method you will be using.
 	private static void execute() {
 		throw new UnsupportedOperationException();
 	}

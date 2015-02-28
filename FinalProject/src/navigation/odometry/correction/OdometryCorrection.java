@@ -13,6 +13,6 @@ package navigation.odometry.correction;
  * Should not have ties to any other classes except the odometer and the light sensors.
  * @author Oleg
  */
-public abstract class OdometerCorrection implements Runnable {
+public abstract class OdometryCorrection implements Runnable {
 	public abstract void run();
 }

@@ -8,21 +8,17 @@
  */
 package navigation;
 
-import lejos.nxt.Motor;
-import lejos.nxt.NXTRegulatedMotor;
+import util.Direction;
 
 /**
  * @author Oleg
  *	This class provides abstraction from the robot's driving functionality.
+ *	Obstacle evasion should be integrated in here and not in navigator. 
  */
 public class Driver {
 	private final int FWD_SPEED;
 	private final int FWD_ACCEL;
 	private final int TURN_SPEED;
-	
-	public static enum Direction {
-		LEFT, RIGHT, FWD, BACK
-	}
 	
 	public Driver() {
 		this(100, 100, 100);

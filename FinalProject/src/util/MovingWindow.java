@@ -17,8 +17,8 @@ import java.util.LinkedList;
  * @author Oleg
  */
 public class MovingWindow {
-	LinkedList<Double> window = new LinkedList<Double>();
-	int maxWindowSize;
+	private LinkedList<Double> window = new LinkedList<Double>();
+	private int maxWindowSize;
 	
 	public MovingWindow(int size) {
 		maxWindowSize = size;
@@ -44,8 +44,8 @@ public class MovingWindow {
 	 */
 	public double median() {
 		// Returns 0 if the moving window is not full yet.
-		if (!isFull()) {
-			return 0.0;
+		if (window.size() == 1) {
+			return window.get(0);
 		}
 		Double[] windowArray = (Double[]) window.toArray(new Double[window.size()]);
 		
