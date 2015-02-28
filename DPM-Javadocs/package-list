@@ -7,4 +7,5 @@ sensors
 sensors.filters
 tests
 tests.sensors
+tests.sensors.filters
 util
