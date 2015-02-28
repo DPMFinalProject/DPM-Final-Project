@@ -27,7 +27,6 @@ public class Odometer implements Runnable {
 
 	/**
 	 * 	Main odometer loop.
-	 * @param a
 	 */
 	@Override
 	public void run() {
