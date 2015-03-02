@@ -165,6 +165,18 @@ public class Driver {
 		rightMotor.setSpeed(speed);
 	}
 	
+	
+	public void getTotalTachoCount(int[] tachoTotal){
+		tachoTotal[0]=rightMotor.getTachoCount();
+		tachoTotal[1]=leftMotor.getTachoCount();
+	}
+	public double delArc(int[] delTacho){
+		return ((delTacho[0]+delTacho[1])*WHL_RADIUS*Math.PI)/360;
+	}
+	public double delTheta(int[] delTacho){
+		return ((delTacho[0]-delTacho[1])*WHL_RADIUS)/(WHL_SEPARATION/2)/2;
+	}
+	
 	// Utility methods provided in lab 2
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);

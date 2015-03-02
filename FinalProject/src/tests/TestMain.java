@@ -10,6 +10,7 @@
 package tests;
 
 import tests.sensors.ExampleTest;
+import tests.sensors.MotorPrecision;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -22,7 +23,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new ExampleTest();
+		TestCase test = new MotorPrecision();
 		test.runTest();
 	}
 
