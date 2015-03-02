@@ -21,27 +21,35 @@ public class Driver {
 	private final int FWD_SPEED;
 	private final int FWD_ACCEL;
 	private final int TURN_SPEED;
+	private final int DRIFT_FACTOR;
 	private final double WHL_RADIUS;
 	private final double WHL_SEPARATION;
 	private final NXTRegulatedMotor leftMotor, rightMotor;
 	
 	public Driver() {
-		this(100, 100, 100, 2.5, 15, Motor.A, Motor.B);
+		this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
 	}
 	
 	public Driver(double wheelRadius, double wheelSeparation, 
-			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor)
-	{
-		this(100, 100, 100, wheelRadius, wheelSeparation, leftMotor, rightMotor);
+			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
+		this(100, 100, 100, 50, wheelRadius, wheelSeparation, leftMotor, rightMotor);
 	}
 	
 	public Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
 			double wheelRadius, double wheelSeparation, 
 			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		
+		this(fwdSpeed, fwdAccel, turnSpeed, 20, wheelRadius, wheelSeparation, leftMotor, rightMotor);
+	}
+	
+	public Driver(int fwdSpeed, int fwdAccel, int turnSpeed, int driftFactor,
+			double wheelRadius, double wheelSeparation, 
+			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
+		
 		FWD_SPEED = fwdSpeed;
 		FWD_ACCEL = fwdAccel;
 		TURN_SPEED = turnSpeed;
+		DRIFT_FACTOR = driftFactor;
 		WHL_RADIUS = wheelRadius;
 		WHL_SEPARATION  = wheelSeparation;
 		this.leftMotor = leftMotor;
@@ -61,13 +69,11 @@ public class Driver {
 		
 		setSpeed(FWD_SPEED);
 		
-		if (direction == Direction.FWD)
-		{
+		if (direction == Direction.FWD) {
 			leftMotor.forward();
 			rightMotor.forward();
 		}
-		else
-		{
+		else {
 			leftMotor.backward();
 			rightMotor.backward();
 		}
@@ -86,6 +92,32 @@ public class Driver {
 	}
 	
 	/**
+	 * 	Turns left or right, but not on itself. 
+	 * 	the robot will follow a curved path in the direction specified
+	 * @param direction	The direction in which to turn: LEFT or RIGHT
+	 */
+	public void drift(Direction direction) {
+		if (direction == Direction.FWD || direction == Direction.BACK) {
+			System.out.println("Cannot turn " + direction + "\n");
+			System.out.println("Must turn left or right");
+			return;
+		}
+		
+		if(direction == Direction.LEFT) {
+			leftMotor.setSpeed(FWD_SPEED - DRIFT_FACTOR);
+			rightMotor.setSpeed(FWD_SPEED + DRIFT_FACTOR);
+			leftMotor.forward();
+			rightMotor.forward();
+		}
+		else {
+			leftMotor.setSpeed(FWD_SPEED + DRIFT_FACTOR);
+			rightMotor.setSpeed(FWD_SPEED - DRIFT_FACTOR);
+			leftMotor.forward();
+			rightMotor.forward();
+		}
+	}
+	
+	/**
 	 * 	Turns continuously until stop() is called.
 	 * @param direction The direction in which to turn: LEFT or RIGHT.
 	 */
@@ -98,13 +130,11 @@ public class Driver {
 		
 		setSpeed(TURN_SPEED);
 		
-		if (direction == Direction.LEFT)
-		{
+		if (direction == Direction.LEFT) {
 			leftMotor.backward();
 			rightMotor.forward();
 		}
-		else
-		{
+		else {
 			leftMotor.forward();
 			rightMotor.backward();
 		}
