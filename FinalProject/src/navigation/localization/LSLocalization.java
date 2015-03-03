@@ -8,9 +8,12 @@ a *	DPM Final Project
  */
 package navigation.localization;
 
+import lejos.nxt.ColorSensor;
+import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
 import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
+import sensors.filters.DifferentialFilter;
 import util.Direction;
 import navigation.Driver;
 import navigation.Navigation;
@@ -33,20 +36,14 @@ public class LSLocalization extends Localization {
 	}
 
 	/**
+	 * Move to (-2,-2,0) and detect all 4 lines while rotating counterclockwise
+	 * Update the odometer (x,y,theta) with the corrected values
 	 * @see navigation.localization.Localization#doLocalization()
 	 */
 	@Override
-	public void doLocalization() {
-		/*
-		 *  Remember to instantiate a desired FilteredSensor with your desired filters
-		 *  You also have access to the odometer and driver from the parent class.
-		 */
-		
-		// Initialize Color Sensor yourself
-		
-		//driver.move(/*-2, -2*/);
-		//driver.turn(/* 0 */);
-		//driver.setSpeed(-20); //rotate counter clockwise
+	public void doLocalization() {		
+		cs = new FilteredColorSensor(SensorPort.S1,new DifferentialFilter(3));
+
 		nav.travelTo(-2, -2, 0);
 		driver.turn(Direction.LEFT, 360); // make one full CCW turn 
 		
@@ -57,42 +54,98 @@ public class LSLocalization extends Localization {
 	
 	
 	//Utilities methods
-	private double[] filterAnalysis(){
+	//Line 70: experimental number--| differential filter peak height
+	private double[] filterAnalysis(){ 
 		double[] filteredAngles= new double [2];
-		double angleA = cs.getFilteredData(), angleB = angleA;
+		double[] val =new double [2];
 		
-		while (angleA > 0 && angleB > 0){
-			angleA = angleB;
-			angleB = cs.getFilteredData();
+		//make sure to be in a peak (differential filter)
+		
+		do{
+			val[0] = cs.getFilteredData();
+			val[1] = val[0];
+		}while(Math.abs(val[0]) <7 && Math.abs(val[1]) <7);
+		
+		//positive peak
+		if(val[0]>0){
+			//wait until we cross the line from above
+			differentialCrossing(val, true);
+			
+			filteredAngles[0]=odo.getTheta();
+			val[0]=val[1];
+			
+			//wait until we cross the line from below
+			differentialCrossing(val, false);
+			
+			filteredAngles[1] = odo.getTheta();
+		}else if(val[0] < 0){
+			//wait until we cross the line from below
+			differentialCrossing(val,false);
+			
+			filteredAngles[0]=odo.getTheta();
+			val[0]=val[1];
+			
+			//wait until we cross the line from above
+			differentialCrossing(val, true);
+			
+			filteredAngles[1] = odo.getTheta();
 		}
 		
-		filteredAngles[0]=odo.getTheta();
-		angleA=angleB;
-		
-		while (angleA < 0 && angleB < 0){
-			angleA = angleB;
-			angleB = cs.getFilteredData();
-		}
-		filteredAngles[1] = odo.getTheta();
 		
 		return filteredAngles;
 	}
 	
-	private void getlineAngle(double[] lineAngle){
-		while(driver.isMoving()){
-			for(byte i=3; i>=0; i--){
-				lineAngle[i]=getLineAngleMid(filterAnalysis(), i);
-
-			try {	Thread.sleep(1000);	} catch (InterruptedException e) {}
+	//detects the zero crossing of the differential filter
+	private void differentialCrossing(double[] val, boolean above){
+		if(above){
+			//crossing the line from above
+			while (val[0] > 0 && val[1] > 0){
+				val[0] = val[1];
+				val[1] = cs.getFilteredData();
 			}
-			driver.setSpeed(0);
+		}else{
+			//crossing the line from below
+			while (val[0] < 0 && val[1] < 0){
+				val[0] = val[1];
+				val[1] = cs.getFilteredData();
+			}
 		}
 	}
 	
+	//get the angles at wich the color sensor detected a line
+	private void getlineAngle(double[] lineAngle){
+		byte i=0;
+		//set array to test the number of line crossed at the end of the rotation
+		for(double val : lineAngle) {
+			val = -1;
+		}
+
+		
+		while(driver.isMoving()){
+			lineAngle[i]=getLineAngleMid(filterAnalysis(), i);
+			i++;
+			
+			//prevent array out of bounds error
+			if(i>3){
+				lineAngle[3]=-1;
+				break;
+			}
+			try {	Thread.sleep(1000);	} catch (InterruptedException e) {}
+			}
+			
+		//test if all fours lines were detected
+		if(lineAngle[3]==-1){
+			getlineAngle(lineAngle);
+		}
+		
+	}
+	
+	//gives the average of the entering/leaving of a black line angles
 	private double getLineAngleAvg( double[] filteredAngles){
 		return (filteredAngles[0] + filteredAngles[1])/2;
 	}
 	
+	//give the middle point between entering/leaving of a black line angles
 	private double getLineAngleMid(double[] filteredAngles, byte lineNumber){
 		//vertical line, assuming counterclockwise , facing north
 		if(lineNumber == 0 || lineNumber == 2){
@@ -103,6 +156,7 @@ public class LSLocalization extends Localization {
 		}
 	}
 
+	
 	private void updateOdometer(double[] lineAng, double[] pos){
 		odo.getPosition(pos);	
 		odo.setPosition(new double [] {correctX(lineAng), correctY(lineAng),

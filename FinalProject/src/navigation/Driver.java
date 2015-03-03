@@ -190,9 +190,10 @@ public class Driver {
 	}
 	
 	//methods to compliment the odometer class
-	public void getTotalTachoCount(int[] tachoTotal){
-		tachoTotal[0]=rightMotor.getTachoCount();
-		tachoTotal[1]=leftMotor.getTachoCount();
+	public void getDelTachoCount(int[] tachoTotal, int[] delTacho){
+		delTacho[0]=rightMotor.getTachoCount()-delTacho[0];
+		delTacho[1]=leftMotor.getTachoCount()-delTacho[1];
+		
 	}
 	public double delArc(int[] delTacho){
 		return ((delTacho[0]+delTacho[1])*WHL_RADIUS*Math.PI)/360;
@@ -209,4 +210,5 @@ public class Driver {
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
+
 }
