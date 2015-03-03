@@ -13,15 +13,16 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Motor;
 
 /**
- * @author Oleg
- *	This class provides abstraction from the robot's driving functionality.
- *	Obstacle evasion should be integrated in here and not in navigator. 
+ * 	This class provides abstraction from the robot's driving functionality.
+ *	Obstacle evasion should be integrated in here and not in navigator.
+ * @author Oleg 
  */
 public class Driver {
 	private final int FWD_SPEED;
 	private final int FWD_ACCEL;
 	private final int TURN_SPEED;
 	private final int DRIFT_FACTOR;
+	
 	private final double WHL_RADIUS;
 	private final double WHL_SEPARATION;
 	private final NXTRegulatedMotor leftMotor, rightMotor;

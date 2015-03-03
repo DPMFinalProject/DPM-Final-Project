@@ -20,17 +20,15 @@ import navigation.odometry.Odometer;
  */
 public class LSLocalization extends Localization {
 	private final FilteredColorSensor cs;
-	private final Driver driver;
-	private final Odometer odo;
 	
-	private final double CS_DIST;
+	private final double CS_DIST = 11.7;
+	
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
 	
 	public LSLocalization(Odometer odo, Driver driver, FilteredColorSensor cs) {
 		super(odo, driver);
 		this.cs=cs;	//assuming already filtered?
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -43,8 +41,8 @@ public class LSLocalization extends Localization {
 		 *  You also have access to the odometer and driver from the parent class.
 		 */
 		
-		driver.move(/*-2, -2*/);
-		driver.turn(/* 0 */);
+		//driver.move(/*-2, -2*/);
+		//driver.turn(/* 0 */);
 		driver.setSpeed(-20); //rotate counter clockwise
 		
 		getlineAngle(lineAngle);
@@ -58,24 +56,25 @@ public class LSLocalization extends Localization {
 	//Utilities methods
 	private double[] filterAnalysis(){
 		double[] filteredAngles= new double [2];
-		double a=cs.getFilteredData(), b=a;
+		double angleA = cs.getFilteredData(), angleB = angleA;
 		
-		while (a > 0 && b >0){
-			a=b;
-			b=cs.getFilteredData();
+		while (angleA > 0 && angleB >0){
+			angleA=angleB;
+			angleB=cs.getFilteredData();
 		}
 		
 		filteredAngles[0]=odo.getTheta();
-		a=b;
+		angleA=angleB;
 		
-		while (a<0 && b<0){
-			a=b;
-			b=cs.getFilteredData();
+		while (angleA < 0 && angleB < 0){
+			angleA = angleB;
+			angleB = cs.getFilteredData();
 		}
-		filteredAngles[1]=odo.getTheta();
+		filteredAngles[1] = odo.getTheta();
 		
 		return filteredAngles;
 	}
+	
 	private void getlineAngle(double[] lineAngle){
 		while(driver.isMoving()){
 			for(byte i=3; i>=0; i--){
@@ -90,6 +89,7 @@ public class LSLocalization extends Localization {
 	private double getLineAngleAvg( double[] filteredAngles){
 		return (filteredAngles[0]+filteredAngles[1])/2;
 	}
+	
 	private double getLineAngleMid(double[] filteredAngles, byte lineNumber){
 		//vertical line, assuming counterclockwise , facing north
 		if(lineNumber == 0 || lineNumber == 2){

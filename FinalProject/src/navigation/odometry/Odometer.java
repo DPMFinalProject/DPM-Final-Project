@@ -31,17 +31,16 @@ public class Odometer implements Runnable {
 	private Object lock;									
 
 	public Odometer(Driver driver,OdometryCorrection odometerCorrector ) {
-		this(0.0,0.0,0.0,driver, odometerCorrector);
-		lock = new Object();
+		this(0.0, 0.0, 0.0, driver, odometerCorrector);
 	}
 	
-	public Odometer(double xpos, double ypos, double Theta, Driver driver, 
+	private Odometer(double xpos, double ypos, double Theta, Driver driver, 
 			OdometryCorrection odometerCorrector) {
 		
-		x=xpos;
-		y=ypos;
-		theta=Theta;
-		this.driver=driver;
+		x = xpos;
+		y = ypos;
+		theta = Theta;
+		this.driver = driver;
 		correction = odometerCorrector;
 		lock = new Object();
 				
@@ -82,28 +81,29 @@ public class Odometer implements Runnable {
 
 	//Utilities methods
 	
-	public void delTachoCount(int[] delTacho, int[]tachoTotal){
-		delTacho[0]= tachoTotal[0]-delTacho[0];
-		delTacho[1]= tachoTotal[1]-delTacho[1];
+	private void delTachoCount(int[] delTacho, int[]tachoTotal){
+		delTacho[0] = tachoTotal[0] - delTacho[0];
+		delTacho[1] = tachoTotal[1] - delTacho[1];
 	}
-	public void delPos(double[] posChange, int[]tachoTotal){
+	
+	private void delPos(double[] posChange, int[]tachoTotal){
 		//get the change in position
 		delTachoCount(delTacho,tachoTotal);
-		posChange[0]= driver.delArc(delTacho);
-		posChange[1]=driver.delTheta(delTacho);
+		posChange[0] = driver.delArc(delTacho);
+		posChange[1] = driver.delTheta(delTacho);
 	}
-	public void odometerUpdate(double delArc,double delTheta){
+	
+	private void odometerUpdate(double delArc,double delTheta){
 		//update position of the center of rotation of the robot
-		x+=delArc*(Math.sin(Math.toRadians(theta+delTheta/2)));
-		y+=delArc*(Math.cos(Math.toRadians(theta+delTheta/2)));
+		x += delArc * (Math.sin(Math.toRadians(theta+delTheta/2)));
+		y += delArc * (Math.cos(Math.toRadians(theta+delTheta/2)));
 		
 		//make sure the reported angle goes from 0 to 360 degrees
-		if((theta+delTheta)%360 < 0)
-			theta = (theta+delTheta)%360+360;
+		if((theta+delTheta) % 360 < 0)
+			theta = ((theta+delTheta) % 360) + 360;
 		else
 			theta=(theta+delTheta)%360;
 	}
-	
 
 	// Getters and Setters
 	public double getX() {

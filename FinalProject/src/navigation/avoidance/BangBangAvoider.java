@@ -33,7 +33,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		this(driver, usMotor, us, odo, 8, 20);
 	}
 	
-	public BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo,int bandWidth, int bandCenter) {
+	private BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo, int bandWidth, int bandCenter) {
 		this.driver = driver;
 		this.usMotor = usMotor;
 		this.us = us;
@@ -58,15 +58,15 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		lookForward();
 	}
 	
-	public void lookTowardsWall() {
+	private void lookTowardsWall() {
 		usMotor.rotate(80);
 	}
 	
-	public void lookForward() {
+	private void lookForward() {
 		usMotor.rotate(-80);
 	}
 	
-	public void bangBang() {
+	private void bangBang() {
 		double error = BAND_CENTER - us.getFilteredData();
 		
 		if (Math.abs(error)<BAND_WIDTH)	{
@@ -80,14 +80,14 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		}
 	}
 	
-	public boolean hasAvoided() {
+	private boolean hasAvoided() {
 		if (isNear(initialOrientation-90, odo.getTheta())) {
 			return true;
 		}
 		return false;
 	}
 
-	boolean isNear(double targetAngle, double actualAngle) {
+	private boolean isNear(double targetAngle, double actualAngle) {
 		return Math.abs(targetAngle - actualAngle) < 30;
 	}
 }
