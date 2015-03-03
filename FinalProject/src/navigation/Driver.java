@@ -31,12 +31,16 @@ public class Driver {
 		this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
 	}
 	
-	/*private Driver(double wheelRadius, double wheelSeparation, 
-			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
-		this(100, 100, 100, 50, wheelRadius, wheelSeparation, leftMotor, rightMotor);
+	public Driver(double wheelRadius, double wheelSeparation) {
+		this(100, 100, 100, 50, wheelRadius, wheelSeparation, Motor.A, Motor.B);
 	}
 	
-	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
+	/*public Driver(double wheelRadius, double wheelSeparation, 
+			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
+		this(100, 100, 100, 50, wheelRadius, wheelSeparation, leftMotor, rightMotor);
+	}*/
+	
+	/*private Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
 			double wheelRadius, double wheelSeparation, 
 			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		
@@ -148,6 +152,7 @@ public class Driver {
 	 */
 	public void turn(Direction direction, double angle) {
 		if (angle < 0) {
+			System.out.println("Cannot turn by a negative angle");
 			return;
 		}
 		
