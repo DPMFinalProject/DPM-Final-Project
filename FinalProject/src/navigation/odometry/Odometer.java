@@ -20,7 +20,7 @@ import navigation.odometry.correction.OdometryCorrection;
 public class Odometer implements Runnable {
 	private double x, y, theta;	
 	private final Driver driver;
-	//private OdometryCorrection correction;
+	private OdometryCorrection correction;
 	
 	//keeps track of position change
 	int[] delTacho=new int[2];								
@@ -30,23 +30,22 @@ public class Odometer implements Runnable {
 	private static final long ODOMETER_PERIOD = 15;			// odometer update period, in ms			
 	private Object lock;									
 
-	public Odometer(Driver driver) {
-		this(0.0,0.0,0.0,driver/*,correction*/);
+	public Odometer(Driver driver,OdometryCorrection odometerCorrector ) {
+		this(0.0,0.0,0.0,driver, odometerCorrector);
 		lock = new Object();
 	}
 	
-	public Odometer(double xpos, double ypos, double Theta, Driver driver/*, 
-			OdometryCorrection odometerCorrector*/) {
+	public Odometer(double xpos, double ypos, double Theta, Driver driver, 
+			OdometryCorrection odometerCorrector) {
 		
 		x=xpos;
 		y=ypos;
 		theta=Theta;
 		this.driver=driver;
-		//correction=odometerCorrector;
+		correction = odometerCorrector;
 		lock = new Object();
 				
 	}
-	
 
 
 	/**
@@ -55,8 +54,6 @@ public class Odometer implements Runnable {
 	 */
 	@Override
 	public void run() {
-		/*throw new UnsupportedOperationException()*/;
-		
 		long updateStart,updateEnd;
 		
 		while (true) {
@@ -80,6 +77,7 @@ public class Odometer implements Runnable {
 				} catch (InterruptedException e) {
 				}
 			}
+			throw new UnsupportedOperationException();
 		}
 	}
 

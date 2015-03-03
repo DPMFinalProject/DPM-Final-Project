@@ -8,6 +8,9 @@ a *	DPM Final Project
  */
 package navigation.localization;
 
+import lejos.nxt.Sound;
+import sensors.FilteredColorSensor;
+import sensors.FilteredSensor;
 import navigation.Driver;
 import navigation.odometry.Odometer;
 
@@ -16,9 +19,17 @@ import navigation.odometry.Odometer;
  * @author Oleg
  */
 public class LSLocalization extends Localization {
+	private final FilteredColorSensor cs;
+	private final Driver driver;
+	private final Odometer odo;
 	
-	public LSLocalization(Odometer odo, Driver driver) {
+	private final double CS_DIST;
+	private double[] pos = new double[3];
+	private double[]lineAngle = new double [4];
+	
+	public LSLocalization(Odometer odo, Driver driver, FilteredColorSensor cs) {
 		super(odo, driver);
+		this.cs=cs;	//assuming already filtered?
 		throw new UnsupportedOperationException();
 	}
 
@@ -31,7 +42,76 @@ public class LSLocalization extends Localization {
 		 *  Remember to instantiate a desired FilteredSensor with your desired filters
 		 *  You also have access to the odometer and driver from the parent class.
 		 */
+		
+		driver.move(/*-2, -2*/);
+		driver.turn(/* 0 */);
+		driver.setSpeed(-20); //rotate counter clockwise
+		
+		getlineAngle(lineAngle);
+		
+		updateOdometer(lineAngle,pos);
+		
 		throw new UnsupportedOperationException();
 	}
+	
+	
+	//Utilities methods
+	private double[] filterAnalysis(){
+		double[] filteredAngles= new double [2];
+		double a=cs.getFilteredData(), b=a;
+		
+		while (a > 0 && b >0){
+			a=b;
+			b=cs.getFilteredData();
+		}
+		
+		filteredAngles[0]=odo.getTheta();
+		a=b;
+		
+		while (a<0 && b<0){
+			a=b;
+			b=cs.getFilteredData();
+		}
+		filteredAngles[1]=odo.getTheta();
+		
+		return filteredAngles;
+	}
+	private void getlineAngle(double[] lineAngle){
+		while(driver.isMoving()){
+			for(byte i=3; i>=0; i--){
+				lineAngle[i]=getLineAngleMid(filterAnalysis(), i);
 
+			try {	Thread.sleep(1000);	} catch (InterruptedException e) {}
+			}
+			driver.setSpeed(0);
+		}
+	}
+	
+	private double getLineAngleAvg( double[] filteredAngles){
+		return (filteredAngles[0]+filteredAngles[1])/2;
+	}
+	private double getLineAngleMid(double[] filteredAngles, byte lineNumber){
+		//vertical line, assuming counterclockwise , facing north
+		if(lineNumber == 0 || lineNumber == 2){
+			return Math.acos( ( Math.cos(filteredAngles[0])+Math.cos(filteredAngles[1]) ) /2);
+		//horizontal line
+		}else {
+			return Math.acos( ( Math.sin(filteredAngles[0])+Math.sin(filteredAngles[1]) ) /2);
+		}
+	}
+
+	private void updateOdometer(double[] lineAng, double[] pos){
+		odo.getPosition(pos);	
+		odo.setPosition(new double [] {correctX(lineAng), correctY(lineAng),
+				delTheta(lineAng)+pos[2]}, new boolean [] {true, true, true});
+	}
+	private double delTheta(double[] lineAng){
+		return 270-((lineAng[0]+lineAng[2])/2);
+	}
+	private double correctX(double[] lineAng){
+		return -CS_DIST*Math.cos(Math.toRadians( (lineAng[0]-lineAng[2])/2 ) );
+	}
+	private double correctY(double[] lineAng){
+		return CS_DIST*Math.cos(Math.toRadians( ( lineAng[1]+360-lineAng[3])/2) );
+	}
 }

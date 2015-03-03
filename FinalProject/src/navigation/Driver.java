@@ -160,12 +160,19 @@ public class Driver {
 		rightMotor.stop();
 	}
 	
-	private void setSpeed(int speed) {
+	public void setSpeed(int speed) {
 		leftMotor.setSpeed(speed);
 		rightMotor.setSpeed(speed);
 	}
 	
+	public boolean isMoving(){
+		if(rightMotor.isMoving() || leftMotor.isMoving()){
+			return true;
+		}
+		return false;
+	}
 	
+	//methods to compliment the odometer class
 	public void getTotalTachoCount(int[] tachoTotal){
 		tachoTotal[0]=rightMotor.getTachoCount();
 		tachoTotal[1]=leftMotor.getTachoCount();
