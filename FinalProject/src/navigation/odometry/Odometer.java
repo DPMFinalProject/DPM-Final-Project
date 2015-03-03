@@ -15,6 +15,11 @@ import navigation.odometry.correction.OdometryCorrection;
 
 /**
  * Keeps track of the position and orientation of the robot.
+ * Coordinate system used:
+ * 		0 degrees faces towards the positive y-axis.
+ * 		Positive angle is clockwise.
+ * 		Range: [0, 359] in degrees
+ * 
  * @author Gregory Brookes
  */
 public class Odometer implements Runnable {

@@ -49,7 +49,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		driver.stop();
 		
 		lookTowardsWall();
-		driver.turn(90);
+		driver.turn(Direction.RIGHT, 90);
 		
 		while(!hasAvoided()) {
 			bangBang();

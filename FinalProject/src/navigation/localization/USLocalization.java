@@ -10,6 +10,7 @@ package navigation.localization;
 
 import sensors.FilteredSensor;
 import navigation.Driver;
+import navigation.Navigation;
 import navigation.odometry.Odometer;
 
 /**
@@ -18,8 +19,8 @@ import navigation.odometry.Odometer;
  */
 public class USLocalization extends Localization {
 	
-	public USLocalization(Odometer odo, Driver driver) {
-		super(odo, driver);
+	public USLocalization(Odometer odo, Driver driver, Navigation nav) {
+		super(odo, driver, nav);
 		throw new UnsupportedOperationException();
 	}
 

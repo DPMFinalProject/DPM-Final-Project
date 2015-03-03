@@ -31,19 +31,19 @@ public class Driver {
 		this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
 	}
 	
-	public Driver(double wheelRadius, double wheelSeparation, 
+	/*private Driver(double wheelRadius, double wheelSeparation, 
 			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		this(100, 100, 100, 50, wheelRadius, wheelSeparation, leftMotor, rightMotor);
 	}
 	
-	public Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
+	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
 			double wheelRadius, double wheelSeparation, 
 			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		
 		this(fwdSpeed, fwdAccel, turnSpeed, 20, wheelRadius, wheelSeparation, leftMotor, rightMotor);
-	}
+	}*/
 	
-	public Driver(int fwdSpeed, int fwdAccel, int turnSpeed, int driftFactor,
+	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed, int driftFactor,
 			double wheelRadius, double wheelSeparation, 
 			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		
@@ -146,11 +146,22 @@ public class Driver {
 	 * returns only once the robot has finished turning
 	 * @param angle The angle in which to turn, in degrees. Will turn left if angle is positive, right otherwise
 	 */
-	public void turn(double angle) {
+	public void turn(Direction direction, double angle) {
+		if (angle < 0) {
+			return;
+		}
+		
 		setSpeed(TURN_SPEED);
 		
-		leftMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
-		rightMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), false);
+		if (direction == Direction.LEFT) {
+			leftMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
+			rightMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), false);
+		} else if (direction == Direction.RIGHT){
+			leftMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
+			rightMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), false);
+		} else {
+			System.out.println("Cannot turn forward or backwards.");
+		}
 	}
 	
 	/**

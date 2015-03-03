@@ -11,7 +11,9 @@ package navigation.localization;
 import lejos.nxt.Sound;
 import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
+import util.Direction;
 import navigation.Driver;
+import navigation.Navigation;
 import navigation.odometry.Odometer;
 
 /**
@@ -19,16 +21,15 @@ import navigation.odometry.Odometer;
  * @author Oleg
  */
 public class LSLocalization extends Localization {
-	private final FilteredColorSensor cs;
+	private FilteredColorSensor cs;
 	
 	private final double CS_DIST = 11.7;
 	
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
 	
-	public LSLocalization(Odometer odo, Driver driver, FilteredColorSensor cs) {
-		super(odo, driver);
-		this.cs=cs;	//assuming already filtered?
+	public LSLocalization(Odometer odo, Driver driver, Navigation nav) {
+		super(odo, driver, nav);
 	}
 
 	/**
@@ -41,15 +42,17 @@ public class LSLocalization extends Localization {
 		 *  You also have access to the odometer and driver from the parent class.
 		 */
 		
+		// Initialize Color Sensor yourself
+		
 		//driver.move(/*-2, -2*/);
 		//driver.turn(/* 0 */);
-		driver.setSpeed(-20); //rotate counter clockwise
+		//driver.setSpeed(-20); //rotate counter clockwise
+		nav.travelTo(-2, -2, 0);
+		driver.turn(Direction.LEFT, 360); // make one full CCW turn 
 		
 		getlineAngle(lineAngle);
 		
 		updateOdometer(lineAngle,pos);
-		
-		throw new UnsupportedOperationException();
 	}
 	
 	
@@ -58,9 +61,9 @@ public class LSLocalization extends Localization {
 		double[] filteredAngles= new double [2];
 		double angleA = cs.getFilteredData(), angleB = angleA;
 		
-		while (angleA > 0 && angleB >0){
-			angleA=angleB;
-			angleB=cs.getFilteredData();
+		while (angleA > 0 && angleB > 0){
+			angleA = angleB;
+			angleB = cs.getFilteredData();
 		}
 		
 		filteredAngles[0]=odo.getTheta();
@@ -87,7 +90,7 @@ public class LSLocalization extends Localization {
 	}
 	
 	private double getLineAngleAvg( double[] filteredAngles){
-		return (filteredAngles[0]+filteredAngles[1])/2;
+		return (filteredAngles[0] + filteredAngles[1])/2;
 	}
 	
 	private double getLineAngleMid(double[] filteredAngles, byte lineNumber){
