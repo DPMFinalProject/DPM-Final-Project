@@ -18,34 +18,36 @@ import lejos.nxt.Motor;
  * @author Oleg 
  */
 public class Driver {
-	private final int FWD_SPEED;
-	private final int FWD_ACCEL;
-	private final int TURN_SPEED;
-	private final int DRIFT_FACTOR;
+	private final int FWD_SPEED = 100;
+	private final int FWD_ACCEL = 100;
+	private final int TURN_SPEED = 100;
+	private final int DRIFT_FACTOR = 50;
 	
-	private final double WHL_RADIUS;
-	private final double WHL_SEPARATION;
-	private final NXTRegulatedMotor leftMotor, rightMotor;
+	private final double WHL_RADIUS = 2.1;
+	private final double WHL_SEPARATION = 15;
+	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
 	
 	public Driver() {
-		this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
+		//this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
+		leftMotor.setAcceleration(FWD_ACCEL);
+		rightMotor.setAcceleration(FWD_ACCEL);
 	}
 	
-	public Driver(double wheelRadius, double wheelSeparation) {
-		this(100, 100, 100, 50, wheelRadius, wheelSeparation, Motor.A, Motor.B);
+	/*public Driver(double wheelRadius, double wheelSeparation) {
+		this(400, 100, 100, 50, wheelRadius, wheelSeparation, Motor.A, Motor.B);
 	}
 	
-	/*public Driver(double wheelRadius, double wheelSeparation, 
+	public Driver(double wheelRadius, double wheelSeparation, 
 			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		this(100, 100, 100, 50, wheelRadius, wheelSeparation, leftMotor, rightMotor);
-	}*/
+	}
 	
-	/*private Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
+	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
 			double wheelRadius, double wheelSeparation, 
 			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		
 		this(fwdSpeed, fwdAccel, turnSpeed, 20, wheelRadius, wheelSeparation, leftMotor, rightMotor);
-	}*/
+	}
 	
 	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed, int driftFactor,
 			double wheelRadius, double wheelSeparation, 
@@ -59,7 +61,7 @@ public class Driver {
 		WHL_SEPARATION  = wheelSeparation;
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
-	}
+	}*/
 	
 	/**
 	 * Moves continuously until stop() is called.
@@ -191,8 +193,8 @@ public class Driver {
 	
 	//methods to compliment the odometer class
 	public void getDelTachoCount(int[] tachoTotal, int[] delTacho){
-		delTacho[0]=rightMotor.getTachoCount()-delTacho[0];
-		delTacho[1]=leftMotor.getTachoCount()-delTacho[1];
+		delTacho[0]=rightMotor.getTachoCount() - tachoTotal[0];
+		delTacho[1]=leftMotor.getTachoCount() - tachoTotal[1];
 		
 	}
 	public double delArc(int[] delTacho){

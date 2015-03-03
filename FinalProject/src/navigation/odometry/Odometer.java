@@ -10,6 +10,7 @@ package navigation.odometry;
 
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.Sound;
 import navigation.Driver;
 import navigation.odometry.correction.OdometryCorrection;
 
@@ -28,9 +29,9 @@ public class Odometer implements Runnable {
 	private OdometryCorrection correction;
 	
 	//keeps track of position change
-	int[] delTacho=new int[2];								
-	int[] tachoTotal=new int[2];
-	double[] posChange=new double[2];
+	int[] delTacho= {0, 0};								
+	int[] tachoTotal= {0, 0};
+	double[] posChange= {0, 0};
 	
 	private static final long ODOMETER_PERIOD = 15;			// odometer update period, in ms			
 	private Object lock;									
@@ -47,8 +48,7 @@ public class Odometer implements Runnable {
 		theta = Theta;
 		this.driver = driver;
 		correction = odometerCorrector;
-		lock = new Object();
-				
+		lock = new Object();	
 	}
 
 
@@ -61,6 +61,8 @@ public class Odometer implements Runnable {
 		
 		while (true) {
 			updateStart = System.currentTimeMillis();
+			
+			//System.out.println("" + x + "," + y + "," + theta);
 			
 			synchronized (lock){
 				driver.getDelTachoCount(tachoTotal,delTacho);
@@ -80,14 +82,13 @@ public class Odometer implements Runnable {
 				} catch (InterruptedException e) {
 				}
 			}
-			throw new UnsupportedOperationException();
 		}
 	}
 
 	//Utilities methods
 	private void getTotalTachoCount(){
-				tachoTotal[0]+=delTacho[0];
-				tachoTotal[1]+=delTacho[1];
+		tachoTotal[0]+=delTacho[0];
+		tachoTotal[1]+=delTacho[1];
 	}
 	
 	private void delPos(){
