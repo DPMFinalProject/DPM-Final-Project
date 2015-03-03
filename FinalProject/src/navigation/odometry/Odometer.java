@@ -63,10 +63,10 @@ public class Odometer implements Runnable {
 			updateStart = System.currentTimeMillis();
 			
 			synchronized (lock){
-				driver.getTotalTachoCount(tachoTotal);
+				driver.getDelTachoCount(tachoTotal,delTacho);
 			}
-			
-			delPos(posChange,tachoTotal);
+			getTotalTachoCount();
+			delPos();
 			
 			synchronized (lock) {
 				odometerUpdate(posChange[0],posChange[1]);
@@ -85,15 +85,13 @@ public class Odometer implements Runnable {
 	}
 
 	//Utilities methods
-	
-	private void delTachoCount(int[] delTacho, int[]tachoTotal){
-		delTacho[0] = tachoTotal[0] - delTacho[0];
-		delTacho[1] = tachoTotal[1] - delTacho[1];
+	private void getTotalTachoCount(){
+				tachoTotal[0]+=delTacho[0];
+				tachoTotal[1]+=delTacho[1];
 	}
 	
-	private void delPos(double[] posChange, int[]tachoTotal){
+	private void delPos(){
 		//get the change in position
-		delTachoCount(delTacho,tachoTotal);
 		posChange[0] = driver.delArc(delTacho);
 		posChange[1] = driver.delTheta(delTacho);
 	}
