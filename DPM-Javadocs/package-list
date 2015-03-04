@@ -6,6 +6,7 @@ navigation.odometry.correction
 sensors
 sensors.filters
 tests
+tests.navigation
 tests.sensors
 tests.sensors.filters
 util
