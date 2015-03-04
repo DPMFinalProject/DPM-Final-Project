@@ -8,6 +8,7 @@
  */
 package navigation;
 
+import navigation.avoidance.ObstacleDetection;
 import util.Direction;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Motor;
@@ -27,10 +28,15 @@ public class Driver {
 	private final double WHL_SEPARATION = 15;
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
 	
+	private final ObstacleDetection detection;
 	public Driver() {
 		//this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
 		leftMotor.setAcceleration(FWD_ACCEL);
 		rightMotor.setAcceleration(FWD_ACCEL);
+		detection = new ObstacleDetection();
+		
+		// start the obstacle detector.
+		(new Thread(detection)).start();
 	}
 	
 	/*	The constructors nested here should only be used for testing.
@@ -84,8 +90,10 @@ public class Driver {
 	public void move(double distance) {
 		setSpeed(FWD_SPEED);
 
+		detection.setRunning(true);
 		leftMotor.rotate(convertDistance(WHL_RADIUS, distance), true);
 		rightMotor.rotate(convertDistance(WHL_RADIUS, distance), false);
+		detection.setRunning(false);
 	}
 	
 	/*
@@ -95,6 +103,8 @@ public class Driver {
 		if (!validMoveDirection(direction)) {
 			return;
 		}
+		
+		detection.setRunning(true);
 		
 		setSpeed(leftSpeed, rightSpeed);
 		
@@ -106,6 +116,8 @@ public class Driver {
 			leftMotor.backward();
 			rightMotor.backward();
 		}
+		
+		detection.setRunning(false);
 	}
 	
 	private boolean validMoveDirection(Direction direction) {
