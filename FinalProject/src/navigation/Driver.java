@@ -185,17 +185,40 @@ public class Driver {
 		
 		setSpeed(TURN_SPEED);
 		
+		angleTurn(direction, angle, false);
+	}
+	
+	/**
+	 * Naively turns in the provided direction, no error checking with odometer.
+	 * returns only once the robot has finished turning
+	 * @param direction	The direction in which to turn. RIGHT or LEFT.
+	 * @param angle The angle by which to turn, in degrees. 
+	 */
+	public void turn(Direction direction, double angle, boolean immediateReturn) {
+		if (!validTurnDirection(direction)) {
+			return;
+		}
+		if (angle < 0) {
+			System.out.println("Cannot turn by a negative angle");
+			return;
+		}
+		
+		setSpeed(TURN_SPEED);
+		
+		angleTurn(direction, angle, immediateReturn);
+	}
+	
+	private void angleTurn(Direction direction, double angle, boolean immediateReturn) {
 		if (direction == Direction.LEFT) {
 			leftMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
-			rightMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), false);
+			rightMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), immediateReturn);
 		} else if (direction == Direction.RIGHT){
 			leftMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
-			rightMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), false);
+			rightMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), immediateReturn);
 		} else {
 			System.out.println("Cannot turn forward or backwards.");
 		}
 	}
-	
 	private boolean validTurnDirection(Direction direction) {
 		if (direction == Direction.FWD || direction == Direction.BACK) {
 			System.out.println("Cannot turn " + direction + "\n");
