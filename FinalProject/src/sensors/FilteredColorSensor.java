@@ -22,6 +22,10 @@ public class FilteredColorSensor extends FilteredSensor {
 	public FilteredColorSensor(SensorPort port, Filter... filters) {
 		super(filters);
 		sensor = new ColorSensor(port);
+		
+		if (!sensor.isFloodlightOn()) {
+			sensor.setFloodlight(true);
+		}
 	}
 
 	@Override
