@@ -93,8 +93,8 @@ public class Odometer implements Runnable {
 	
 	private void delPos(){
 		//get the change in position
-		posChange[0] = driver.delArc(delTacho);
-		posChange[1] = driver.delTheta(delTacho);
+		posChange[0] = driver.getDelArc(delTacho);
+		posChange[1] = driver.getDelTheta(delTacho);
 	}
 	
 	private void odometerUpdate(double delArc,double delTheta){
