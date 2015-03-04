@@ -9,6 +9,7 @@
  */
 package tests;
 
+import tests.navigation.localization.oneLsLocalisaion;
 import tests.sensors.ExampleTest;
 import tests.sensors.MotorPrecision;
 import lejos.nxt.Button;
@@ -23,7 +24,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new MotorPrecision();
+		TestCase test = new oneLsLocalisaion();
 		test.runTest();
 	}
 

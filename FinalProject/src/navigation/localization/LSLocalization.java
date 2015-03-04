@@ -26,7 +26,7 @@ import navigation.odometry.Odometer;
 public class LSLocalization extends Localization {
 	private FilteredColorSensor cs;
 	
-	private final double CS_DIST = 11.7;
+	private final double CS_DIST = 5;
 	
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
@@ -44,7 +44,7 @@ public class LSLocalization extends Localization {
 	public void doLocalization() {		
 		cs = new FilteredColorSensor(SensorPort.S1,new DifferentialFilter(3));
 
-		nav.travelTo(-2, -2, 0);
+		//nav.travelTo(-2, -2, 0);
 		driver.turn(Direction.LEFT, 360); // make one full CCW turn 
 		
 		getlineAngle(lineAngle);
@@ -60,7 +60,6 @@ public class LSLocalization extends Localization {
 		double[] val =new double [2];
 		
 		//make sure to be in a peak (differential filter)
-		
 		do{
 			val[0] = cs.getFilteredData();
 			val[1] = val[0];
@@ -78,6 +77,7 @@ public class LSLocalization extends Localization {
 			differentialCrossing(val, false);
 			
 			filteredAngles[1] = odo.getTheta();
+			Sound.beep();
 		}else if(val[0] < 0){
 			//wait until we cross the line from below
 			differentialCrossing(val,false);
@@ -89,6 +89,7 @@ public class LSLocalization extends Localization {
 			differentialCrossing(val, true);
 			
 			filteredAngles[1] = odo.getTheta();
+			Sound.beep();
 		}
 		
 		
@@ -158,7 +159,7 @@ public class LSLocalization extends Localization {
 
 	
 	private void updateOdometer(double[] lineAng, double[] pos){
-		odo.getPosition(pos);	
+		pos[2]=odo.getTheta();	
 		odo.setPosition(new double [] {correctX(lineAng), correctY(lineAng),
 				delTheta(lineAng)+pos[2]}, new boolean [] {true, true, true});
 	}

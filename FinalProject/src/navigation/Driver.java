@@ -219,14 +219,30 @@ public class Driver {
 	}
 	
 	//methods to complement the odometer class
+	
+	/**
+	 * Update the change in the tachometer reading since the last time this metod was called
+	 * @param tachoTotal
+	 * @param delTacho
+	 */
 	public void getDelTachoCount(int[] tachoTotal, int[] delTacho){
 		delTacho[0]=rightMotor.getTachoCount() - tachoTotal[0];
 		delTacho[1]=leftMotor.getTachoCount() - tachoTotal[1];
 		
 	}
+	/**
+	 * returns the change in arclength since the last time this method was called
+	 * @param delTacho
+	 * @return Returns the charge in arclength
+	 */
 	public double getDelArc(int[] delTacho){
 		return ((delTacho[0]+delTacho[1])*WHL_RADIUS*Math.PI)/360;
 	}
+	/**
+	 * returns the change in heading (theta) since   time this method was called
+	 * @param delTacho
+	 * @return Returns the change in heading
+	 */
 	public double getDelTheta(int[] delTacho){
 		return ((delTacho[0]-delTacho[1])*WHL_RADIUS)/(WHL_SEPARATION/2)/2;
 	}

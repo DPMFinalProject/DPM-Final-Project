@@ -89,7 +89,7 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		
 	}
 	private void updateOdometer(double x, double y) {
-		odo.getPosition(pos);
+		odo.getPosition(pos, new boolean[] {true,true,false});
 		//find which line is the closest ( x or y line) and correct accordingly
 		if( Math.abs(y) < Math.abs(x)){
 			odo.setY(pos[1]-y);
