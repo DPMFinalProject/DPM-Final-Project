@@ -11,6 +11,7 @@ package sensors;
 import sensors.filters.Filter;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.SensorPort;
+import lejos.robotics.Color;
 
 /**
  * Wrapper around the LeJOS ultrasonic class adding filtering capabilities.
@@ -23,14 +24,13 @@ public class FilteredColorSensor extends FilteredSensor {
 		super(filters);
 		sensor = new ColorSensor(port);
 		
-		if (!sensor.isFloodlightOn()) {
 			sensor.setFloodlight(true);
-		}
 	}
 
 	@Override
 	public double getFilteredData() {
 		double lightValue = sensor.getLightValue();
+		//System.out.println("\t"+lightValue);
 		
 		return applyFilters(lightValue);
 	}

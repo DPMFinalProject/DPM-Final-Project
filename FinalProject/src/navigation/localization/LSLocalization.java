@@ -45,7 +45,7 @@ public class LSLocalization extends Localization {
 		cs = new FilteredColorSensor(SensorPort.S1,new DifferentialFilter(3));
 
 		//nav.travelTo(-2, -2, 0);
-		driver.turn(Direction.LEFT, 360); // make one full CCW turn 
+		driver.turn(Direction.LEFT, 360, true); // make one full CCW turn 
 		
 		getlineAngle(lineAngle);
 		
@@ -63,7 +63,11 @@ public class LSLocalization extends Localization {
 		do{
 			val[0] = cs.getFilteredData();
 			val[1] = val[0];
-		}while(Math.abs(val[0]) <7 && Math.abs(val[1]) <7);
+			System.out.println(val[0]);
+			try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+		}while(Math.abs(val[0])<3 && Math.abs(val[1]) <3);
+		
+		Sound.twoBeeps();
 		
 		//positive peak
 		if(val[0]>0){
@@ -77,7 +81,7 @@ public class LSLocalization extends Localization {
 			differentialCrossing(val, false);
 			
 			filteredAngles[1] = odo.getTheta();
-			Sound.beep();
+			System.out.println("we got a filtered angle");
 		}else if(val[0] < 0){
 			//wait until we cross the line from below
 			differentialCrossing(val,false);
@@ -89,7 +93,7 @@ public class LSLocalization extends Localization {
 			differentialCrossing(val, true);
 			
 			filteredAngles[1] = odo.getTheta();
-			Sound.beep();
+			System.out.println("we got a filtered angle");
 		}
 		
 		
@@ -121,7 +125,6 @@ public class LSLocalization extends Localization {
 			val = -1;
 		}
 
-		
 		while(driver.isMoving()){
 			lineAngle[i]=getLineAngleMid(filterAnalysis(), i);
 			i++;
@@ -136,7 +139,7 @@ public class LSLocalization extends Localization {
 			
 		//test if all fours lines were detected
 		if(lineAngle[3]==-1){
-			getlineAngle(lineAngle);
+			this.doLocalization();
 		}
 		
 	}

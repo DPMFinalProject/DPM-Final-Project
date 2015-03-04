@@ -13,6 +13,9 @@ import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.comm.RConsole;
+import sensors.FilteredColorSensor;
+import sensors.FilteredSensor;
+import sensors.filters.DifferentialFilter;
 import tests.TestCase;
 
 /**A simple test consisting of a robot moving at a steady speed
@@ -40,8 +43,8 @@ public class LSFLMoving extends TestCase {
 	@Override
 	public void runTest() {
 		NXTRegulatedMotor motorA =Motor.A, motorB=Motor.B;
-		ColorSensor ls = new ColorSensor(SensorPort.S1);
-		ls.setFloodlight(true);
+		FilteredSensor ls = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
+	
 		
 		//drive the robot
 		motorA.setSpeed(100);
@@ -51,8 +54,8 @@ public class LSFLMoving extends TestCase {
 		
 		//get light measurements and print them to the console
 		while(motorB.isMoving() || motorA.isMoving()){
-		System.out.println(ls.getLightValue());
-		try {	Thread.sleep(100);	} catch (InterruptedException e) {}
+		System.out.println(ls.getFilteredData());
+		try {	Thread.sleep(50);	} catch (InterruptedException e) {}
 		}
 	}
 

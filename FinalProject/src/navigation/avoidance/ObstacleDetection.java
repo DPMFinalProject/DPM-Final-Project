@@ -30,8 +30,8 @@ public class ObstacleDetection implements Runnable {
 	private Object lock = new Object();
 	
 	public ObstacleDetection() {
-		leftSensor = new FilteredUltrasonicSensor(SensorPort.S1, new OutlierFilter(3, usSensorOutlier));
-		rightSensor = new FilteredUltrasonicSensor(SensorPort.S2, new OutlierFilter(3, usSensorOutlier));
+		leftSensor = new FilteredUltrasonicSensor(SensorPort.S3, new OutlierFilter(3, usSensorOutlier));
+		rightSensor = new FilteredUltrasonicSensor(SensorPort.S4, new OutlierFilter(3, usSensorOutlier));
 	}
 
 	@Override

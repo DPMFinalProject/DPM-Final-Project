@@ -8,12 +8,14 @@
  */
 package tests.sensors.filters;
 
+import navigation.Driver;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
 import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
 import sensors.filters.*;
 import tests.TestCase;
+import util.Direction;
 import util.MovingWindow;
 
 /**
@@ -27,19 +29,16 @@ public class LSFilterTest extends TestCase {
 	 */
 	@Override
 	public void runTest() {
-		FilteredSensor sensor = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(4));
-		FilteredSensor averageSensor = new FilteredColorSensor(SensorPort.S1, new AveragingFilter(4));
+		FilteredSensor cs= new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
+				
+		Driver driver = new Driver();
+		//driver.move(Direction.FWD);
+		driver.turn(Direction.LEFT, 360, true);
 		
-		MovingWindow window = new MovingWindow(50);
-		
-		while (true) {
-			double value = sensor.getFilteredData();
-			window.add(value);
-			String signal = "" + sensor.getFilteredData() + "," + window.stdDev(); 
-			System.out.println(signal);
-			if (Math.abs(value - averageSensor.getFilteredData()) > window.stdDev()*3) {
-				Sound.beep();
-			}
+	
+		while (driver.isMoving()) { 
+			System.out.println(cs.getFilteredData());
+			try {	Thread.sleep(100);	} catch (InterruptedException e) {}
 		}
 	}
 
