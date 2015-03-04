@@ -25,7 +25,7 @@ public class DriverTests extends TestCase {
 	@Override
 	public void runTest() {
 		Driver driver = new Driver();
-		Odometer odo = new Odometer(driver, null);
+		Odometer odo = new Odometer(driver);
 		
 		(new Thread(odo)).start();
 		

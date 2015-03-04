@@ -12,6 +12,7 @@ import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Sound;
 import navigation.Driver;
+import navigation.odometry.correction.CorrectionLightSensorFB;
 import navigation.odometry.correction.OdometryCorrection;
 
 /**
@@ -36,18 +37,17 @@ public class Odometer implements Runnable {
 	private static final long ODOMETER_PERIOD = 15;			// odometer update period, in ms			
 	private Object lock;									
 
-	public Odometer(Driver driver, OdometryCorrection odometerCorrector ) {
-		this(0.0, 0.0, 0.0, driver, odometerCorrector);
+	public Odometer(Driver driver) {
+		this(0.0, 0.0, 0.0, driver);
 	}
 	
-	private Odometer(double xpos, double ypos, double Theta, Driver driver, 
-			OdometryCorrection odometerCorrector) {
+	private Odometer(double xpos, double ypos, double Theta, Driver driver) {
 		
 		x = xpos;
 		y = ypos;
 		theta = Theta;
 		this.driver = driver;
-		correction = odometerCorrector;
+		correction = new CorrectionLightSensorFB (this);
 		lock = new Object();	
 	}
 
@@ -86,6 +86,7 @@ public class Odometer implements Runnable {
 	}
 
 	//Utilities methods
+	
 	private void getTotalTachoCount(){
 		tachoTotal[0]+=delTacho[0];
 		tachoTotal[1]+=delTacho[1];
@@ -131,11 +132,11 @@ public class Odometer implements Runnable {
 		this.theta = theta;
 	}
 	
-	public void getPosition(double [] pos) {
+	public void getPosition(double [] pos, boolean[] update) {
 		synchronized (lock) {
-			pos[0] = x;
-			pos[1] = y;
-			pos[2] = theta;
+			if (update[0]) pos[0]=x;
+			if (update[1]) pos[1]=y;
+			if (update[2]) pos[2]=theta;
 		}
 	}
 	public void setPosition(double [] pos, boolean [] update) {
