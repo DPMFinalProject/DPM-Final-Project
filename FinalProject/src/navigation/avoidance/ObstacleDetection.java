@@ -9,8 +9,10 @@
 package navigation.avoidance;
 
 import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import sensors.FilteredUltrasonicSensor;
 import sensors.filters.OutlierFilter;
+import util.Direction;
 
 /**
  * Runs in a separate thread, waiting until it detects an obstacle.
@@ -25,6 +27,8 @@ public class ObstacleDetection implements Runnable {
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
 	
+	private Object lock = new Object();
+	
 	public ObstacleDetection() {
 		leftSensor = new FilteredUltrasonicSensor(SensorPort.S1, new OutlierFilter(3, usSensorOutlier));
 		rightSensor = new FilteredUltrasonicSensor(SensorPort.S2, new OutlierFilter(3, usSensorOutlier));
@@ -32,21 +36,47 @@ public class ObstacleDetection implements Runnable {
 
 	@Override
 	public void run() {
-		running = true;
 		
-		while (running) {
-			// If sensor does not report an obstacle, there is an obstacle nearby
-			leftObstacle = !(leftSensor.getFilteredData() == usSensorOutlier);
-			rightObstacle = !(rightSensor.getFilteredData() == usSensorOutlier);
+		while (true) {
 			
-			frontObstacle = leftObstacle && rightObstacle;
-			
+			synchronized(lock) {
+				if (running) {
+					// If sensor does not report an outlier, there is an obstacle nearby
+					double leftValue, rightValue;
+					
+					leftValue = leftSensor.getFilteredData();
+					rightValue = rightSensor.getFilteredData();
+					
+					leftObstacle = !(leftValue == usSensorOutlier);
+					rightObstacle = !(rightValue == usSensorOutlier);
+					
+					frontObstacle = leftObstacle && rightObstacle;
+					
+				} else {
+					leftObstacle = rightObstacle = frontObstacle = false;
+				}
+			}
 			pause(20);
 		}
 	}
 	
+	/**
+	 * Turns the obstacle detection on/off. 
+	 * @param running
+	 */
 	public void setRunning(boolean running) {
 		this.running = running;
+	}
+	
+	/**
+	 * Returns the direction in which an obstacle is currently located.
+	 * @return	FWD, LEFT or RIGHT if an obstacle is detected, null otherwise.
+	 */
+	public Direction isObstaclePresent() {
+		if (frontObstacle) return Direction.FWD;
+		if (leftObstacle) return Direction.LEFT;
+		if (rightObstacle) return Direction.RIGHT;
+		return null;
 	}
 	
 	private void pause(int ms) {
@@ -56,5 +86,17 @@ public class ObstacleDetection implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public boolean isLeftObstacle() {
+		return leftObstacle;
+	}
+
+	public boolean isRightObstacle() {
+		return rightObstacle;
+	}
+
+	public boolean isFrontObstacle() {
+		return frontObstacle;
 	}
 }
