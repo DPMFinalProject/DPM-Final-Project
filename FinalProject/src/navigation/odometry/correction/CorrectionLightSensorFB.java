@@ -35,7 +35,6 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		csBackward = new FilteredColorSensor(SensorPort.S2,new DifferentialFilter(3));
 	}
 	
-
 	@Override
 	public void run() {
 		long correctionStart, correctionEnd;
@@ -68,8 +67,6 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		}
 	}
 	
-
-
 	private void correctXY(FilteredColorSensor cs){
 		if (cs == csForward){
 			snap(CSF_DIST);
@@ -77,6 +74,7 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 			snap(CSB_DIST);
 		}
 	}
+	
 	private void snap(double csDist){
 		double[]csPos = new double[2];
 		csPos[0]=pos[0]-csDist*Math.cos(Math.toRadians(pos[2]));
@@ -88,6 +86,7 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		updateOdometer(csPos[0],csPos[1]);
 		
 	}
+	
 	private void updateOdometer(double x, double y) {
 		odo.getPosition(pos);
 		//find which line is the closest ( x or y line) and correct accordingly
@@ -98,7 +97,6 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		}
 		
 	}
-
 
 	//Line 70: experimental number--| differential filter peak height
 	private void filterAnalysisXY(FilteredColorSensor cs){ 
@@ -140,6 +138,7 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		pos[1]=(filteredPos[0][1]+filteredPos[1][1])/2;
 		pos[2]=(filteredPos[0][2]+filteredPos[1][2])/2;
 	}
+	
 	//detects the zero crossing of the differential filter
 	private void differentialCrossing(double[] val, FilteredColorSensor cs, boolean above){
 			if(above){
@@ -168,6 +167,7 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		}
 		return null;	
 	}
+	
 	//Line 70: experimental number--| differential filter peak height
 	private boolean isPeak(FilteredColorSensor cs, double[] val){
 		updatePeakVal(cs,val);
@@ -177,11 +177,9 @@ public class CorrectionLightSensorFB extends OdometryCorrection {
 		return false;
 		
 	}
+	
 	private void updatePeakVal(FilteredColorSensor cs, double[] val){
 		val[0] = cs.getFilteredData();
 		val[1] = val[0];
 	}
-	
-
-	
 }

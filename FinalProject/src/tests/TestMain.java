@@ -9,8 +9,9 @@
  */
 package tests;
 
-import tests.sensors.ExampleTest;
-import tests.sensors.MotorPrecision;
+import tests.sensors.*;
+import tests.navigation.*;
+import tests.navigation.avoidance.*;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -23,7 +24,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new MotorPrecision();
+		TestCase test = new DetectTest();
 		test.runTest();
 	}
 
@@ -32,16 +33,20 @@ public class TestMain {
 	 * 	These should be standard across all tests so try to avoid changing them 
 	 */
 	protected static void init() {
-		RConsole.open();
 		
-		LCD.drawString("Press a button", 0, 3);
-		LCD.drawString("to start", 0, 4);
-		Button.waitForAnyPress();
-		System.setOut(RConsole.getPrintStream());
+		LCD.drawString("LEFT FOR NORMAL", 0, 2);
+		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
+		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
+			RConsole.open();
+			
+			LCD.drawString("Press a button", 0, 3);
+			LCD.drawString("to start", 0, 4);
+			Button.waitForAnyPress();
+			System.setOut(RConsole.getPrintStream());
+		}
 	}
 	
 	protected static void done() {		
-		Button.waitForAnyPress();
 		RConsole.close();
 		System.exit(0);
 	}
@@ -56,7 +61,7 @@ public class TestMain {
 					execute(passedArgs);
 				}
 			}).start();
-			
+			Button.waitForAnyPress();
 		} finally {
 			done();
 		}

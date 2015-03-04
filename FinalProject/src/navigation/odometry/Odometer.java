@@ -36,7 +36,7 @@ public class Odometer implements Runnable {
 	private static final long ODOMETER_PERIOD = 15;			// odometer update period, in ms			
 	private Object lock;									
 
-	public Odometer(Driver driver,OdometryCorrection odometerCorrector ) {
+	public Odometer(Driver driver, OdometryCorrection odometerCorrector ) {
 		this(0.0, 0.0, 0.0, driver, odometerCorrector);
 	}
 	

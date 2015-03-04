@@ -22,8 +22,6 @@ import util.Direction;
  * @author Auguste
  */
 public class BangBangAvoider extends ObstacleAvoidance {
-	private final Driver driver;
-	private final Odometer odo;
 	private final NXTRegulatedMotor usMotor;
 	private final FilteredUltrasonicSensor us;
 	private final int BAND_WIDTH, BAND_CENTER;
@@ -34,10 +32,9 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	}
 	
 	private BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo, int bandWidth, int bandCenter) {
-		this.driver = driver;
+		super(driver, odo);
 		this.usMotor = usMotor;
 		this.us = us;
-		this.odo = odo;
 		BAND_WIDTH = bandWidth;
 		BAND_CENTER = bandCenter;
 	}

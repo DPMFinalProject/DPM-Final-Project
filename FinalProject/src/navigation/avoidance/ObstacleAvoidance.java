@@ -9,13 +9,20 @@
 package navigation.avoidance;
 
 import navigation.Driver;
+import navigation.odometry.Odometer;
 
 /**
  * Provides the logic to bypass obstacles.
  * @author Oleg
  */
 public abstract class ObstacleAvoidance {
-	Driver driver;
+	protected final Driver driver;
+	protected final Odometer odo;
+	
+	public ObstacleAvoidance(Driver driver, Odometer odo) {
+		this.driver = driver;
+		this.odo = odo;
+	}
 	/**
 	 *	Executes an obstacle avoidance maneuver.
 	 */
