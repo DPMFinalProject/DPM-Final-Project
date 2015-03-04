@@ -33,7 +33,8 @@ public class Driver {
 		rightMotor.setAcceleration(FWD_ACCEL);
 	}
 	
-	/*public Driver(double wheelRadius, double wheelSeparation) {
+	/*	The constructors nested here should only be used for testing.
+	public Driver(double wheelRadius, double wheelSeparation) {
 		this(400, 100, 100, 50, wheelRadius, wheelSeparation, Motor.A, Motor.B);
 	}
 	
@@ -68,22 +69,11 @@ public class Driver {
 	 * @param direction	The direction in which to move: FWD or BACK
 	 */
 	public void move(Direction direction) {
-		if (direction == Direction.LEFT || direction == Direction.RIGHT) {
-			System.out.println("Cannot move " + direction + "\n");
-			System.out.println("Must move forward or backward");
+		if (!validMoveDirection(direction)) {
 			return;
 		}
 		
-		setSpeed(FWD_SPEED);
-		
-		if (direction == Direction.FWD) {
-			leftMotor.forward();
-			rightMotor.forward();
-		}
-		else {
-			leftMotor.backward();
-			rightMotor.backward();
-		}
+		move(direction, FWD_SPEED, FWD_SPEED);
 	}
 	
 	/**
@@ -98,29 +88,50 @@ public class Driver {
 		rightMotor.rotate(convertDistance(WHL_RADIUS, distance), false);
 	}
 	
+	/*
+	 * 	Moves the robot with different wheel spins. This method should stay hidden.
+	 */
+	private void move(Direction direction, int leftSpeed, int rightSpeed) {
+		if (!validMoveDirection(direction)) {
+			return;
+		}
+		
+		setSpeed(leftSpeed, rightSpeed);
+		
+		if (direction == Direction.FWD) {
+			leftMotor.forward();
+			rightMotor.forward();
+		}
+		else {
+			leftMotor.backward();
+			rightMotor.backward();
+		}
+	}
+	
+	private boolean validMoveDirection(Direction direction) {
+		if (direction == Direction.LEFT || direction == Direction.RIGHT) {
+			System.out.println("Cannot move " + direction + "\n");
+			System.out.println("Must move forward or backward");
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * 	Turns left or right, but not on itself. 
 	 * 	the robot will follow a curved path in the direction specified
 	 * @param direction	The direction in which to turn: LEFT or RIGHT
 	 */
 	public void drift(Direction direction) {
-		if (direction == Direction.FWD || direction == Direction.BACK) {
-			System.out.println("Cannot turn " + direction + "\n");
-			System.out.println("Must turn left or right");
+		if (!validTurnDirection(direction)) {
 			return;
 		}
 		
 		if(direction == Direction.LEFT) {
-			leftMotor.setSpeed(FWD_SPEED - DRIFT_FACTOR);
-			rightMotor.setSpeed(FWD_SPEED + DRIFT_FACTOR);
-			leftMotor.forward();
-			rightMotor.forward();
+			move(Direction.FWD, FWD_SPEED - DRIFT_FACTOR, FWD_SPEED + DRIFT_FACTOR);
 		}
 		else {
-			leftMotor.setSpeed(FWD_SPEED + DRIFT_FACTOR);
-			rightMotor.setSpeed(FWD_SPEED - DRIFT_FACTOR);
-			leftMotor.forward();
-			rightMotor.forward();
+			move(Direction.FWD, FWD_SPEED + DRIFT_FACTOR, FWD_SPEED - DRIFT_FACTOR);
 		}
 	}
 	
@@ -129,9 +140,7 @@ public class Driver {
 	 * @param direction The direction in which to turn: LEFT or RIGHT.
 	 */
 	public void turn(Direction direction) {
-		if (direction == Direction.FWD || direction == Direction.BACK) {
-			System.out.println("Cannot turn " + direction + "\n");
-			System.out.println("Must turn left or right");
+		if (!validTurnDirection(direction)) {
 			return;
 		}
 		
@@ -150,9 +159,13 @@ public class Driver {
 	/**
 	 * Naively turns in the provided direction, no error checking with odometer.
 	 * returns only once the robot has finished turning
-	 * @param angle The angle in which to turn, in degrees. Will turn left if angle is positive, right otherwise
+	 * @param direction	The direction in which to turn. RIGHT or LEFT.
+	 * @param angle The angle by which to turn, in degrees. 
 	 */
 	public void turn(Direction direction, double angle) {
+		if (!validTurnDirection(direction)) {
+			return;
+		}
 		if (angle < 0) {
 			System.out.println("Cannot turn by a negative angle");
 			return;
@@ -171,6 +184,15 @@ public class Driver {
 		}
 	}
 	
+	private boolean validTurnDirection(Direction direction) {
+		if (direction == Direction.FWD || direction == Direction.BACK) {
+			System.out.println("Cannot turn " + direction + "\n");
+			System.out.println("Must turn left or right");
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * 	Stops any movement.
 	 */
@@ -179,28 +201,33 @@ public class Driver {
 		rightMotor.stop();
 	}
 	
-	public void setSpeed(int speed) {
-		leftMotor.setSpeed(speed);
-		rightMotor.setSpeed(speed);
+	private void setSpeed(int speed) {
+		setSpeed(speed, speed);
 	}
 	
+	private void setSpeed(int leftSpeed, int rightSpeed) {
+		leftMotor.setSpeed(leftSpeed);
+		rightMotor.setSpeed(rightSpeed);
+	}
+	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is moving.
+	 */
 	public boolean isMoving(){
-		if(rightMotor.isMoving() || leftMotor.isMoving()){
-			return true;
-		}
-		return false;
+		return rightMotor.isMoving() || leftMotor.isMoving();
 	}
 	
-	//methods to compliment the odometer class
+	//methods to complement the odometer class
 	public void getDelTachoCount(int[] tachoTotal, int[] delTacho){
 		delTacho[0]=rightMotor.getTachoCount() - tachoTotal[0];
 		delTacho[1]=leftMotor.getTachoCount() - tachoTotal[1];
 		
 	}
-	public double delArc(int[] delTacho){
+	public double getDelArc(int[] delTacho){
 		return ((delTacho[0]+delTacho[1])*WHL_RADIUS*Math.PI)/360;
 	}
-	public double delTheta(int[] delTacho){
+	public double getDelTheta(int[] delTacho){
 		return ((delTacho[0]-delTacho[1])*WHL_RADIUS)/(WHL_SEPARATION/2)/2;
 	}
 	
