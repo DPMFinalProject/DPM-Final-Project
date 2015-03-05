@@ -1,6 +1,5 @@
 /**
-
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ *	DPM Final Project
+ * 	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
@@ -20,13 +19,13 @@ import lejos.nxt.Motor;
  * @author Oleg 
  */
 public class Driver {
-	private final int FWD_SPEED = 100;
+	private final int FWD_SPEED = 200;
 	private final int FWD_ACCEL = 100;
 	private final int TURN_SPEED = 100;
 	private final int DRIFT_FACTOR = 50;
 	
-	private final double WHL_RADIUS = 2.1;
-	private final double WHL_SEPARATION = 15;
+	private final double WHL_RADIUS = 2.15;
+	private final double WHL_SEPARATION = 15.2;
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
 	
 	private final ObstacleDetection detection;

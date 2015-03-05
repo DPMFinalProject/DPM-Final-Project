@@ -10,8 +10,9 @@ package navigation.avoidance;
 
 import navigation.Driver;
 import navigation.odometry.Odometer;
-import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.SensorPort;
 import sensors.FilteredUltrasonicSensor;
+import sensors.filters.AveragingFilter;
 import util.Direction;
 
 /**
@@ -22,22 +23,27 @@ import util.Direction;
  * @author Auguste
  */
 public class BangBangAvoider extends ObstacleAvoidance {
-	private final NXTRegulatedMotor usMotor;
-	private final FilteredUltrasonicSensor us;
-	private final int BAND_WIDTH, BAND_CENTER;
+	private final FilteredUltrasonicSensor us = new FilteredUltrasonicSensor(SensorPort.S1, new AveragingFilter(5));
+	private final int BAND_WIDTH = 8;
+	private final int BAND_CENTER = 20;
 	public double initialOrientation;
-
-	public BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo) {
-		this(driver, usMotor, us, odo, 8, 20);
-	}
 	
-	private BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo, int bandWidth, int bandCenter) {
+	public BangBangAvoider(Driver driver, Odometer odo)
+	{
 		super(driver, odo);
-		this.usMotor = usMotor;
-		this.us = us;
-		BAND_WIDTH = bandWidth;
-		BAND_CENTER = bandCenter;
 	}
+
+//	public BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo) {
+//		this(driver, usMotor, us, odo, 8, 20);
+//	}
+	
+//	private BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo, int bandWidth, int bandCenter) {
+//		super(driver, odo);
+//		this.usMotor = usMotor;
+//		this.us = us;
+//		BAND_WIDTH = bandWidth;
+//		BAND_CENTER = bandCenter;
+//	}
 	
 	@Override
 	public void avoid() {
@@ -45,22 +51,11 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		
 		driver.stop();
 		
-		lookTowardsWall();
 		driver.turn(Direction.RIGHT, 90);
 		
 		while(!hasAvoided()) {
 			bangBang();
 		}
-
-		lookForward();
-	}
-	
-	private void lookTowardsWall() {
-		usMotor.rotate(80);
-	}
-	
-	private void lookForward() {
-		usMotor.rotate(-80);
 	}
 	
 	private void bangBang() {
