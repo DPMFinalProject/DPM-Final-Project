@@ -51,7 +51,8 @@ public class OdoWithCorrectionTest extends TestCase {
 		(new Thread() {public void run() {
 				while(true) {
 					System.out.println(gridMan.isOnLine());
-					pause(20);
+					pause(20
+							);
 				}
 			}
 		}).start();

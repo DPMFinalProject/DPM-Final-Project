@@ -25,9 +25,11 @@ import util.Direction;
  */
 
 public class GridManager implements Runnable{
-	private final FilteredColorSensor cs = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
+	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
+	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S2, new DifferentialFilter(2));
 	private final double LINE_THRESHOLD = 2;
-	private boolean lineDetected = false;
+	private boolean leftCSOnLine = false;
+	private boolean rightCSOnLine = false;
 	private final double[] leftSensorCoor = {-4.8, 6.5};//{x, y}
 	private final double[] rightSensorCoor = {4.8, 6.5};//{x, y}
 	
@@ -36,25 +38,50 @@ public class GridManager implements Runnable{
 	public void run() {
 		while(true) {
 			
-			double data = cs.getFilteredData();
+			double leftCSMeasure = leftCS.getFilteredData();
 			
-			if (data < -LINE_THRESHOLD) {
-				setLineDetected(true);
+			if (leftCSMeasure < -LINE_THRESHOLD) {
+				setLeftCSDetected(true);
 			}
-			else if (data > LINE_THRESHOLD) {
-				setLineDetected(false);
+			else if (leftCSMeasure > LINE_THRESHOLD) {
+				setLeftCSDetected(false);
+			}
+			
+			double rightCSMeasure = rightCS.getFilteredData();
+			
+			if (rightCSMeasure < -LINE_THRESHOLD) {
+				setRightCSDetected(true);
+			}
+			else if (rightCSMeasure > LINE_THRESHOLD) {
+				setRightCSDetected(false);
 			}
 			
 			pause(20);
 		}
 	}
 	
-	private void setLineDetected(boolean detected) {
-		lineDetected = detected;
+	private void setLeftCSDetected(boolean detected) {
+		leftCSOnLine = detected;
 	}
 	
-	public boolean isOnLine() {
-		return lineDetected;
+	private void setRightCSDetected(boolean detected) {
+		rightCSOnLine = detected;
+	}
+	
+	public boolean lineDetected() {
+		if (rightCSOnLine || leftCSOnLine) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isOnLine(Direction direction) {
+		if (direction == Direction.RIGHT) {
+			return rightCSOnLine;
+		}
+		else {
+			return leftCSOnLine;
+		}
 	}
 	
 	public double[] getSensorCoor(Direction direction) {
