@@ -1,4 +1,5 @@
- /**	DPM Final Project
+/**
+ * 	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
@@ -18,22 +19,16 @@ import lejos.nxt.Motor;
  * @author Oleg 
  */
 
-
-/*  #####################################################################################
- * 	#		problem: both wheels don<T start at same time, 								#
- * 	#	      or both wheels don't have the same radius									#
- * 	#																					#
- * 	#	--> i added a lock object, doesn't work perfectly, might want to change that	#
- *  #####################################################################################
- */
 public class Driver {
+
 	private final int FWD_SPEED = 150;
 	private final int FWD_ACCEL = 200;
 	private final int TURN_SPEED = 100;
 	private final int DRIFT_FACTOR = 50;
 	
-	private final double WHL_RADIUS = 2.1;
-	private final double WHL_SEPARATION = 15.4;
+	private final double WHL_RADIUS = 2.15;
+	private final double WHL_SEPARATION = 15.3;
+
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
 	private Object lock;
 	
@@ -94,19 +89,18 @@ public class Driver {
 	
 	/**
 	 * 	Naively moves forward a given distance, no error checking with odometer.
-	 * 	returns only once the robot has finished moving
+	 * 
 	 * @param distance	The distance by which to move, in cm
+	 * @param returnNow return immediately if true
 	 */
-	public void move(double distance) {
+	public void move(double distance, boolean returnNow) {
 		setSpeed(FWD_SPEED);
 
 //		detection.setRunning(true);
 		int a=convertDistance(WHL_RADIUS, distance);
 				
-		synchronized (lock){
 			leftMotor.rotate(a, true);
-			rightMotor.rotate(a, true);
-		}
+			rightMotor.rotate(a, returnNow);
 		
 //		detection.setRunning(false);
 	}
