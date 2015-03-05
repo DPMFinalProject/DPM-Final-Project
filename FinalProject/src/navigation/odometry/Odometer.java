@@ -131,6 +131,13 @@ public class Odometer implements Runnable {
 	public void setTheta(double theta) {
 		this.theta = theta;
 	}
+	public void getPosition(double [] pos) {
+		synchronized (lock) {
+			pos[0]=x;
+			pos[1]=y;
+			pos[2]=theta;
+		}
+	}
 	
 	public void getPosition(double [] pos, boolean[] update) {
 		synchronized (lock) {
