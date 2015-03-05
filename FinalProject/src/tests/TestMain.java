@@ -9,12 +9,9 @@
  */
 package tests;
 
-import navigation.localization.LSLocalization;
-import tests.sensors.*;
-import tests.sensors.filters.LSFilterTest;
 import tests.navigation.*;
-import tests.navigation.avoidance.*;
 import tests.navigation.localization.*;
+import tests.sensors.*;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -28,6 +25,7 @@ public class TestMain {
 
 	private static void execute(String[] args) {
 		TestCase test = new OdoWithCorrectionTest();
+
 		test.runTest();
 	}
 

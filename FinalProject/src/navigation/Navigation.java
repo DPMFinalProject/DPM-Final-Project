@@ -16,6 +16,15 @@ import navigation.odometry.Odometer;
  * 	The Navigation class is responsible for odometer-adjusted movement.
  * @author Oleg
  */
+
+
+/*  #####################################################################################
+ * 	#		problem: when asking the wheels to move, we cant do anything else after		#
+ * 	#	      																			#
+ * 	#																					#
+ * 	#	--> i changed them to immediatereturn, might want to look into that				#
+ *  #####################################################################################
+ */
 public class Navigation {
 	private Driver driver;
 	private Odometer odo;

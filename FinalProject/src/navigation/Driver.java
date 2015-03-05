@@ -18,15 +18,27 @@ import lejos.nxt.Motor;
  *	Obstacle evasion should be integrated in here and not in navigator.
  * @author Oleg 
  */
+
+
+/*  #####################################################################################
+ * 	#		problem: both wheels don<T start at same time, 								#
+ * 	#	      or both wheels don't have the same radius									#
+ * 	#																					#
+ * 	#	--> i added a lock object, doesn't work perfectly, might want to change that	#
+ *  #####################################################################################
+ */
 public class Driver {
-	private final int FWD_SPEED = 200;
-	private final int FWD_ACCEL = 100;
+
+	private final int FWD_SPEED = 150;
+	private final int FWD_ACCEL = 200;
 	private final int TURN_SPEED = 100;
 	private final int DRIFT_FACTOR = 50;
 	
-	private final double WHL_RADIUS = 2.15;
-	private final double WHL_SEPARATION = 15.2;
+	private final double WHL_RADIUS = 2.1;
+	private final double WHL_SEPARATION = 15.4;
+
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
+	private Object lock;
 	
 	private final ObstacleDetection detection;
 	public Driver() {
@@ -34,9 +46,10 @@ public class Driver {
 		leftMotor.setAcceleration(FWD_ACCEL);
 		rightMotor.setAcceleration(FWD_ACCEL);
 		detection = new ObstacleDetection();
+		lock = new Object();
 		
 		// start the obstacle detector.
-		(new Thread(detection)).start();
+		//(new Thread(detection)).start();
 	}
 	
 	/*	The constructors nested here should only be used for testing.
@@ -90,10 +103,15 @@ public class Driver {
 	public void move(double distance) {
 		setSpeed(FWD_SPEED);
 
-		detection.setRunning(true);
-		leftMotor.rotate(convertDistance(WHL_RADIUS, distance), true);
-		rightMotor.rotate(convertDistance(WHL_RADIUS, distance), false);
-		detection.setRunning(false);
+//		detection.setRunning(true);
+		int a=convertDistance(WHL_RADIUS, distance);
+				
+		synchronized (lock){
+			leftMotor.rotate(a, true);
+			rightMotor.rotate(a, true);
+		}
+		
+//		detection.setRunning(false);
 	}
 	
 	/*
@@ -241,8 +259,11 @@ public class Driver {
 	}
 	
 	private void setSpeed(int leftSpeed, int rightSpeed) {
-		leftMotor.setSpeed(leftSpeed);
-		rightMotor.setSpeed(rightSpeed);
+		synchronized (lock){
+			leftMotor.setSpeed(leftSpeed);
+			rightMotor.setSpeed(rightSpeed);
+		}
+		
 	}
 	
 	/**

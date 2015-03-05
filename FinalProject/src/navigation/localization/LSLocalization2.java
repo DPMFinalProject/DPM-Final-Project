@@ -15,6 +15,7 @@ import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
 import sensors.filters.DifferentialFilter;
 import util.Direction;
+import util.GridManager;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
@@ -23,15 +24,16 @@ import navigation.odometry.Odometer;
  * 	Performs localization using the light sensor
  * @author Oleg
  */
-public class LSLocalization extends Localization {
+public class LSLocalization2 extends Localization {
 	private FilteredColorSensor cs;
+	private GridManager grid;
 	
-	private final double CS_DIST = 3.5;
+	private final double CS_DIST = 13.1;
 	
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
 	
-	public LSLocalization(Odometer odo, Driver driver, Navigation nav) {
+	public LSLocalization2(Odometer odo, Driver driver, Navigation nav) {
 		super(odo, driver, nav);
 	}
 
@@ -43,9 +45,10 @@ public class LSLocalization extends Localization {
 	@Override
 	public void doLocalization() {		
 		cs = new FilteredColorSensor(SensorPort.S1,new DifferentialFilter(3));
+		grid = new GridManager(cs,CS_DIST,odo);
 
 		//nav.travelTo(-2, -2, 0);
-		driver.turn(Direction.LEFT, 360, true); // make one full CCW turn 
+		driver.turn(Direction.LEFT); // make one full CCW turn 
 		
 		getlineAngle(lineAngle);
 		
@@ -63,37 +66,30 @@ public class LSLocalization extends Localization {
 	
 	//get the angles at wich the color sensor detected a line
 	private void getlineAngle(double[] lineAngle){
-		byte i=0;
+		
 		//set array to test the number of line crossed at the end of the rotation
-		for(double val : lineAngle) {
-			val = -1;
+		for(int i=0; i<lineAngle.length;i++) {
+			lineAngle[i] = -1;
 		}
-		while(/*driver.isMoving()*/i<4){
-			//prevent array out of bounds error
-			//try{
-				lineAngle[i]=getLineAngleAvg(filterAnalysis());
-			//}catch (ArrayIndexOutOfBoundsException e) {
-			//	System.out.println("Array out of bouds!YAYAYYYAYAYA");
-			//	break;
-			//}
+		for(int i=0 ; i<4 ; i++){
+			System.out.println(i+ "      " +lineAngle[i]);
+			while(lineAngle[i]==-1){
+				grid.getPosMidLineCrossing(pos);
+				System.out.println(pos[2]);
+				lineAngle[i]=pos[2];
+			}
 				
 			Sound.twoBeeps();
 			System.out.println("The angle retrived is:" + lineAngle[i]);
-			i++;
-			try {	Thread.sleep(750);	} catch (InterruptedException e) {}
 			}
-		
-			
-		/*//test if all fours lines were detected
-		if(lineAngle[3]==-1){
-			this.doLocalization();
-		}		*/	
+		driver.stop();
 	}
-	//gives the average of the entering/leaving of a black line angles
+	
+/*	//gives the average of the entering/leaving of a black line angles
 	private double getLineAngleAvg( double[] filteredAngles){
 		return (filteredAngles[0] + filteredAngles[1])/2;
 	}
-	/*//give the middle point between entering/leaving of a black line angles
+	//give the middle point between entering/leaving of a black line angles
 	private double getLineAngleMid(double[] filteredAngles, byte lineNumber){
 		//vertical line, assuming counterclockwise , facing north
 		if(lineNumber == 0 || lineNumber == 2){
@@ -102,7 +98,7 @@ public class LSLocalization extends Localization {
 		}else {
 			return Math.acos( ( Math.sin(filteredAngles[0])+Math.sin(filteredAngles[1]) ) /2);
 		}
-	}*/
+	}
 	//Line 70: experimental number--| differential filter peak height
 	private double[] filterAnalysis(){ 
 		double[] filteredAngles= new double [2];
@@ -110,18 +106,18 @@ public class LSLocalization extends Localization {
 		double val= 0;
 		//make sure to be in a peak (differential filter)
 		do{
-			val/*[0]*/ = cs.getFilteredData();
-			System.out.println(val/*[0]*/);
+			val[0] = cs.getFilteredData();
+			System.out.println(val[0]);
 			try {	Thread.sleep(50);	} catch (InterruptedException e) {}
 //			if(!driver.isMoving()){
 //				return val;
 //			}
-		}while(Math.abs(val/*[0]*/)<2 );
+		}while(Math.abs(val[0])<2 );
 		System.out.println("-->found a line");
 //			val[1] = val[0];
 		
 		//positive peak
-		if(val/*[0]*/>0){
+		if(val[0]>0){
 			//wait until we cross the line from above
 			System.out.println("\t val positive");
 			val=differentialCrossing(val, true);
@@ -136,7 +132,7 @@ public class LSLocalization extends Localization {
 			
 			filteredAngles[1] = odo.getTheta();
 			System.out.println("we got a filtered angle");
-		}else if(val/*[0]*/ < 0){
+		}else if(val[0] < 0){
 			
 			//wait until we cross the line from below
 			System.out.println("\t val negative");
@@ -158,20 +154,20 @@ public class LSLocalization extends Localization {
 		return filteredAngles;
 	}
 	//detects the zero crossing of the differential filter
-	private double differentialCrossing(double/*[]*/ val, boolean above){
+	private double differentialCrossing(double[] val, boolean above){
 		if(above){
 			//crossing the line from above
-			while (val/*[0]*/ > 0 /*&& val[1] > 0*/){
+			while (val[0] > 0 && val[1] > 0){
 //				val[0] = val[1];
-				val/*[1 0]*/ = cs.getFilteredData();
+				val[1 0] = cs.getFilteredData();
 				System.out.println("\t " +val);
 				try {	Thread.sleep(50);	} catch (InterruptedException e) {}
 			}
 		}else{
 			//crossing the line from below
-			while (val/*[0]*/ < 0 /*&& val[1] < 0*/){
+			while (val[0] < 0 && val[1] < 0){
 //				val[0] = val[1];
-				val/*[1 0]*/ = cs.getFilteredData();
+				val[1 0] = cs.getFilteredData();
 				System.out.println("\t " +val);
 				try {	Thread.sleep(50);	} catch (InterruptedException e) {}
 			}
@@ -179,7 +175,7 @@ public class LSLocalization extends Localization {
 		return 0;
 	}
 	
-	
+	*/
 	private void updateOdometer(double[] lineAng, double[] pos){
 		pos[2]=odo.getTheta();	
 		//TODO: this math is not good, need to adapt depending on position of sensor/rotation

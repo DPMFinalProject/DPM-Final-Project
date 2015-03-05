@@ -11,13 +11,14 @@ package tests.navigation.localization;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.localization.LSLocalization;
+import navigation.localization.LSLocalization2;
 import navigation.odometry.Odometer;
 import tests.TestCase;
 import util.Direction;
 
 /**
  * 
- * @author Mc Greggys
+ * @author Gregory Brookes
  */
 public class oneLsLocalisaion extends TestCase {
 
@@ -33,7 +34,7 @@ public class oneLsLocalisaion extends TestCase {
 		Navigation nav = new Navigation(odo, driver);
 		
 		
-		LSLocalization lsl=new LSLocalization(odo,driver,nav);
+		LSLocalization2 lsl=new LSLocalization2(odo,driver,nav);
 		
 		lsl.doLocalization();
 		
