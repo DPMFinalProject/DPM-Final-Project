@@ -3,7 +3,7 @@ package util;
 import navigation.odometry.Odometer;
 import lejos.nxt.LCD;
 
-public class OdometryDisplay extends Thread {
+public class OdometryDisplay implements Runnable {
 	private static final long DISPLAY_PERIOD = 250;
 	private Odometer odometer;
 
