@@ -23,6 +23,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	public CorrectionLightSensorSS(Odometer odo) {
 		super(odo);
+		(new Thread(gridMana)).start();
 	}
 	
 	@Override
@@ -32,17 +33,10 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			while(!gridMana.lineDetected()) {
 				pause(10);
 			}
-			
+
 			Direction csDir = gridMana.whichSensorDetected();
-			
-			if(csDir == Direction.RIGHT) {
-			//csRight detected line
-				correctPos(rightSensorCoor);
-			}
-			else {
-			//csLeft detected line
-				correctPos(leftSensorCoor);
-			}
+		
+			correctPos(gridMana.getSensorCoor(csDir));
 		}
 	}
 	

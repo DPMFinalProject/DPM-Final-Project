@@ -43,19 +43,9 @@ public class OdoWithCorrectionTest extends TestCase {
 	@Override
 	public void runTest() {
 		
-//		(new Thread(odo)).start();
-//		(new Thread(correct)).start();
-//		(new Thread(display)).start();
-		(new Thread(gridMan)).start();
-		
-		(new Thread() {public void run() {
-				while(true) {
-					System.out.println(gridMan.isOnLine());
-					pause(20
-							);
-				}
-			}
-		}).start();
+		(new Thread(odo)).start();
+		(new Thread(correct)).start();
+		(new Thread(display)).start();
 		
 		driveSquare();
 		
@@ -72,11 +62,5 @@ public class OdoWithCorrectionTest extends TestCase {
 		driver.turn(Direction.RIGHT,90);
 		driver.move(60, false);
 		driver.turn(Direction.RIGHT,90);
-	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
 	}
 }

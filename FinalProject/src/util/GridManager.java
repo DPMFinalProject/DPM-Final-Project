@@ -17,6 +17,7 @@ import util.Direction;
 
 /**
  *	This will take take of everything that deals with the colorsensors
+ *	start this class in a thread at the beginning of any class interacting with the color sensors
  * @author GregoryBrookes, Auguste
  */
 
