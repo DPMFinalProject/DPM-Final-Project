@@ -10,6 +10,7 @@
 package tests;
 
 import tests.navigation.DriverTests;
+import tests.navigation.localization.LSLocalizationInterceptTest;
 import tests.navigation.localization.oneLsLocalisaion;
 import tests.sensors.GridManagerTest;
 import lejos.nxt.Button;
@@ -24,7 +25,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new GridManagerTest();
+		TestCase test = new LSLocalizationInterceptTest();
 		test.runTest();
 	}
 

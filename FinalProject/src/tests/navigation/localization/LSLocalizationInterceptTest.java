@@ -11,6 +11,7 @@ package tests.navigation.localization;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.localization.LSLocalization;
+import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.LSLocalizationRotation;
 import navigation.odometry.Odometer;
 import tests.TestCase;
@@ -20,7 +21,7 @@ import util.Direction;
  * 
  * @author Gregory Brookes
  */
-public class oneLsLocalisaion extends TestCase {
+public class LSLocalizationInterceptTest extends TestCase {
 
 	/**
 	 * @see tests.TestCase#runTest()
@@ -34,13 +35,18 @@ public class oneLsLocalisaion extends TestCase {
 		Navigation nav = new Navigation(odo, driver);
 		
 		
-		LSLocalizationRotation lsl=new LSLocalizationRotation(odo,driver,nav);
+		LSLocalizationIntercept lsl=new LSLocalizationIntercept(odo,driver,nav);
+		odo.setX(20);
+		odo.setY(20);
 		
 		lsl.doLocalization();
 		
-		System.out.println("X: " + odo.getX());
+	/*	System.out.println("X: " + odo.getX());
 		System.out.println("Y: " + odo.getY());
-		System.out.println("Theta: " + odo.getTheta());
+		System.out.println("Theta: " + odo.getTheta());*/
+	
+	
+		System.out.println("Localization Finished");
 	}
 
 }

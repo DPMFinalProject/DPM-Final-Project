@@ -24,7 +24,7 @@ import navigation.odometry.Odometer;
  * 	Performs localization using the light sensor
  * @author Oleg
  */
-public class LSLocalization2 extends Localization {
+public class LSLocalizationRotation extends Localization {
 	private FilteredColorSensor cs;
 	private GridManager grid;
 	
@@ -33,7 +33,7 @@ public class LSLocalization2 extends Localization {
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
 	
-	public LSLocalization2(Odometer odo, Driver driver, Navigation nav) {
+	public LSLocalizationRotation(Odometer odo, Driver driver, Navigation nav) {
 		super(odo, driver, nav);
 	}
 

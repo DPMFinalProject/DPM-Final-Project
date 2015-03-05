@@ -40,8 +40,8 @@ public class Driver {
 	private final ObstacleDetection detection;
 	public Driver() {
 		//this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
-		leftMotor.setAcceleration(FWD_ACCEL);
-		rightMotor.setAcceleration(FWD_ACCEL);
+//		leftMotor.setAcceleration(FWD_ACCEL);
+//		rightMotor.setAcceleration(FWD_ACCEL);
 		detection = new ObstacleDetection();
 		lock = new Object();
 		
@@ -247,7 +247,7 @@ public class Driver {
 	 * 	Stops any movement.
 	 */
 	public void stop() {
-		leftMotor.stop();
+		leftMotor.stop(true);
 		rightMotor.stop();
 	}
 	

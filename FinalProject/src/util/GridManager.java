@@ -39,7 +39,7 @@ public class GridManager {
  * 	Returns boolean condition if just entered a line
  * @return Return true if just ENTERED a line
  */
-	private boolean hasEnterLine( ){
+	public boolean hasEnterLine( ){
 		return lineCrossingCondition(-lineCrossingThreshold, true);
 	}
 	/**
