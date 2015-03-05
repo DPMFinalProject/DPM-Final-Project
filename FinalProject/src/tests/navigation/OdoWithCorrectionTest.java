@@ -53,13 +53,13 @@ public class OdoWithCorrectionTest extends TestCase {
 	
 	public void driveSquare()
 	{
-		driver.move(60);
+		driver.move(60, false);
 		driver.turn(Direction.RIGHT,90);
-		driver.move(60);
+		driver.move(60, false);
 		driver.turn(Direction.RIGHT,90);
-		driver.move(60);
+		driver.move(60, false);
 		driver.turn(Direction.RIGHT,90);
-		driver.move(60);
+		driver.move(60, false);
 		driver.turn(Direction.RIGHT,90);
 	}
 }

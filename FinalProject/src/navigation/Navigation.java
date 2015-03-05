@@ -17,14 +17,6 @@ import navigation.odometry.Odometer;
  * @author Oleg
  */
 
-
-/*  #####################################################################################
- * 	#		problem: when asking the wheels to move, we cant do anything else after		#
- * 	#	      																			#
- * 	#																					#
- * 	#	--> i changed them to immediatereturn, might want to look into that				#
- *  #####################################################################################
- */
 public class Navigation {
 	private Driver driver;
 	private Odometer odo;
@@ -76,7 +68,7 @@ public class Navigation {
 			turnTo(targetAngle);
 			
 			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-			driver.move(distance);
+			driver.move(distance, false);
 		}
 		
 	}

@@ -22,6 +22,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	FilteredColorSensor csRight, csLeft;
 	final double SIZE_OF_TILE = 30.48;
+	final double LINE_THRESHOLD = 2;
 	private final double[] leftSensorCoor = {-4.8, 6.5};//{x, y}
 	private final double[] rightSensorCoor = {4.8, 6.5};//{x, y}
 	
@@ -53,7 +54,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	public boolean hasDetectedLine() {
-		if(csRight.getFilteredData()>5 || csLeft.getFilteredData()>5) {
+		if(csRight.getFilteredData()>LINE_THRESHOLD || csLeft.getFilteredData()>LINE_THRESHOLD) {
 			return true;
 		}
 		return false;
@@ -61,7 +62,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	public Direction whichSensorDetected()
 	{
-		if(csRight.getFilteredData()>5) {
+		if(csRight.getFilteredData()>LINE_THRESHOLD) {
 			return Direction.RIGHT;
 		}
 		else {
