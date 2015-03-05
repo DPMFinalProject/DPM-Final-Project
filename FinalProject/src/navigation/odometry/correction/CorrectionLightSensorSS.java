@@ -8,11 +8,9 @@
  */
 package navigation.odometry.correction;
 
-import lejos.nxt.SensorPort;
 import navigation.odometry.Odometer;
-import sensors.FilteredColorSensor;
-import sensors.filters.DifferentialFilter;
 import util.Direction;
+import util.GridManager;
 
 /**
  * Odometry correction assuming two light sensors both placed at the front of the robot
@@ -20,27 +18,22 @@ import util.Direction;
  */
 public class CorrectionLightSensorSS extends OdometryCorrection {
 	
-	FilteredColorSensor csRight, csLeft;
 	final double SIZE_OF_TILE = 30.48;
-	final double LINE_THRESHOLD = -2;
-	private final double[] leftSensorCoor = {-4.8, 6.5};//{x, y}
-	private final double[] rightSensorCoor = {4.8, 6.5};//{x, y}
+	final GridManager gridMana = new GridManager();
 	
 	public CorrectionLightSensorSS(Odometer odo) {
 		super(odo);
-		csLeft = new FilteredColorSensor(SensorPort.S1,new DifferentialFilter(2));
-		csRight = new FilteredColorSensor(SensorPort.S2,new DifferentialFilter(2));
 	}
 	
 	@Override
 	public void run() {
 		while(true)
 		{
-			while(!hasDetectedLine()) {
+			while(!gridMana.lineDetected()) {
 				pause(10);
 			}
 			
-			Direction csDir = whichSensorDetected();
+			Direction csDir = gridMana.whichSensorDetected();
 			
 			if(csDir == Direction.RIGHT) {
 			//csRight detected line
@@ -50,25 +43,6 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			//csLeft detected line
 				correctPos(leftSensorCoor);
 			}
-		}
-	}
-	
-	public boolean hasDetectedLine() {
-		if(csRight.getFilteredData()<LINE_THRESHOLD || csLeft.getFilteredData()<LINE_THRESHOLD) {
-			
-			System.out.println("line detected");
-			return true;
-		}
-		return false;
-	}
-	
-	public Direction whichSensorDetected()
-	{
-		if(csRight.getFilteredData()<LINE_THRESHOLD) {
-			return Direction.RIGHT;
-		}
-		else {
-			return Direction.LEFT;
 		}
 	}
 	

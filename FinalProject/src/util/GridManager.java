@@ -11,17 +11,13 @@
 package util;
 
 import lejos.nxt.SensorPort;
-import navigation.odometry.Odometer;
 import sensors.FilteredColorSensor;
 import sensors.filters.DifferentialFilter;
 import util.Direction;
 
-//TODO: Find out what where does the light sensor detects a line (+- constant)
-//		add the corrected values depending on position of sensor
-
 /**
- *	This will take take of everything that deals with the gridLines
- * @author GregoryBrookes
+ *	This will take take of everything that deals with the colorsensors
+ * @author GregoryBrookes, Auguste
  */
 
 public class GridManager implements Runnable{
@@ -75,12 +71,13 @@ public class GridManager implements Runnable{
 		return false;
 	}
 	
-	public boolean isOnLine(Direction direction) {
-		if (direction == Direction.RIGHT) {
-			return rightCSOnLine;
+	public Direction whichSensorDetected()
+	{
+		if(rightCSOnLine) {
+			return Direction.RIGHT;
 		}
 		else {
-			return leftCSOnLine;
+			return Direction.LEFT;
 		}
 	}
 	
