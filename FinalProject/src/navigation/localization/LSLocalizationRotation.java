@@ -29,11 +29,12 @@ import navigation.odometry.Odometer;
 //#            TODO: make sure the position of the 					#
 //#					light sensors doesn't make this code 			#
 //#						fall apart									#	
-//#				TODO: update the GrigManager after August changes	#
+//#				   if it does, decrease all the angles by 45deg?	#
+//#				TODO: add a trhead.stop? 							#
 //###################################################################
 public class LSLocalizationRotation extends Localization {
 	private FilteredColorSensor cs;
-	private GridManager grid;
+	private GridManager grid = new GridManager();
 	
 	private final double CS_DIST = 13.1;
 	
@@ -42,6 +43,7 @@ public class LSLocalizationRotation extends Localization {
 	
 	public LSLocalizationRotation(Odometer odo, Driver driver, Navigation nav) {
 		super(odo, driver, nav);
+		(new Thread(grid)).start();
 	}
 
 	/**
@@ -52,7 +54,6 @@ public class LSLocalizationRotation extends Localization {
 	@Override
 	public void doLocalization() {		
 		cs = new FilteredColorSensor(SensorPort.S1,new DifferentialFilter(3));
-		grid = new GridManager(cs,CS_DIST,odo);
 
 		//nav.travelTo(-2, -2, 0);
 		driver.turn(Direction.LEFT); // make one full CCW turn 
@@ -81,7 +82,11 @@ public class LSLocalizationRotation extends Localization {
 		for(int i=0 ; i<4 ; i++){
 			System.out.println(i+ "      " +lineAngle[i]);
 			while(lineAngle[i]==-1){
-				grid.getPosMidLineCrossing(pos);
+				
+				while(!grid.lineDetected()){
+					try { Thread.sleep(10); } catch (InterruptedException e) {}
+				}
+				odo.getPosition(pos);
 				System.out.println(pos[2]);
 				lineAngle[i]=pos[2];
 			}
