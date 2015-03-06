@@ -24,7 +24,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new OdoWithCorrectionTest();
+		TestCase test = new LSLocalizationInterceptTest();
 		
 		test.runTest();
 	}

@@ -22,8 +22,15 @@ import navigation.odometry.Odometer;
 
 /**
  * 	Performs localization using the light sensor
- * @author Oleg
+ * @author Gregory Brookes
  */
+
+//###################################################################
+//#            TODO: make sure the position of the 					#
+//#					light sensors doesn't make this code 			#
+//#						fall apart									#	
+//#				TODO: update the GrigManager after August changes	#
+//###################################################################
 public class LSLocalizationRotation extends Localization {
 	private FilteredColorSensor cs;
 	private GridManager grid;
