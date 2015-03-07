@@ -29,8 +29,7 @@ public class OdometryDisplay implements Runnable {
 			LCD.drawString("T:              ", 0, 2);
 
 			// get the odometry information
-			boolean[] updateBool = {true,true,true};
-			odometer.getPosition(position, updateBool);
+			odometer.getPosition(position);
 			
 			//convert to absolute angle in range 0 to 360
 			double thetaDegrees = Math.toDegrees(position[2]);

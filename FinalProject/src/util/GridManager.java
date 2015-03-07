@@ -38,22 +38,26 @@ public class GridManager implements Runnable{
 			double leftCSMeasure = leftCS.getFilteredData();
 			
 			if (leftCSMeasure < -LINE_THRESHOLD) {
+				//System.out.println(leftCSMeasure);
 				setLeftCSDetected(true);
 			}
 			else if (leftCSMeasure > LINE_THRESHOLD) {
+				//System.out.println(leftCSMeasure);
 				setLeftCSDetected(false);
 			}
 			
 			double rightCSMeasure = rightCS.getFilteredData();
 			
 			if (rightCSMeasure < -LINE_THRESHOLD) {
+				//System.out.println(rightCSMeasure);
 				setRightCSDetected(true);
 			}
 			else if (rightCSMeasure > LINE_THRESHOLD) {
+				//System.out.println(rightCSMeasure);
 				setRightCSDetected(false);
 			}
 			
-			pause(20);
+			pause(30);
 		}
 	}
 	
@@ -100,15 +104,13 @@ public class GridManager implements Runnable{
 	}
 	
 	public boolean isOnLine(Direction direction){
-		if(direction == Direction.RIGHT){
-			if(rightCSOnLine)
-				return true;
-		}else if(leftCSOnLine){
-			return true;
+		if(direction == Direction.RIGHT) {
+			return rightCSOnLine;
 		}
-		return false;
+		else {
+			return leftCSOnLine;
+		}
 	}
-	 
 	
  	private void pause(int ms) {
 		try {

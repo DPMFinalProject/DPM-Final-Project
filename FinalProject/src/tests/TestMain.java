@@ -24,7 +24,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new LSLocalizationInterceptTest();
+		TestCase test = new OdoTest();
 		
 		test.runTest();
 	}
@@ -40,6 +40,7 @@ public class TestMain {
 		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
 			RConsole.open();
 			
+			LCD.drawString("",0,2);
 			LCD.drawString("Press a button", 0, 3);
 			LCD.drawString("to start", 0, 4);
 			Button.waitForAnyPress();

@@ -89,16 +89,16 @@ public class Driver {
 	 * 	Naively moves forward a given distance, no error checking with odometer.
 	 * 
 	 * @param distance	The distance by which to move, in cm
-	 * @param returnNow return immediately if true
+	 * @param immediateReturn return immediately if true
 	 */
-	public void move(double distance, boolean returnNow) {
+	public void move(double distance, boolean immediateReturn) {
 		setSpeed(FWD_SPEED);
 
 //		detection.setRunning(true);
 		int a=convertDistance(WHL_RADIUS, distance);
 				
 			leftMotor.rotate(a, true);
-			rightMotor.rotate(a, returnNow);
+			rightMotor.rotate(a, immediateReturn);
 		
 //		detection.setRunning(false);
 	}
@@ -226,6 +226,7 @@ public class Driver {
 			System.out.println("Cannot turn forward or backwards.");
 		}
 	}
+	
 	private boolean validTurnDirection(Direction direction) {
 		if (direction == Direction.FWD || direction == Direction.BACK) {
 			System.out.println("Cannot turn " + direction + "\n");
@@ -270,8 +271,8 @@ public class Driver {
 	public void getDelTachoCount(int[] tachoTotal, int[] delTacho){
 		delTacho[0]=rightMotor.getTachoCount() - tachoTotal[0];
 		delTacho[1]=leftMotor.getTachoCount() - tachoTotal[1];
-		
 	}
+	
 	/**
 	 * returns the change in arclength since the last time this method was called
 	 * @param delTacho
@@ -280,13 +281,14 @@ public class Driver {
 	public double getDelArc(int[] delTacho){
 		return ((delTacho[0]+delTacho[1])*WHL_RADIUS*Math.PI)/360;
 	}
+	
 	/**
 	 * returns the change in heading (theta) since   time this method was called
 	 * @param delTacho
 	 * @return Returns the change in heading
 	 */
 	public double getDelTheta(int[] delTacho){
-		return ((delTacho[0]-delTacho[1])*WHL_RADIUS)/(WHL_SEPARATION/2)/2;
+		return ((delTacho[1]-delTacho[0])*WHL_RADIUS)/WHL_SEPARATION;
 	}
 	
 	// Utility methods provided in lab 2

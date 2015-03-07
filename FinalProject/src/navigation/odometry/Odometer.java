@@ -27,14 +27,13 @@ import navigation.odometry.correction.OdometryCorrection;
 public class Odometer implements Runnable {
 	private double x, y, theta;	
 	private final Driver driver;
-	private OdometryCorrection correction;
 	
 	//keeps track of position change
 	int[] delTacho= {0, 0};								
 	int[] tachoTotal= {0, 0};
 	double[] posChange= {0, 0};
 	
-	private static final long ODOMETER_PERIOD = 15;			// odometer update period, in ms			
+	private static final long ODOMETER_PERIOD = 15;// odometer update period, in ms			
 	private Object lock;									
 
 	public Odometer(Driver driver) {
@@ -47,7 +46,6 @@ public class Odometer implements Runnable {
 		y = ypos;
 		theta = Theta;
 		this.driver = driver;
-		correction = new CorrectionLightSensorFB (this);
 		lock = new Object();	
 	}
 
@@ -64,9 +62,9 @@ public class Odometer implements Runnable {
 			
 			//System.out.println("" + x + "," + y + "," + theta);
 			
-			synchronized (lock){
-				driver.getDelTachoCount(tachoTotal,delTacho);
-			}
+			
+			driver.getDelTachoCount(tachoTotal,delTacho);
+			
 			getTotalTachoCount();
 			delPos();
 			
@@ -109,11 +107,12 @@ public class Odometer implements Runnable {
 		else
 			theta=(theta+delTheta)%360;
 	}
-
+	
 	// Getters and Setters
 	public double getX() {
 		return x;
 	}
+	
 	public void setX(double x) {
 		this.x = x;
 	}
@@ -121,6 +120,7 @@ public class Odometer implements Runnable {
 	public double getY() {
 		return y;
 	}
+	
 	public void setY(double y) {
 		this.y = y;
 	}
@@ -128,9 +128,11 @@ public class Odometer implements Runnable {
 	public double getTheta() {
 		return theta;
 	}
+	
 	public void setTheta(double theta) {
 		this.theta = theta;
 	}
+	
 	public void getPosition(double [] pos) {
 		synchronized (lock) {
 			pos[0]=x;

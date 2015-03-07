@@ -17,7 +17,7 @@ import util.*;
 
 /**
  * Odometer calibration and testing class
- * @author Oleg
+ * @author Auguste
  */
 public class OdoWithCorrectionTest extends TestCase {
 
@@ -28,7 +28,6 @@ public class OdoWithCorrectionTest extends TestCase {
 	Odometer odo;
 	CorrectionLightSensorSS correct;
 	OdometryDisplay display;
-	GridManager gridMan;
 	
 	public OdoWithCorrectionTest() {
 		
@@ -36,7 +35,6 @@ public class OdoWithCorrectionTest extends TestCase {
 		odo = new Odometer(driver);
 		correct = new CorrectionLightSensorSS(odo);
 		display = new OdometryDisplay(odo);
-		gridMan = new GridManager();
 		
 	}
 	
@@ -47,20 +45,23 @@ public class OdoWithCorrectionTest extends TestCase {
 		(new Thread(correct)).start();
 		(new Thread(display)).start();
 		
-		driveSquare();
+		driver.turn(Direction.RIGHT, 90);
+		driver.move(20, false);
+		
+		//driveSquare();
 		
 		Button.waitForAnyPress();
 	}
 	
-	public void driveSquare()
+	private void driveSquare()
 	{
 		driver.move(60, false);
-		driver.turn(Direction.RIGHT,90);
+		driver.turn(Direction.RIGHT, 90);
 		driver.move(60, false);
-		driver.turn(Direction.RIGHT,90);
+		driver.turn(Direction.RIGHT, 90);
 		driver.move(60, false);
-		driver.turn(Direction.RIGHT,90);
+		driver.turn(Direction.RIGHT, 90);
 		driver.move(60, false);
-		driver.turn(Direction.RIGHT,90);
+		driver.turn(Direction.RIGHT, 90);
 	}
 }

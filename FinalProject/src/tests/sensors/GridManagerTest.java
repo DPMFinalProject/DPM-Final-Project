@@ -4,51 +4,50 @@
  *	ECSE 211: Design Principles and Methods
  *
  *	OdoTest.java
- *	Created On:	Mar 3, 2015
+ *	Created On:	Mar 7, 2015
  */
-package tests.navigation;
+package tests.sensors;
 
 import navigation.Driver;
-import navigation.odometry.Odometer;
 import tests.TestCase;
-import util.Direction;
+import util.*;
 
 /**
- * Odometer calibration and testing class
- * @author Oleg
+ * Line detection test
+ * @author Auguste
  */
-public class OdoTest extends TestCase {
-	
-	Driver driver;
-	
-	public OdoTest() {
-		driver = new Driver();
-	}
-	
+public class GridManagerTest extends TestCase {
+
 	/**
 	 * @see tests.TestCase#runTest()
 	 */
+	Driver driver;
+	GridManager gridMana;
+	
+	public GridManagerTest() {
+		
+		driver = new Driver();
+		gridMana = new GridManager();
+	}
+	
 	@Override
 	public void runTest() {
-		final Odometer odo = new Odometer(new Driver());
 		
-		(new Thread(odo)).start();
-		
+		(new Thread(gridMana)).start();
 		(new Thread() {
 			public void run() {
 				while(true) {
-					System.out.println("x: "+odo.getX());
-					System.out.println("y: "+odo.getY());
-					System.out.println("T: "+odo.getTheta());
-					pause(1000);
+					System.out.println(gridMana.lineDetected());
+					pause(50	);
 				}
 			}
-		}).start();
+		}
+		).start();
 		
 		driveSquare();
 	}
 	
-	private void driveSquare()
+	public void driveSquare()
 	{
 		driver.move(60, false);
 		driver.turn(Direction.RIGHT, 90);
