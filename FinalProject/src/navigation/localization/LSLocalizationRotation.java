@@ -33,17 +33,18 @@ import navigation.odometry.Odometer;
 //#				TODO: add a trhead.stop? 							#
 //###################################################################
 public class LSLocalizationRotation extends Localization {
-	private FilteredColorSensor cs;
 	private GridManager grid = new GridManager();
 	
-	private final double CS_DIST = 13.1;
-	
+	private final double CS_DIST;
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
 	
 	public LSLocalizationRotation(Odometer odo, Driver driver, Navigation nav) {
 		super(odo, driver, nav);
 		(new Thread(grid)).start();
+		double[] temp = new double[2];
+		temp=grid.getSensorCoor(Direction.RIGHT);
+		CS_DIST= ( Math.pow(temp[0], 2)+Math.pow(temp[1], 2) )/2;
 	}
 
 	/**
@@ -53,8 +54,6 @@ public class LSLocalizationRotation extends Localization {
 	 */
 	@Override
 	public void doLocalization() {		
-		cs = new FilteredColorSensor(SensorPort.S1,new DifferentialFilter(3));
-
 		//nav.travelTo(-2, -2, 0);
 		driver.turn(Direction.LEFT); // make one full CCW turn 
 		
@@ -83,7 +82,7 @@ public class LSLocalizationRotation extends Localization {
 			System.out.println(i+ "      " +lineAngle[i]);
 			while(lineAngle[i]==-1){
 				
-				while(!grid.lineDetected()){
+				while(!grid.lineDetectedRS()){
 					try { Thread.sleep(10); } catch (InterruptedException e) {}
 				}
 				odo.getPosition(pos);

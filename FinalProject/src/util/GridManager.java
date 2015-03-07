@@ -71,6 +71,12 @@ public class GridManager implements Runnable{
 		}
 		return false;
 	}
+	public boolean lineDetectedRS() {
+		if (rightCSOnLine) {
+			return true;
+		}
+		return false;
+	}
 	
 	public Direction whichSensorDetected()
 	{
@@ -91,7 +97,18 @@ public class GridManager implements Runnable{
 		}
 	}
 	
-	private void pause(int ms) {
+	public boolean isOnLine(Direction direction){
+		if(direction == Direction.RIGHT){
+			if(rightCSOnLine)
+				return true;
+		}else if(leftCSOnLine){
+			return true;
+		}
+		return false;
+	}
+	 
+	
+ 	private void pause(int ms) {
 		try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {}
