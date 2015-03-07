@@ -13,5 +13,5 @@ package util;
  * @author Auguste
  */
 public enum SensorID {
-	LEFT, RIGHT, BOTH
+	LEFT, RIGHT, BOTH, NONE
 }

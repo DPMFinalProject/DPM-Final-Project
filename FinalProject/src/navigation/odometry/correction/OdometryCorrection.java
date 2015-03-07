@@ -3,15 +3,12 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	OdometerCorrection.java
+ *	OdometryCorrection.java
  *	Created On:	Feb 26, 2015
  */
 package navigation.odometry.correction;
 
-import navigation.Driver;
-import navigation.Navigation;
 import navigation.odometry.Odometer;
-import sensors.FilteredColorSensor;
 
 /**
  * Uses light sensors to correct the odometer's coordinates.
@@ -24,7 +21,6 @@ public abstract class OdometryCorrection implements Runnable {
 	public OdometryCorrection(Odometer odo) {
 		this.odo = odo;
 	}
-	public abstract void run();
 	
-	
+	public abstract void run();	
 }

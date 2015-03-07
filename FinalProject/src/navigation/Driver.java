@@ -22,7 +22,7 @@ import lejos.nxt.Motor;
 public class Driver {
 
 	private final int FWD_SPEED = 250;
-	private final int FWD_ACCEL = 200;
+	//private final int FWD_ACCEL = 6000;
 	private final int TURN_SPEED = 100;
 	private final int DRIFT_FACTOR = 50;
 	

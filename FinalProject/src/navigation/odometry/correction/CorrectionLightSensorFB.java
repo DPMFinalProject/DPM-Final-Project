@@ -3,15 +3,12 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	OdometerCorrection.java
+ *	CorrectionLightSensorFB.java
  *	Created On:	Feb 26, 2015
  */
 package navigation.odometry.correction;
 
 import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
-import navigation.Driver;
-import navigation.Navigation;
 import navigation.odometry.Odometer;
 import sensors.FilteredColorSensor;
 import sensors.filters.DifferentialFilter;

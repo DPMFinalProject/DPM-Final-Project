@@ -8,12 +8,7 @@
  */
 package navigation.odometry;
 
-import lejos.nxt.Motor;
-import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.Sound;
 import navigation.Driver;
-import navigation.odometry.correction.CorrectionLightSensorFB;
-import navigation.odometry.correction.OdometryCorrection;
 
 /**
  * Keeps track of the position and orientation of the robot.

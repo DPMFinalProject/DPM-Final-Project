@@ -11,7 +11,6 @@ package sensors;
 import sensors.filters.Filter;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.SensorPort;
-import lejos.robotics.Color;
 
 /**
  * Wrapper around the LeJOS ultrasonic class adding filtering capabilities.

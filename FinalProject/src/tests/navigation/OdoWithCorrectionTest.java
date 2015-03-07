@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	OdoTest.java
+ *	OdoWithCorrectionTest.java
  *	Created On:	Mar 3, 2015
  */
 package tests.navigation;
@@ -13,10 +13,11 @@ import navigation.Driver;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.*;
 import tests.TestCase;
-import util.*;
+import util.Direction;
+import util.OdometryDisplay;
 
 /**
- * Odometer calibration and testing class
+ * Odometry Correction test
  * @author Auguste
  */
 public class OdoWithCorrectionTest extends TestCase {

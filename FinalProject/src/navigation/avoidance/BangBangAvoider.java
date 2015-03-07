@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	ObstacleAvoidance.java
+ *	BangBangAvoider.java
  *	Created On:	Mar 1, 2015
  */
 package navigation.avoidance;

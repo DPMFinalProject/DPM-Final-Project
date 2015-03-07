@@ -5,7 +5,6 @@
  *
  *	GridManager.java
  *	Created On:	Mar 4, 2015
- *	
  */
 
 package util;
@@ -20,7 +19,8 @@ import sensors.filters.DifferentialFilter;
  * @author GregoryBrookes, Auguste
  */
 
-public class GridManager implements Runnable{
+public class GridManager implements Runnable {
+	
 	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
 	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S2, new DifferentialFilter(2));
 	private final double LINE_THRESHOLD = 2;
@@ -87,17 +87,20 @@ public class GridManager implements Runnable{
 		else if (rightCSOnLine) {
 			return SensorID.RIGHT;
 		}
-		else {
+		else if (leftCSOnLine) {
 			return SensorID.LEFT;
+		}
+		else {
+			return SensorID.NONE;
 		}
 	}
 	
 	public double[] getSensorCoor(SensorID ID) {
-		if (ID == SensorID.RIGHT) {
-			return rightSensorCoor;
+		if (ID == SensorID.LEFT) {
+			return leftSensorCoor;
 		}
 		else {
-			return leftSensorCoor;
+			return rightSensorCoor;
 		}
 	}
 	
@@ -108,8 +111,11 @@ public class GridManager implements Runnable{
 		else if (ID == SensorID.RIGHT) {
 			return rightCSOnLine;
 		}
-		else {
+		else if (ID == SensorID.LEFT) {
 			return leftCSOnLine;
+		}
+		else {
+			return (!rightCSOnLine && !leftCSOnLine);
 		}
 	}
 	
