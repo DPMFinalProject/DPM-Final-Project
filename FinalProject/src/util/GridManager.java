@@ -71,11 +71,13 @@ public class GridManager implements Runnable{
 		}
 		return false;
 	}
+	
 	public boolean lineDetectedRS() {
-		if (rightCSOnLine) {
-			return true;
-		}
-		return false;
+		return rightCSOnLine;
+	}
+	
+	public boolean lineDetectedLS() {
+		return leftCSOnLine;
 	}
 	
 	public Direction whichSensorDetected()
