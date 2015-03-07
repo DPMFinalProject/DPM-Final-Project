@@ -9,7 +9,7 @@
 package navigation.odometry.correction;
 
 import navigation.odometry.Odometer;
-import util.Direction;
+import util.SensorID;
 import util.GridManager;
 
 /**
@@ -36,7 +36,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			
 			System.out.println("correcting...");
 			
-			Direction csDir = gridMana.whichSensorDetected();
+			SensorID csDir = gridMana.whichSensorDetected();
 			
 			System.out.println("direction..."+csDir);
 			

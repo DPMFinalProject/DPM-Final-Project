@@ -45,10 +45,7 @@ public class OdoWithCorrectionTest extends TestCase {
 		(new Thread(correct)).start();
 		(new Thread(display)).start();
 		
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(20, false);
-		
-		//driveSquare();
+		driveSquare();
 		
 		Button.waitForAnyPress();
 	}

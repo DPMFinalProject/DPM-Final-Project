@@ -8,13 +8,9 @@ a *	DPM Final Project
  */
 package navigation.localization;
 
-import lejos.nxt.ColorSensor;
-import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
-import sensors.FilteredColorSensor;
-import sensors.FilteredSensor;
-import sensors.filters.DifferentialFilter;
 import util.Direction;
+import util.SensorID;
 import util.GridManager;
 import navigation.Driver;
 import navigation.Navigation;
@@ -43,7 +39,7 @@ public class LSLocalizationRotation extends Localization {
 		super(odo, driver, nav);
 		(new Thread(grid)).start();
 		double[] temp = new double[2];
-		temp=grid.getSensorCoor(Direction.RIGHT);
+		temp=grid.getSensorCoor(SensorID.RIGHT);
 		CS_DIST= ( Math.pow(temp[0], 2)+Math.pow(temp[1], 2) )/2;
 	}
 

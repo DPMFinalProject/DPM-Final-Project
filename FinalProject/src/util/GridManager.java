@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	Test.java
+ *	GridManager.java
  *	Created On:	Mar 4, 2015
  *	
  */
@@ -13,7 +13,6 @@ package util;
 import lejos.nxt.SensorPort;
 import sensors.FilteredColorSensor;
 import sensors.filters.DifferentialFilter;
-import util.Direction;
 
 /**
  *	This will take take of everything that deals with the colorsensors
@@ -38,22 +37,18 @@ public class GridManager implements Runnable{
 			double leftCSMeasure = leftCS.getFilteredData();
 			
 			if (leftCSMeasure < -LINE_THRESHOLD) {
-				//System.out.println(leftCSMeasure);
 				setLeftCSDetected(true);
 			}
 			else if (leftCSMeasure > LINE_THRESHOLD) {
-				//System.out.println(leftCSMeasure);
 				setLeftCSDetected(false);
 			}
 			
 			double rightCSMeasure = rightCS.getFilteredData();
 			
 			if (rightCSMeasure < -LINE_THRESHOLD) {
-				//System.out.println(rightCSMeasure);
 				setRightCSDetected(true);
 			}
 			else if (rightCSMeasure > LINE_THRESHOLD) {
-				//System.out.println(rightCSMeasure);
 				setRightCSDetected(false);
 			}
 			
@@ -84,18 +79,21 @@ public class GridManager implements Runnable{
 		return leftCSOnLine;
 	}
 	
-	public Direction whichSensorDetected()
+	public SensorID whichSensorDetected()
 	{
-		if(rightCSOnLine) {
-			return Direction.RIGHT;
+		if (rightCSOnLine && leftCSOnLine) {
+			return SensorID.BOTH;
+		}
+		else if (rightCSOnLine) {
+			return SensorID.RIGHT;
 		}
 		else {
-			return Direction.LEFT;
+			return SensorID.LEFT;
 		}
 	}
 	
-	public double[] getSensorCoor(Direction direction) {
-		if (direction == Direction.RIGHT) {
+	public double[] getSensorCoor(SensorID ID) {
+		if (ID == SensorID.RIGHT) {
 			return rightSensorCoor;
 		}
 		else {
@@ -103,8 +101,11 @@ public class GridManager implements Runnable{
 		}
 	}
 	
-	public boolean isOnLine(Direction direction){
-		if(direction == Direction.RIGHT) {
+	public boolean isOnLine(SensorID ID){
+		if (ID == SensorID.BOTH) {
+			return (rightCSOnLine && leftCSOnLine);
+		}
+		else if (ID == SensorID.RIGHT) {
 			return rightCSOnLine;
 		}
 		else {

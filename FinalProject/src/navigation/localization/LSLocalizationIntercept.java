@@ -8,13 +8,9 @@ a *	DPM Final Project
  */
 package navigation.localization;
 
-import lejos.nxt.ColorSensor;
-import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
-import sensors.FilteredColorSensor;
-import sensors.FilteredSensor;
-import sensors.filters.DifferentialFilter;
 import util.Direction;
+import util.SensorID;
 import util.GridManager;
 import navigation.Driver;
 import navigation.Navigation;
@@ -33,7 +29,7 @@ import navigation.odometry.Odometer;
 
 public class LSLocalizationIntercept extends Localization {
 	final GridManager grid = new GridManager();
-	private Direction triggeredSensor ;
+	private SensorID triggeredSensor ;
 	
 	private double[] pos = new double[3];
 	
@@ -133,7 +129,7 @@ public class LSLocalizationIntercept extends Localization {
 		driver.turn(rotationDirection());
 		
 		//find the what is the other sensor
-		Direction untriggeredSensor = findUntriggeredSensor();
+		SensorID untriggeredSensor = findUntriggeredSensor();
 		
 		//now: if triggered ls is off line, stop, move forward by 1 and rotate again
 		//rotate as long as the triggered light sensor is on the line and until the second is on a line aswell
@@ -148,17 +144,19 @@ public class LSLocalizationIntercept extends Localization {
 		driver.move(Direction.FWD);
 		perpendicularToLine();
 	}
-	private Direction findUntriggeredSensor() {
-		if(triggeredSensor == Direction.RIGHT){
-			return Direction.LEFT;
+	
+	private SensorID findUntriggeredSensor() {
+		if(triggeredSensor == SensorID.RIGHT){
+			return SensorID.LEFT;
 		}
-		return Direction.RIGHT;
+		return SensorID.RIGHT;
 	}
+	
 	//find out which sensor detected a line and return the direction to turn
 	private Direction rotationDirection(){
 		triggeredSensor=grid.whichSensorDetected();
 		
-		if(triggeredSensor == Direction.RIGHT){
+		if(triggeredSensor == SensorID.RIGHT){
 			return Direction.LEFT;
 		}
 		return Direction.RIGHT;
