@@ -13,7 +13,7 @@ import util.SensorID;
 import util.GridManager;
 
 /**
- * Odometry correction assuming two light sensors both placed at the front of the robot
+ * Odometry correction assuming <<TWO>> light sensors both placed at the <<FRONT>> of the robot
  * @author Auguste
  */
 public class CorrectionLightSensorSS extends OdometryCorrection {
@@ -27,6 +27,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	private boolean rightCrossed = false, leftCrossed = false;
 	private Line axisCrossed;
 	private double[] firstCross = new double[3];
+	private double[] secondCross = new double[3];
 	
 	//stall flag - stall() should be called whenever the robot is turning
 	private boolean stall = false;
@@ -75,49 +76,76 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		SensorID sensor = gridMana.whichSensorDetected();
 		
 		switch (sensor) {
-		case BOTH:
-			//robot is traveling perpendicular to the detected line
-			//set theta accordingly
-			
-			setFlags(true);
-			
-			double thetaError = odo.getTheta()%90;
-			
-			double newTheta = (thetaError > 45) ? (odo.getTheta() + (90 - thetaError)) : (odo.getTheta() - thetaError);
-			
-			odo.setTheta(newTheta);
-			
-		case RIGHT:
-			rightCrossed = true;
-			
-			if (!leftCrossed) {
-				axisCrossed = whichLineCrossed();
-				odo.getPosition(firstCross);
-			}
-			else if (axisCrossed == whichLineCrossed()) {
-				//correct angle
-			}
-			else {
-				return;
-			}
-		
-		case LEFT:
-			leftCrossed = true;
-			
-			if (!rightCrossed) {
+			case BOTH:
+				setFlags(true);
+
+				double newTheta = Math.round(odo.getTheta()/90)*90;
+
+				odo.setTheta(newTheta);
+
+				break;	
+			case RIGHT:
+				rightCrossed = true;
+
+				if (!leftCrossed) {
+					axisCrossed = whichLineCrossed();
+					odo.getPosition(firstCross);
+				}
+				else if (axisCrossed == whichLineCrossed()) {
+					odo.getPosition(secondCross);
+
+					double distanceTravelled = euclideanDistance(firstCross, secondCross);
+					double sensorSeperation = euclideanDistance(gridMana.getSensorCoor(SensorID.LEFT), gridMana.getSensorCoor(SensorID.RIGHT));
+					
+					double odoTheta = odo.getTheta()%90;
+					double correctionTheta = Math.atan(distanceTravelled/sensorSeperation);
+					
+					double thetaError;
+					
+					if (odoTheta < correctionTheta) {
+						thetaError = odoTheta - correctionTheta;
+					}
+					else {
+						thetaError = correctionTheta - odoTheta;
+					}
+					
+					odo.setTheta(odo.getTheta() - thetaError);
+				}
+
+				break;
+			case LEFT:
 				leftCrossed = true;
-				axisCrossed = whichLineCrossed();
-				odo.getPosition(firstCross);
-			}
-			else if (axisCrossed == whichLineCrossed()) {
-				//correct angle
-			}
-			else {
-				return;
-			}
-		
-		default: 
-			System.out.println("no line detected");
+
+				if (!rightCrossed) {
+					leftCrossed = true;
+					axisCrossed = whichLineCrossed();
+					odo.getPosition(firstCross);
+				}
+				else if (axisCrossed == whichLineCrossed()) {
+					odo.getPosition(secondCross);
+
+					double distanceTravelled = euclideanDistance(firstCross, secondCross);
+					double sensorSeperation = euclideanDistance(gridMana.getSensorCoor(SensorID.LEFT), gridMana.getSensorCoor(SensorID.RIGHT));
+
+					double odoTheta = odo.getTheta()%90;
+					double correctionTheta = Math.atan(distanceTravelled/sensorSeperation);
+					
+					double thetaError;
+					
+					if (odoTheta < correctionTheta) {
+						thetaError = correctionTheta - odoTheta;
+					}
+					else {
+						thetaError = odoTheta - correctionTheta;
+					}
+					
+					odo.setTheta(odo.getTheta() - thetaError);
+				}
+
+				break; 
+			case NONE:
+				System.out.println("ERROR: no line detected");
+				break;
 		}
 	}
 	
@@ -164,10 +192,6 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		
 		double sensorTheta = Math.toRadians(odo.getTheta()) + sensorPolar[1];
 		
-		System.out.println("sensorPolarTheta: "+Math.toDegrees(sensorPolar[1]));
-		System.out.println("odoTheta: "+ odo.getTheta());
-		System.out.println("sensorTheta: "+Math.toDegrees(sensorTheta));
-		
 		sensorPos[0] = odo.getX() + sensorPolar[0]*Math.sin(sensorTheta);
 		sensorPos[1] = odo.getY() + sensorPolar[0]*Math.cos(sensorTheta);
 		
@@ -175,13 +199,15 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	private double[] convertToPolar(double[] cartCoor) {
+		double distance = Math.sqrt(Math.pow(cartCoor[0], 2)+Math.pow(cartCoor[1],2));
 		double angle = Math.atan(cartCoor[0]/cartCoor[1]);
 		
-		angle = (cartCoor[0] < 0) ? (angle - 180) : angle;
-		
-		double distance = Math.sqrt(Math.pow(cartCoor[0], 2)+Math.pow(cartCoor[1],2));
 		double[] result = {distance, angle};
 		return result;
+	}
+	
+	private double euclideanDistance(double[] posA, double[] posB) {
+		return Math.sqrt(Math.pow(posA[0]-posB[0], 2) + Math.pow(posA[1]-posB[1], 2));
 	}
 	
 	private boolean isCloserToLine(double thisOne, double thatOne) {
