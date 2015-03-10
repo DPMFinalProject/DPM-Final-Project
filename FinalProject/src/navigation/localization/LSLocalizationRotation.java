@@ -29,7 +29,7 @@ import navigation.odometry.Odometer;
 //#				TODO: add a trhead.stop? 							#
 //###################################################################
 public class LSLocalizationRotation extends Localization {
-	private GridManager grid = new GridManager();
+	private GridManager grid = GridManager.getGridManager();
 	
 	private final double CS_DIST;
 	private double[] pos = new double[3];

@@ -28,7 +28,7 @@ import navigation.odometry.Odometer;
 
 
 public class LSLocalizationIntercept extends Localization {
-	final GridManager grid = new GridManager();
+	final GridManager grid = GridManager.getGridManager();
 	private SensorID triggeredSensor ;
 	
 	private double[] pos = new double[3];

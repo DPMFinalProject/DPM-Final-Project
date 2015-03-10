@@ -46,7 +46,7 @@ public class GridManager extends SensorManager {
 	
 	@Override
 	public void execute() {
-			
+		
 		double leftCSMeasure = leftCS.getFilteredData();
 
 		if (leftCSMeasure < -LINE_THRESHOLD) {

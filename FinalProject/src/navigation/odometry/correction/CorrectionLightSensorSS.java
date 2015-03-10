@@ -21,7 +21,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	private enum Line {xAxis, yAxis};
 	
 	final double SIZE_OF_TILE = 30.48;
-	final GridManager gridMana = new GridManager();
+	final GridManager grid;
 	
 	//Orientationcorrection flags and position variables
 	private boolean rightCrossed = false, leftCrossed = false;
@@ -34,7 +34,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	public CorrectionLightSensorSS(Odometer odo) {
 		super(odo);
-		(new Thread(gridMana)).start();
+		grid = GridManager.getGridManager();
 	}
 	
 	@Override
@@ -45,17 +45,18 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				pause(100);
 			}
 			
-			while(!gridMana.lineDetected()) {
+			while(!grid.lineDetected()) {
 				pause(10);
 			}
-			
-			System.out.println("correcting...");
 			
 			correctOrientation();
 			
 			if (rightCrossed && leftCrossed) {
+				
 				correctPosition();
 				setFlags(false);
+				
+				pause(100);
 			}
 		}
 	}
@@ -73,14 +74,19 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	private void correctOrientation() {
-		SensorID sensor = gridMana.whichSensorDetected();
+		SensorID sensor = grid.whichSensorDetected();
+		System.out.println("correcting... orientation");
+		
+		System.out.println(""+sensor+" sensor(s) detected");
 		
 		switch (sensor) {
 			case BOTH:
 				setFlags(true);
 
 				double newTheta = Math.round(odo.getTheta()/90)*90;
-
+				
+				System.out.println("correcting to: "+newTheta);
+				
 				odo.setTheta(newTheta);
 
 				break;	
@@ -95,7 +101,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					odo.getPosition(secondCross);
 
 					double distanceTravelled = euclideanDistance(firstCross, secondCross);
-					double sensorSeperation = euclideanDistance(gridMana.getSensorCoor(SensorID.LEFT), gridMana.getSensorCoor(SensorID.RIGHT));
+					double sensorSeperation = euclideanDistance(grid.getSensorCoor(SensorID.LEFT), grid.getSensorCoor(SensorID.RIGHT));
 					
 					double odoTheta = odo.getTheta()%90;
 					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
@@ -109,7 +115,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 						thetaError = correctionTheta - odoTheta;
 					}
 					
+					System.out.println("correcting to: "+ (odo.getTheta() - thetaError));
+					
 					odo.setTheta(odo.getTheta() - thetaError);
+				}
+				else {
+					System.out.println("detected different lines... reseting");
 				}
 
 				break;
@@ -125,7 +136,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					odo.getPosition(secondCross);
 
 					double distanceTravelled = euclideanDistance(firstCross, secondCross);
-					double sensorSeperation = euclideanDistance(gridMana.getSensorCoor(SensorID.LEFT), gridMana.getSensorCoor(SensorID.RIGHT));
+					double sensorSeperation = euclideanDistance(grid.getSensorCoor(SensorID.LEFT), grid.getSensorCoor(SensorID.RIGHT));
 
 					double odoTheta = odo.getTheta()%90;
 					double correctionTheta = 90 - Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
@@ -139,7 +150,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 						thetaError = odoTheta - correctionTheta;
 					}
 					
+					System.out.println("correcting to: "+ (odo.getTheta() - thetaError));
+					
 					odo.setTheta(odo.getTheta() - thetaError);
+				}
+				else {
+					System.out.println("detected different lines... reseting");
 				}
 
 				break; 
@@ -151,13 +167,15 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	private void correctPosition() {
 		
-		double[] sensorPos = getSensorPos(gridMana.getSensorCoor(gridMana.whichSensorDetected()));
+		double[] sensorPos = getSensorPos(grid.getSensorCoor(grid.whichSensorDetected()));
+		
+		System.out.println("correcting... position");
 		
 		if(whichLineCrossed(sensorPos) == Line.xAxis) {
 			
 			double yError = (sensorPos[1] % SIZE_OF_TILE) - (SIZE_OF_TILE/2);
 			
-			//System.out.println("correcting y to:"+odo.getY()+" - "+yError);
+			System.out.println("correcting y to:"+odo.getY()+" - "+yError);
 			
 			odo.setY(odo.getY()-yError);
 		}
@@ -165,14 +183,14 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		//detected y-axis line
 			double xError = (sensorPos[0] % SIZE_OF_TILE) - (SIZE_OF_TILE/2);
 			
-			//System.out.println("correcting x to:"+odo.getX()+" - "+xError);
+			System.out.println("correcting x to:"+odo.getX()+" - "+xError);
 			
 			odo.setX(odo.getX()-xError);
 		}
 	}
 	
 	private Line whichLineCrossed() {
-		return whichLineCrossed(getSensorPos(gridMana.getSensorCoor(gridMana.whichSensorDetected())));
+		return whichLineCrossed(getSensorPos(grid.getSensorCoor(grid.whichSensorDetected())));
 	}
 	
 	private Line whichLineCrossed(double[] sensorPos) {

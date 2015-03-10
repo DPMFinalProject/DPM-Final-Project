@@ -54,12 +54,22 @@ public class OdoWithCorrectionTest extends TestCase {
 	private void driveSquare()
 	{
 		driver.move(60, false);
+		correct.stall();
 		driver.turn(Direction.RIGHT, 90);
+		correct.resume();
 		driver.move(60, false);
+		correct.stall();
 		driver.turn(Direction.RIGHT, 90);
+		correct.resume();
 		driver.move(60, false);
+		correct.stall();
 		driver.turn(Direction.RIGHT, 90);
+		correct.resume();
 		driver.move(60, false);
+		correct.stall();
 		driver.turn(Direction.RIGHT, 90);
+		correct.resume();
+		driver.move(15, false);
+		System.out.println("final orientation: "+odo.getTheta());
 	}
 }

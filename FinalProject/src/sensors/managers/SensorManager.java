@@ -14,7 +14,7 @@ package sensors.managers;
  */
 public abstract class SensorManager extends Thread {
 	protected static GridManager gridManager;
-	private static boolean running = false;
+	private static boolean running = true;
 	
 	public final void run() {
 		while(true) {
@@ -39,7 +39,6 @@ public abstract class SensorManager extends Thread {
 		try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

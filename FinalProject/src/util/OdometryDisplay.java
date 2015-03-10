@@ -4,7 +4,7 @@ import navigation.odometry.Odometer;
 import lejos.nxt.LCD;
 
 public class OdometryDisplay implements Runnable {
-	private static final long DISPLAY_PERIOD = 250;
+	private static final long DISPLAY_PERIOD = 50;
 	private Odometer odometer;
 
 	// constructor
@@ -30,10 +30,6 @@ public class OdometryDisplay implements Runnable {
 
 			// get the odometry information
 			odometer.getPosition(position);
-			
-			//convert to absolute angle in range 0 to 360
-			double thetaDegrees = Math.toDegrees(position[2]);
-			position[2] = (thetaDegrees<0) ? 360 + (thetaDegrees % 360) : thetaDegrees % 360;
 			
 			// display odometry information
 			for (int i = 0; i < 3; i++) {

@@ -23,23 +23,25 @@ public class GridManagerTest extends TestCase {
 	 * @see tests.TestCase#runTest()
 	 */
 	Driver driver;
-	GridManager gridMana;
+	GridManager grid;
 	
 	public GridManagerTest() {
 		
 		driver = new Driver();
-		gridMana = GridManager.getGridManager();
+		grid = GridManager.getGridManager();
 	}
 	
 	@Override
 	public void runTest() {
 		
-		(new Thread(gridMana)).start();
 		(new Thread() {
 			public void run() {
 				while(true) {
-					System.out.println(gridMana.lineDetected());
-					pause(50	);
+					if (grid.lineDetected()) {
+						System.out.println("line detected");
+					}
+					
+					pause(50);
 				}
 			}
 		}
