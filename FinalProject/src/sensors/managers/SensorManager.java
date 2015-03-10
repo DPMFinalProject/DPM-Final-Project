@@ -13,7 +13,7 @@ package sensors.managers;
  * @author Oleg
  */
 public abstract class SensorManager extends Thread {
-	protected static SensorManager manager;
+	protected static GridManager gridManager;
 	private static boolean running = false;
 	
 	public final void run() {
@@ -25,7 +25,7 @@ public abstract class SensorManager extends Thread {
 	}
 	
 	public abstract void execute();
-	public abstract SensorManager getSensorManager();
+	//public abstract SensorManager getSensorManager();
 
 	public void setRunning(boolean run) {
 		running = run;

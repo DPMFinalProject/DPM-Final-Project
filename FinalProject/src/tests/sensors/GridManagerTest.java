@@ -9,6 +9,7 @@
 package tests.sensors;
 
 import navigation.Driver;
+import sensors.managers.GridManager;
 import tests.TestCase;
 import util.*;
 
@@ -27,7 +28,7 @@ public class GridManagerTest extends TestCase {
 	public GridManagerTest() {
 		
 		driver = new Driver();
-		gridMana = new GridManager();
+		gridMana = GridManager.getGridManager();
 	}
 	
 	@Override

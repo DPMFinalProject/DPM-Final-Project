@@ -9,8 +9,8 @@
 package navigation.odometry.correction;
 
 import navigation.odometry.Odometer;
+import sensors.managers.GridManager;
 import util.SensorID;
-import util.GridManager;
 
 /**
  * Odometry correction assuming <<TWO>> light sensors both placed at the <<FRONT>> of the robot
@@ -98,7 +98,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					double sensorSeperation = euclideanDistance(gridMana.getSensorCoor(SensorID.LEFT), gridMana.getSensorCoor(SensorID.RIGHT));
 					
 					double odoTheta = odo.getTheta()%90;
-					double correctionTheta = Math.atan(distanceTravelled/sensorSeperation);
+					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 					
 					double thetaError;
 					
@@ -128,7 +128,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					double sensorSeperation = euclideanDistance(gridMana.getSensorCoor(SensorID.LEFT), gridMana.getSensorCoor(SensorID.RIGHT));
 
 					double odoTheta = odo.getTheta()%90;
-					double correctionTheta = Math.atan(distanceTravelled/sensorSeperation);
+					double correctionTheta = 90 - Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 					
 					double thetaError;
 					

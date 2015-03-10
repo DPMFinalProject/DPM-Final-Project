@@ -9,9 +9,9 @@ a *	DPM Final Project
 package navigation.localization;
 
 import lejos.nxt.Sound;
+import sensors.managers.GridManager;
 import util.Direction;
 import util.SensorID;
-import util.GridManager;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
