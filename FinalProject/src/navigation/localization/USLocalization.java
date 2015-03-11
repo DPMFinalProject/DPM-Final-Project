@@ -13,6 +13,7 @@ import lejos.nxt.UltrasonicSensor;
 import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
 import sensors.FilteredUltrasonicSensor;
+import sensors.filters.DifferentialFilter;
 import sensors.filters.OutlierFilter;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
@@ -184,10 +185,15 @@ public class USLocalization extends Localization {
 	//make sure to be facing away from wall;
 	private void faceAwayFromWall(){
 		double val;
+		DifferentialFilter dFilter = new DifferentialFilter(2);
+		OutlierFilter oFilter = new OutlierFilter(2, 250);
 		do{
 			//val=rightUSSensor.getFilteredData();
+			// Use edge triggering by applying the differential filter.
 			val = obstacleDetection.rightDistance();
 			System.out.println(val);
+			val = oFilter.filter(dFilter.filter(val));
+			pause(10);
 		} while(val < 50);
 		
 	}
