@@ -48,7 +48,7 @@ public class USLocalization extends Localization {
 	 */
 	@Override
 	public void doLocalization() {
-		usL = new FilteredUltrasonicSensor(SensorPort.S1 ,new OutlierFilter(3, usSensorOutlier));
+		usL = new FilteredUltrasonicSensor(SensorPort.S3 ,new OutlierFilter(3, usSensorOutlier));
 		usR = new FilteredUltrasonicSensor(SensorPort.S2 ,new OutlierFilter(3, usSensorOutlier));
 		
 		// order: L/R
@@ -57,16 +57,21 @@ public class USLocalization extends Localization {
 		//IDEA: turn until the robot faces both walls, move towards the farthest wall
 		//until it reaches the first tile, then do the same localization as in lab 4
 		
+		/*
 		driver.turn(Direction.LEFT);
 		while(!isfacingBothWalls(readings)){
 			try {	Thread.sleep(50);	} catch (InterruptedException e) {}
 		}
 		driver.stop();		
 		
-		
-		while(isInFirstTile(readings)){
-			moveTowardsFarthestWall(readings);
+		System.out.println("Is facing both walls");
+		*/
+		/*
+		while(!isInFirstTile(readings)){
+			moveTowardsFurthestWall(readings);
 		}
+		System.out.println("is in first tile");
+		*/
 		
 		fallingEdgeLocalization();
 		
@@ -82,18 +87,23 @@ public class USLocalization extends Localization {
 		
 		//get the angles for each falling edges
 		angles[0] = getThetaFallingEdge();
+		
+		driver.turn(Direction.LEFT);
 		getThetaRisingEdge();
+		
 		angles[1]= getThetaFallingEdge();
 		
 		
 		driver.stop();
 		odo.setTheta(localizationHeading(angles));
 		
+		/*
 		nav.turnTo(270);
 		odo.setX(usR.getFilteredData());
 		
 		nav.turnTo(180);
 		odo.setY(usR.getFilteredData());
+		*/
 		
 		
 	}
@@ -111,18 +121,21 @@ public class USLocalization extends Localization {
 	private boolean isInFirstTile(double[] readings) {
 		readings[0]=usL.getFilteredData();
 		readings[1]=usR.getFilteredData();
-		if(readings[0] < 40 && readings[1] < 40){
+		System.out.println(readings[0]+ "\t"+ readings[1]);
+		if(readings[0] < 30 && readings[1] < 30){
 			return true;
 		}
 		return false;
 	}
 	//move towards thefarthestWall by increments of 10
-	private void moveTowardsFarthestWall(double[] readings) {
+	private void moveTowardsFurthestWall(double[] readings) {
 		if(readings[0]>readings[1]){
+			System.out.println("left is the closest wall");
 			driver.turn(Direction.LEFT, 45);
 			driver.move(10, false);
 			driver.turn(Direction.RIGHT, 45);
 		}else{
+			System.out.println("Right is the closest wall");
 			driver.turn(Direction.RIGHT, 45);
 			driver.move(10, false);
 			driver.turn(Direction.LEFT, 45);
@@ -166,8 +179,11 @@ public class USLocalization extends Localization {
 		double[] angles = new double[2];
 		
 		//enters upper margin of error
-		while(val>threshold+noiseMargin)
+		while(val>threshold+noiseMargin){
 			val=usR.getFilteredData();
+			System.out.println("\t" + val);
+		}
+		System.out.println("inside upper margin of error");
 			
 		odo.getPosition(pos);
 		angles[0]=pos[2];
@@ -175,6 +191,7 @@ public class USLocalization extends Localization {
 		//leaves lower margin of error
 		while(val>threshold-noiseMargin)
 			val=usR.getFilteredData();
+		System.out.println("outside lower margin of error");
 		
 		odo.getPosition(pos);
 		angles[1]=pos[2];
@@ -188,14 +205,15 @@ public class USLocalization extends Localization {
 		double val=usR.getFilteredData();
 		double[] angles = new double[2];
 		
-		while(val<threshold+noiseMargin)
+		//enters lower margin of error
+		while(val<threshold-noiseMargin)
 			val=usR.getFilteredData();
 		
 		odo.getPosition(pos);
 		angles[0]=pos[2];
 	
-		//leaves lower margin of error
-		while(val<threshold-noiseMargin)
+		//leaves upper margin of error
+		while(val<threshold+noiseMargin)
 			val=usR.getFilteredData();
 		
 		odo.getPosition(pos);

@@ -10,7 +10,6 @@ package tests.navigation.localization;
 
 import navigation.Driver;
 import navigation.Navigation;
-import navigation.localization.LSLocalization;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.LSLocalizationRotation;
 import navigation.odometry.Odometer;

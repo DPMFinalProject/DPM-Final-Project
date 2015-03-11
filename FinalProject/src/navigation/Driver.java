@@ -29,7 +29,7 @@ public class Driver {
 	private final double WHL_RADIUS = 2.15;
 	private final double WHL_SEPARATION = 14.8;
 
-	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
+	private final NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
 	
 	private final ObstacleDetection detection;
 	public Driver() {
