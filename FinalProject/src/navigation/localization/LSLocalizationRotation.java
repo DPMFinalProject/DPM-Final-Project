@@ -9,9 +9,9 @@ a *	DPM Final Project
 package navigation.localization;
 
 import lejos.nxt.Sound;
+import sensors.managers.GridManager;
 import util.Direction;
 import util.SensorID;
-import util.GridManager;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
@@ -29,7 +29,7 @@ import navigation.odometry.Odometer;
 //#				TODO: add a trhead.stop? 							#
 //###################################################################
 public class LSLocalizationRotation extends Localization {
-	private GridManager grid = new GridManager();
+	private GridManager grid = GridManager.getGridManager();
 	
 	private final double CS_DIST;
 	private double[] pos = new double[3];

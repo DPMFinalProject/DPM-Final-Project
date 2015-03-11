@@ -7,11 +7,12 @@
  *	Created On:	Mar 4, 2015
  */
 
-package util;
+package sensors.managers;
 
 import lejos.nxt.SensorPort;
 import sensors.FilteredColorSensor;
 import sensors.filters.DifferentialFilter;
+import util.SensorID;
 
 /**
  *	This will take take of everything that deals with the colorsensors
@@ -19,7 +20,7 @@ import sensors.filters.DifferentialFilter;
  * @author GregoryBrookes, Auguste
  */
 
-public class GridManager implements Runnable {
+public class GridManager extends SensorManager {
 	
 	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
 	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S2, new DifferentialFilter(2));
@@ -28,32 +29,47 @@ public class GridManager implements Runnable {
 	private boolean rightCSOnLine = false;
 	private final double[] leftSensorCoor = {-4.8, 6.5};//{x, y}
 	private final double[] rightSensorCoor = {4.8, 6.5};//{x, y}
+	private boolean kill =  false;
 	
+	private GridManager () {
+		
+	}
+	
+	public static GridManager getGridManager() { 
+		if (gridManager == null) {
+			gridManager = new GridManager();
+			gridManager.start();
+		}
+		
+		return gridManager;
+	}
 	
 	@Override
-	public void run() {
-		while(true) {
-			
-			double leftCSMeasure = leftCS.getFilteredData();
-			
-			if (leftCSMeasure < -LINE_THRESHOLD) {
-				setLeftCSDetected(true);
-			}
-			else if (leftCSMeasure > LINE_THRESHOLD) {
-				setLeftCSDetected(false);
-			}
-			
-			double rightCSMeasure = rightCS.getFilteredData();
-			
-			if (rightCSMeasure < -LINE_THRESHOLD) {
-				setRightCSDetected(true);
-			}
-			else if (rightCSMeasure > LINE_THRESHOLD) {
-				setRightCSDetected(false);
-			}
-			
-			pause(30);
+	public void execute() {
+		
+		double leftCSMeasure = leftCS.getFilteredData();
+
+		if (leftCSMeasure < -LINE_THRESHOLD) {
+			setLeftCSDetected(true);
 		}
+		else if (leftCSMeasure > LINE_THRESHOLD) {
+			setLeftCSDetected(false);
+		}
+
+		double rightCSMeasure = rightCS.getFilteredData();
+
+		if (rightCSMeasure < -LINE_THRESHOLD) {
+			setRightCSDetected(true);
+		}
+		else if (rightCSMeasure > LINE_THRESHOLD) {
+			setRightCSDetected(false);
+		}
+
+		if (kill) {
+			return;
+		}
+
+		pause(30);
 	}
 	
 	private void setLeftCSDetected(boolean detected) {
@@ -119,12 +135,9 @@ public class GridManager implements Runnable {
 		}
 	}
 	
- 	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
+	public void kill() {
+		kill = true;
 	}
-	
 	
 ///**
 // * 	Returns boolean condition if just entered a line

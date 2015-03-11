@@ -9,6 +9,7 @@
 package tests.sensors;
 
 import navigation.Driver;
+import sensors.managers.GridManager;
 import tests.TestCase;
 import util.*;
 
@@ -22,23 +23,25 @@ public class GridManagerTest extends TestCase {
 	 * @see tests.TestCase#runTest()
 	 */
 	Driver driver;
-	GridManager gridMana;
+	GridManager grid;
 	
 	public GridManagerTest() {
 		
 		driver = new Driver();
-		gridMana = new GridManager();
+		grid = GridManager.getGridManager();
 	}
 	
 	@Override
 	public void runTest() {
 		
-		(new Thread(gridMana)).start();
 		(new Thread() {
 			public void run() {
 				while(true) {
-					System.out.println(gridMana.lineDetected());
-					pause(50	);
+					if (grid.lineDetected()) {
+						System.out.println("line detected");
+					}
+					
+					pause(50);
 				}
 			}
 		}

@@ -9,9 +9,9 @@ a *	DPM Final Project
 package navigation.localization;
 
 import lejos.nxt.Sound;
+import sensors.managers.GridManager;
 import util.Direction;
 import util.SensorID;
-import util.GridManager;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
@@ -28,7 +28,7 @@ import navigation.odometry.Odometer;
 
 
 public class LSLocalizationIntercept extends Localization {
-	final GridManager grid = new GridManager();
+	final GridManager grid = GridManager.getGridManager();
 	private SensorID triggeredSensor ;
 	
 	private double[] pos = new double[3];
