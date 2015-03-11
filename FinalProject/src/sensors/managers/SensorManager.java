@@ -14,6 +14,7 @@ package sensors.managers;
  */
 public abstract class SensorManager extends Thread {
 	protected static GridManager gridManager;
+	protected static ObstacleDetection obstDetector;
 	private static boolean running = true;
 	
 	public final void run() {
