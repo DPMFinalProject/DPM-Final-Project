@@ -24,10 +24,11 @@ public class ObstacleDetection extends SensorManager {
 	private int usSensorOutlier = 255;
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
+	private double leftDistance = 0, rightDistance = 0; 
 	
 	private ObstacleDetection() {
-		leftSensor = new FilteredUltrasonicSensor(SensorPort.S3, new OutlierFilter(3, usSensorOutlier));
-		rightSensor = new FilteredUltrasonicSensor(SensorPort.S2, new OutlierFilter(3, usSensorOutlier));
+		leftSensor = new FilteredUltrasonicSensor(SensorPort.S3, new OutlierFilter(10, usSensorOutlier));
+		rightSensor = new FilteredUltrasonicSensor(SensorPort.S2, new OutlierFilter(10, usSensorOutlier));
 	}
 	
 	public static ObstacleDetection getObstacleDetection() {
@@ -42,13 +43,12 @@ public class ObstacleDetection extends SensorManager {
 	@Override
 	public void execute() {
 		// If sensor does not report an outlier, there is an obstacle nearby
-		double leftValue, rightValue;
 		
-		leftValue = leftSensor.getFilteredData();
-		rightValue = rightSensor.getFilteredData();
+		leftDistance = leftSensor.getFilteredData();
+		rightDistance = rightSensor.getFilteredData();
 		
-		leftObstacle = !(leftValue == usSensorOutlier);
-		rightObstacle = !(rightValue == usSensorOutlier);
+		leftObstacle = !(leftDistance == usSensorOutlier);
+		rightObstacle = !(rightDistance == usSensorOutlier);
 		
 		frontObstacle = leftObstacle && rightObstacle;
 		
@@ -69,12 +69,24 @@ public class ObstacleDetection extends SensorManager {
 	public boolean isLeftObstacle() {
 		return leftObstacle;
 	}
-
+	
+	public double leftDistance() {
+		return leftDistance;
+	}
+	
 	public boolean isRightObstacle() {
 		return rightObstacle;
 	}
-
+	
+	public double rightDistance() {
+		return rightDistance;
+	}
+	
 	public boolean isFrontObstacle() {
 		return frontObstacle;
-	}	
+	}
+	
+	public double frontDistance() {
+		return (leftDistance + rightDistance)/2;
+	}
 }

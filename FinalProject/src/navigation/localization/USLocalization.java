@@ -14,6 +14,7 @@ import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
 import sensors.FilteredUltrasonicSensor;
 import sensors.filters.OutlierFilter;
+import sensors.managers.ObstacleDetection;
 import util.Direction;
 import navigation.Driver;
 import navigation.Navigation;
@@ -31,16 +32,24 @@ import navigation.odometry.Odometer;
 
 
 public class USLocalization extends Localization {
-	private FilteredUltrasonicSensor usL;
-	private FilteredUltrasonicSensor usR;
-	private double[] usLpos = {5,-3};
-	private double[] usRpos = {5,3};
+	//private FilteredUltrasonicSensor leftUSSensor;
+	//private FilteredUltrasonicSensor rightUSSensor;
+	
+	private ObstacleDetection obstacleDetection;
+	
+	private double[] leftUSPosition = {5,-3};
+	private double[] rightUSPosition = {5,3};
 	
 	private double[] pos = new double[3];
 	private int usSensorOutlier = 255;
 	
 	public USLocalization(Odometer odo, Driver driver, Navigation nav) {
 		super(odo, driver, nav);
+		
+		//leftUSSensor = new FilteredUltrasonicSensor(SensorPort.S3 ,new OutlierFilter(3, usSensorOutlier));
+		//rightUSSensor = new FilteredUltrasonicSensor(SensorPort.S2 ,new OutlierFilter(3, usSensorOutlier));
+		
+		obstacleDetection = ObstacleDetection.getObstacleDetection();
 	}
 
 	/**
@@ -48,9 +57,6 @@ public class USLocalization extends Localization {
 	 */
 	@Override
 	public void doLocalization() {
-		usL = new FilteredUltrasonicSensor(SensorPort.S3 ,new OutlierFilter(3, usSensorOutlier));
-		usR = new FilteredUltrasonicSensor(SensorPort.S2 ,new OutlierFilter(3, usSensorOutlier));
-		
 		// order: L/R
 		double[] readings = new double[2];
 		
@@ -74,7 +80,6 @@ public class USLocalization extends Localization {
 		*/
 		
 		fallingEdgeLocalization();
-		
 	}
 	
 	//Localization same as lab 4, using FallingEdge method;
@@ -82,36 +87,45 @@ public class USLocalization extends Localization {
 		double[] angles = new double [2];
 	
 		//make sure to face away from anywall at first
+		obstacleDetection.setRunning(true);
 		driver.turn(Direction.RIGHT);
 		faceAwayFromWall();
-		
-		//get the angles for each falling edges
-		angles[0] = getThetaFallingEdge();
-		
-		driver.turn(Direction.LEFT);
-		getThetaRisingEdge();
-		
-		angles[1]= getThetaFallingEdge();
-		
-		
 		driver.stop();
+		angles[0] = obstacleDetection.rightDistance();
+		//get the angles for each falling edges
+		//angles[0] = getThetaFallingEdge();
+		
+		obstacleDetection.setRunning(false);
+		driver.turn(Direction.LEFT);
+		//getThetaRisingEdge();
+		pause(1000);
+		obstacleDetection.setRunning(true);
+		pause(1000);
+		
+		faceAwayFromWall();
+		driver.stop();
+		angles[1] = obstacleDetection.leftDistance();
+		//angles[1] = getThetaFallingEdge();
+		
 		odo.setTheta(localizationHeading(angles));
 		
-		/*
-		nav.turnTo(270);
-		odo.setX(usR.getFilteredData());
 		
-		nav.turnTo(180);
-		odo.setY(usR.getFilteredData());
-		*/
-		
+//		nav.turnTo(270);
+//		odo.setX(obstacleDetection.rightDistance());
+//		
+//		nav.turnTo(180);
+//		odo.setY(obstacleDetection.rightDistance());
 		
 	}
 	
 	//returns true if the robot is sort of facing both wall (this is a rough approximation)
 	private boolean isfacingBothWalls(double[] readings){
-		readings[0]=usL.getFilteredData();
-		readings[1]=usR.getFilteredData();
+		readings[0] = obstacleDetection.leftDistance();
+		readings[1] = obstacleDetection.rightDistance();
+		
+		//readings[0]=leftUSSensor.getFilteredData();
+		//readings[1]=rightUSSensor.getFilteredData();
+		
 		if(readings[0] < 80 && readings[1] < 80){
 			return true;
 		}
@@ -119,9 +133,12 @@ public class USLocalization extends Localization {
 	}
 	//returns true if the robot is in the first tile (might want to change the values: i made them larger to deal with the errors)
 	private boolean isInFirstTile(double[] readings) {
-		readings[0]=usL.getFilteredData();
-		readings[1]=usR.getFilteredData();
-		System.out.println(readings[0]+ "\t"+ readings[1]);
+		// readings[0]=leftUSSensor.getFilteredData();
+		// readings[1]=rightUSSensor.getFilteredData();
+		readings[0] = obstacleDetection.leftDistance();
+		readings[1] = obstacleDetection.rightDistance();
+		
+		//System.out.println(readings[0]+ "\t"+ readings[1]);
 		if(readings[0] < 30 && readings[1] < 30){
 			return true;
 		}
@@ -164,24 +181,29 @@ public class USLocalization extends Localization {
 		return 3;									//		|_______________|_________________>
 	}*/
 	
-	//make sur to be facing away from wall;
+	//make sure to be facing away from wall;
 	private void faceAwayFromWall(){
 		double val;
 		do{
-			val=usR.getFilteredData();
-		}while(val<50);
+			//val=rightUSSensor.getFilteredData();
+			val = obstacleDetection.rightDistance();
+			System.out.println(val);
+		} while(val < 50);
+		
 	}
 	
 	//returns the average of the entering of the wall and the exit
 	private double getThetaFallingEdge() {
 		double threshold=35, noiseMargin=3;
-		double val=usR.getFilteredData();
+		//double val=rightUSSensor.getFilteredData();
+		double val = obstacleDetection.rightDistance();
 		double[] angles = new double[2];
 		
 		//enters upper margin of error
 		while(val>threshold+noiseMargin){
-			val=usR.getFilteredData();
-			System.out.println("\t" + val);
+			//val=rightUSSensor.getFilteredData();
+			obstacleDetection.rightDistance();
+			//System.out.println("\t" + val);
 		}
 		System.out.println("inside upper margin of error");
 			
@@ -189,8 +211,10 @@ public class USLocalization extends Localization {
 		angles[0]=pos[2];
 	
 		//leaves lower margin of error
-		while(val>threshold-noiseMargin)
-			val=usR.getFilteredData();
+		while(val>threshold-noiseMargin) {
+			//val=rightUSSensor.getFilteredData();
+			obstacleDetection.rightDistance();
+		}
 		System.out.println("outside lower margin of error");
 		
 		odo.getPosition(pos);
@@ -202,19 +226,26 @@ public class USLocalization extends Localization {
 	//returns the average of the exiting of the wall and the entering
 	private double getThetaRisingEdge(){
 		double threshold=35, noiseMargin=3;
-		double val=usR.getFilteredData();
+		//double val=rightUSSensor.getFilteredData();
+		double val = obstacleDetection.rightDistance();
 		double[] angles = new double[2];
 		
 		//enters lower margin of error
-		while(val<threshold-noiseMargin)
-			val=usR.getFilteredData();
+		while(val<threshold-noiseMargin) {
+			//val=rightUSSensor.getFilteredData();
+			obstacleDetection.rightDistance();
+		}
+			
 		
 		odo.getPosition(pos);
 		angles[0]=pos[2];
 	
 		//leaves upper margin of error
-		while(val<threshold+noiseMargin)
-			val=usR.getFilteredData();
+		while(val<threshold+noiseMargin) {
+			// val=rightUSSensor.getFilteredData();
+			obstacleDetection.rightDistance();
+		}
+			
 		
 		odo.getPosition(pos);
 		angles[1]=pos[2];
@@ -234,5 +265,12 @@ public class USLocalization extends Localization {
 		
 	}
 	
-	
+	private void pause(int ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
