@@ -19,10 +19,12 @@ import util.Direction;
  */
 public class OdoTest extends TestCase {
 	
-	Driver driver;
+	final Driver driver;
+	final Odometer odo;
 	
 	public OdoTest() {
 		driver = new Driver();
+		odo = new Odometer(driver);
 	}
 	
 	/**
@@ -30,7 +32,6 @@ public class OdoTest extends TestCase {
 	 */
 	@Override
 	public void runTest() {
-		final Odometer odo = new Odometer(new Driver());
 		
 		(new Thread(odo)).start();
 		
@@ -40,7 +41,7 @@ public class OdoTest extends TestCase {
 					System.out.println("x: "+odo.getX());
 					System.out.println("y: "+odo.getY());
 					System.out.println("T: "+odo.getTheta());
-					pause(1000);
+					pause(500);
 				}
 			}
 		}).start();

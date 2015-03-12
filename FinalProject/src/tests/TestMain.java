@@ -10,8 +10,10 @@
 package tests;
 
 import tests.navigation.*;
+import tests.navigation.avoidance.*;
 import tests.navigation.localization.*;
 import tests.sensors.*;
+import tests.sensors.filters.*;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -38,9 +40,10 @@ public class TestMain {
 		LCD.drawString("LEFT FOR NORMAL", 0, 2);
 		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
 		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
+			LCD.clear();
+			
 			RConsole.open();
 			
-			LCD.drawString("",0,2);
 			LCD.drawString("Press a button", 0, 3);
 			LCD.drawString("to start", 0, 4);
 			Button.waitForAnyPress();

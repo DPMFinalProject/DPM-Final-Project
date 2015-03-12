@@ -11,7 +11,7 @@ package tests.navigation;
 import lejos.nxt.Button;
 import navigation.Driver;
 import navigation.odometry.Odometer;
-import navigation.odometry.correction.*;
+import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
 import util.Direction;
 import util.OdometryDisplay;
@@ -46,17 +46,17 @@ public class OdoWithCorrectionTest extends TestCase {
 		(new Thread(correct)).start();
 		(new Thread(display)).start();
 		
-		odo.setY(-15);
+		odo.setY(0);
 		odo.setX(-15);
-		
-		driveSquare();
+			
+		driveSquareIsh();
 		
 		Button.waitForAnyPress();
 	}
 	
-	private void driveSquare()
+	private void driveSquareIsh()
 	{
-		driver.move(60, false);
+		driver.move(75, false);
 		correct.stall();
 		driver.turn(Direction.RIGHT, 90);
 		correct.resume();
@@ -71,8 +71,8 @@ public class OdoWithCorrectionTest extends TestCase {
 		driver.move(60, false);
 		correct.stall();
 		driver.turn(Direction.RIGHT, 90);
-		correct.resume();
-		driver.move(15, false);
-		System.out.println("final orientation: "+odo.getTheta());
+		System.out.println("final X: "+odo.getX());
+		System.out.println("final Y: "+odo.getY());
+		System.out.println("final Theta: "+odo.getTheta());
 	}
 }
