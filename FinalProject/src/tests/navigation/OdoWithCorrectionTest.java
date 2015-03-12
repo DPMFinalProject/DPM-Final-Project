@@ -46,6 +46,9 @@ public class OdoWithCorrectionTest extends TestCase {
 		(new Thread(correct)).start();
 		(new Thread(display)).start();
 		
+		odo.setY(-15);
+		odo.setX(-15);
+		
 		driveSquare();
 		
 		Button.waitForAnyPress();

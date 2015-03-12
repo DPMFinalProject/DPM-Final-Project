@@ -8,7 +8,7 @@
  */
 package tests.navigation.avoidance;
 
-import navigation.avoidance.ObstacleDetection;
+import sensors.managers.ObstacleDetection;
 import tests.TestCase;
 
 /**
@@ -22,7 +22,7 @@ public class DetectTest extends TestCase {
 	 */
 	@Override
 	public void runTest() {
-		ObstacleDetection detection = new ObstacleDetection();
+		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
 		(new Thread(detection)).start();
 		

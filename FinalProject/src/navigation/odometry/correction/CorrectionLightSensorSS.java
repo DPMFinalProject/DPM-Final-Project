@@ -173,19 +173,37 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		
 		if(whichLineCrossed(sensorPos) == Line.xAxis) {
 			
-			double yError = (sensorPos[1] % SIZE_OF_TILE) - (SIZE_OF_TILE/2);
+			double correction = sensorPos[1] % SIZE_OF_TILE;
+			
+			double yError;
+			
+			if (correction > (SIZE_OF_TILE/2)) {
+				yError = correction - SIZE_OF_TILE;
+			}
+			else {
+				yError = correction;
+			}
 			
 			System.out.println("correcting y to:"+odo.getY()+" - "+yError);
 			
-			odo.setY(odo.getY()-yError);
+			odo.setY(odo.getY() - yError);
 		}
 		else {
-		//detected y-axis line
-			double xError = (sensorPos[0] % SIZE_OF_TILE) - (SIZE_OF_TILE/2);
 			
-			System.out.println("correcting x to:"+odo.getX()+" - "+xError);
+			double correction = sensorPos[1] % SIZE_OF_TILE;
 			
-			odo.setX(odo.getX()-xError);
+			double xError;
+			
+			if (correction > (SIZE_OF_TILE/2)) {
+				xError = correction - SIZE_OF_TILE;
+			}
+			else {
+				xError = correction;
+			}
+			
+			System.out.println("correcting x to: "+odo.getX()+" - "+xError);
+			
+			odo.setX(odo.getX() - xError);
 		}
 	}
 	
