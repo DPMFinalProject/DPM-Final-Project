@@ -38,9 +38,7 @@ public class OdoTest extends TestCase {
 		(new Thread() {
 			public void run() {
 				while(true) {
-					System.out.println("x: "+odo.getX());
-					System.out.println("y: "+odo.getY());
-					System.out.println("T: "+odo.getTheta());
+					System.out.println(odo.getX()+ "\t"+ odo.getY()+"\t"+odo.getTheta());
 					pause(500);
 				}
 			}
@@ -51,14 +49,18 @@ public class OdoTest extends TestCase {
 	
 	private void driveSquare()
 	{
-		driver.move(60, false);
+		driver.move(2*30.48, false);
 		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
+		System.out.println("Turn");
+		driver.move(10*30.48, false);
 		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
+		System.out.println("Turn");
+		driver.move(2*30.48, false);
 		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
+		System.out.println("Turn");
+		driver.move(10*30.48, false);
 		driver.turn(Direction.RIGHT, 90);
+		System.out.println("Turn");
 	}
 	
 	private void pause(int ms) {

@@ -25,10 +25,11 @@ public class Driver {
 	private final int TURN_SPEED = 100;
 	private final int DRIFT_FACTOR = 50;
 	
-	private final double WHL_RADIUS = 2.15;
-	private final double WHL_SEPARATION = 14.8;
+	private final double WHL_RADIUS = 2.085;//2.09			//smaller radius = go further
+	private final double WHL_SEPARATION = 17.355;		//smaller width = turn less
 
 	private final NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
+	Object lock;
 	
 	public Driver() {
 		//this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
@@ -89,17 +90,31 @@ public class Driver {
 	 * @param immediateReturn return immediately if true
 	 */
 	public void move(double distance, boolean immediateReturn) {
+		int acc=leftMotor.getAcceleration();
+		setAcceleration(acc/10);
+			
 		setSpeed(FWD_SPEED);
 
 //		detection.setRunning(true);
 		int a=convertDistance(WHL_RADIUS, distance);
 				
+		
+		
 			leftMotor.rotate(a, true);
-			rightMotor.rotate(a, immediateReturn);
+			rightMotor.rotate(a,immediateReturn);
+		
+			
+		setAcceleration(acc);
 		
 //		detection.setRunning(false);
 	}
 	
+	private void setAcceleration(int i) {
+		leftMotor.setAcceleration(i);
+		rightMotor.setAcceleration(i);
+		
+	}
+
 	/*
 	 * 	Moves the robot with different wheel spins. This method should stay hidden.
 	 */

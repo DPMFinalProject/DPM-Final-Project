@@ -45,7 +45,7 @@ public class OdoCalibration extends TestCase {
 			}
 		}).start();
 		
-		distanceTest(3);
+		distanceTest(6);
 	}
 	
 	private void driveSquare()
