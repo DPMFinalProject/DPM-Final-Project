@@ -38,7 +38,7 @@ public class GridManagerTest extends TestCase {
 			public void run() {
 				while(true) {
 					if (grid.lineDetected()) {
-						System.out.println("line detected");
+						System.out.println(grid.whichSensorDetected());
 					}
 					
 					pause(50);

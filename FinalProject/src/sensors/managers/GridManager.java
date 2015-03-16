@@ -24,12 +24,11 @@ public class GridManager extends SensorManager {
 	
 	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
 	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S2, new DifferentialFilter(2));
-	private final double LINE_THRESHOLD = 2;
+	private final double LINE_THRESHOLD = 1.5;
 	private boolean leftCSOnLine = false;
 	private boolean rightCSOnLine = false;
 	private final double[] leftSensorCoor = {-4.8, 6.5};//{x, y}
 	private final double[] rightSensorCoor = {4.8, 6.5};//{x, y}
-	private boolean kill =  false;
 	
 	private GridManager () {
 		
@@ -63,10 +62,6 @@ public class GridManager extends SensorManager {
 		}
 		else if (rightCSMeasure > LINE_THRESHOLD) {
 			setRightCSDetected(false);
-		}
-
-		if (kill) {
-			return;
 		}
 
 		pause(30);
@@ -133,10 +128,6 @@ public class GridManager extends SensorManager {
 		else {
 			return (!rightCSOnLine && !leftCSOnLine);
 		}
-	}
-	
-	public void kill() {
-		kill = true;
 	}
 	
 ///**
