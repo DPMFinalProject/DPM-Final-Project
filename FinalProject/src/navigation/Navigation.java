@@ -18,15 +18,13 @@ import navigation.odometry.Odometer;
  */
 
 public class Navigation {
-	private Driver driver;
 	private Odometer odo;
 	
 	private final double ANGLE_ERROR = 10.0;
 	private final double POS_ERROR= 2.0;
 	
-	public Navigation(Odometer odo, Driver driver) {
+	public Navigation(Odometer odo) {
 		this.odo = odo;
-		this.driver = driver;
 	}
 	
 	/**
@@ -77,7 +75,7 @@ public class Navigation {
 			turnTo(targetAngle);
 			
 			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-			driver.move(distance, false);
+			Driver.move(distance, false);
 		}
 		
 	}
@@ -94,10 +92,10 @@ public class Navigation {
 			
 			if (dTheta > 0) {
 				System.out.println("LEFT");
-				driver.turn(Direction.LEFT, dTheta);
+				Driver.turn(Direction.LEFT, dTheta);
 			} else if (dTheta < 0) {
 				System.out.println("RIGHT");
-				driver.turn(Direction.RIGHT, Math.abs(dTheta));
+				Driver.turn(Direction.RIGHT, Math.abs(dTheta));
 			} else { // Should never happen
 				System.out.println("Robot trying to turn by 0 degrees for some reason");
 			}

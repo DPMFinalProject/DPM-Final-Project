@@ -21,7 +21,6 @@ import navigation.Driver;
  */
 public class Odometer implements Runnable {
 	private double x, y, theta;	
-	private final Driver driver;
 	
 	//keeps track of position change
 	int[] delTacho= {0, 0};								
@@ -31,16 +30,15 @@ public class Odometer implements Runnable {
 	private static final long ODOMETER_PERIOD = 15;// odometer update period, in ms			
 	private Object lock;									
 
-	public Odometer(Driver driver) {
-		this(0.0, 0.0, 0.0, driver);
+	public Odometer() {
+		this(0.0, 0.0, 0.0);
 	}
 	
-	private Odometer(double xpos, double ypos, double Theta, Driver driver) {
+	private Odometer(double xpos, double ypos, double Theta) {
 		
 		x = xpos;
 		y = ypos;
 		theta = Theta;
-		this.driver = driver;
 		lock = new Object();	
 	}
 
@@ -58,7 +56,7 @@ public class Odometer implements Runnable {
 			//System.out.println("" + x + "," + y + "," + theta);
 			
 			
-			driver.getDelTachoCount(tachoTotal,delTacho);
+			Driver.getDelTachoCount(tachoTotal,delTacho);
 			
 			getTotalTachoCount();
 			delPos();
@@ -87,8 +85,8 @@ public class Odometer implements Runnable {
 	
 	private void delPos(){
 		//get the change in position
-		posChange[0] = driver.getDelArc(delTacho);
-		posChange[1] = driver.getDelTheta(delTacho);
+		posChange[0] = Driver.getDelArc(delTacho);
+		posChange[1] = Driver.getDelTheta(delTacho);
 	}
 	
 	private void odometerUpdate(double delArc,double delTheta){

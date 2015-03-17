@@ -25,11 +25,11 @@ public class NavTest extends TestCase {
 	 */
 	@Override
 	public void runTest() {
-		Driver driver = new Driver();
-		Odometer odo = new Odometer(driver);
+		
+		Odometer odo = new Odometer();
 		
 		(new Thread(odo)).start(); 
-		Navigation nav = new Navigation(odo, driver);
+		Navigation nav = new Navigation(odo);
 		
 		nav.travelTo(30, 30, 135);
 		nav.travelTo(60, 30, 180);

@@ -23,14 +23,25 @@ import util.Direction;
  * @author Auguste
  */
 public class BangBangAvoider extends ObstacleAvoidance {
-	private final FilteredUltrasonicSensor us = new FilteredUltrasonicSensor(SensorPort.S1, new AveragingFilter(5));
+
+	public BangBangAvoider(Direction wallDirection) {
+		super(wallDirection);
+		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public void avoid() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+/*	private final FilteredUltrasonicSensor us = new FilteredUltrasonicSensor(SensorPort.S1, new AveragingFilter(5));
 	private final int BAND_WIDTH = 8;
 	private final int BAND_CENTER = 20;
 	public double initialOrientation;
 	
-	public BangBangAvoider(Driver driver, Odometer odo)
+	public BangBangAvoider(Odometer odo)
 	{
-		super(driver, odo);
+		super(odo, Direction direction);
 	}
 
 //	public BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo) {
@@ -49,9 +60,9 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	public void avoid() {
 		initialOrientation = odo.getTheta();
 		
-		driver.stop();
+		Driver.stop();
 		
-		driver.turn(Direction.RIGHT, 90);
+		Driver.turn(Direction.RIGHT, 90);
 		
 		while(!hasAvoided()) {
 			bangBang();
@@ -62,13 +73,13 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		double error = BAND_CENTER - us.getFilteredData();
 		
 		if (Math.abs(error)<BAND_WIDTH)	{
-			driver.move(Direction.FWD);
+			Driver.move(Direction.FWD);
 		}
 		else if (error < 0) {
-			driver.drift(Direction.RIGHT);
+			Driver.drift(Direction.RIGHT);
 		}
 		else {
-			driver.drift(Direction.LEFT);
+			Driver.drift(Direction.LEFT);
 		}
 	}
 	
@@ -81,5 +92,5 @@ public class BangBangAvoider extends ObstacleAvoidance {
 
 	private boolean isNear(double targetAngle, double actualAngle) {
 		return Math.abs(targetAngle - actualAngle) < 30;
-	}
+	}*/
 }

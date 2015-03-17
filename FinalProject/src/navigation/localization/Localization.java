@@ -19,12 +19,10 @@ import navigation.odometry.Odometer;
  */
 public abstract class Localization {
 	protected final Odometer odo;
-	protected final Driver driver;
 	protected final Navigation nav;
 	
-	public Localization(Odometer odo, Driver driver, Navigation nav) {
+	public Localization(Odometer odo, Navigation nav) {
 		this.odo = odo;
-		this.driver = driver;
 		this.nav = nav;
 	}
 	

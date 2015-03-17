@@ -34,7 +34,7 @@ public class LSLocalizationIntercept extends Localization {
 	private double[] pos = new double[3];
 	
 	public LSLocalizationIntercept(Odometer odo, Driver driver, Navigation nav) {
-		super(odo, driver, nav);
+		super(odo, nav);
 		(new Thread(grid)).start();
 	}
 
@@ -86,7 +86,7 @@ public class LSLocalizationIntercept extends Localization {
 		}else{
 			nav.turnTo(180);
 		}
-		driver.move(Direction.FWD);
+		Driver.move(Direction.FWD);
 	}
 	private void moveAwayClosestWall(){
 		if(pos[0]<pos[1]){
@@ -94,11 +94,11 @@ public class LSLocalizationIntercept extends Localization {
 		}else{
 			optimalRotation(1);
 		}
-		while(driver.isMoving()){
+		while(Driver.isMoving()){
 			try {	Thread.sleep(100);	} catch (InterruptedException e) {}
 		}
 		System.out.println("Forward");
-		driver.move(Direction.FWD);
+		Driver.move(Direction.FWD);
 	}
 	private void optimalRotation(int i){
 		if (i == 0){
@@ -125,8 +125,8 @@ public class LSLocalizationIntercept extends Localization {
 		while(!grid.lineDetected()) {
 			try {Thread.sleep(10);} catch (InterruptedException e) {}
 		}
-		driver.stop();
-		driver.turn(rotationDirection());
+		Driver.stop();
+		Driver.turn(rotationDirection());
 		
 		//find the what is the other sensor
 		SensorID untriggeredSensor = findUntriggeredSensor();
@@ -135,13 +135,13 @@ public class LSLocalizationIntercept extends Localization {
 		//rotate as long as the triggered light sensor is on the line and until the second is on a line aswell
 		while(grid.isOnLine(triggeredSensor)){
 			if(grid.isOnLine(untriggeredSensor) ){
-				driver.stop();
+				Driver.stop();
 				return;
 			}
 		}
 		//if the triggered light sensor leaves the line, recall this method
-		driver.stop();
-		driver.move(Direction.FWD);
+		Driver.stop();
+		Driver.move(Direction.FWD);
 		perpendicularToLine();
 	}
 	
@@ -164,14 +164,14 @@ public class LSLocalizationIntercept extends Localization {
 
 	//knowing one position and the angle, orient the robot towards the other line, by making it go forward and then turning clockwise of counter clockwaise
 	private void toOtherLine() {
-		driver.move(15, false);
+		Driver.move(15, false);
 		if(needClockWiseMovement(pos[2])){
-			driver.turn(Direction.RIGHT, 90, false);
+			Driver.turn(Direction.RIGHT, 90, false);
 		}else{
-			driver.turn(Direction.LEFT, 90, false);
+			Driver.turn(Direction.LEFT, 90, false);
 		}
 		
-		driver.move(Direction.FWD);
+		Driver.move(Direction.FWD);
 		
 	}
 	

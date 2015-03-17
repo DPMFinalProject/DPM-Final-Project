@@ -36,7 +36,7 @@ public class LSLocalizationRotation extends Localization {
 	private double[]lineAngle = new double [4];
 	
 	public LSLocalizationRotation(Odometer odo, Driver driver, Navigation nav) {
-		super(odo, driver, nav);
+		super(odo, nav);
 		(new Thread(grid)).start();
 		double[] temp = new double[2];
 		temp=grid.getSensorCoor(SensorID.RIGHT);
@@ -51,11 +51,11 @@ public class LSLocalizationRotation extends Localization {
 	@Override
 	public void doLocalization() {		
 		//nav.travelTo(-2, -2, 0);
-		driver.turn(Direction.LEFT); // make one full CCW turn 
+		Driver.turn(Direction.LEFT); // make one full CCW turn 
 		
 		getlineAngle(lineAngle);
 		
-		while(driver.isMoving()){
+		while(Driver.isMoving()){
 			try {	Thread.sleep(500);	} catch (InterruptedException e) {}
 		}
 		updateOdometer(lineAngle,pos);
@@ -89,7 +89,7 @@ public class LSLocalizationRotation extends Localization {
 			Sound.twoBeeps();
 			System.out.println("The angle retrived is:" + lineAngle[i]);
 			}
-		driver.stop();
+		Driver.stop();
 	}
 	
 /*	//gives the average of the entering/leaving of a black line angles
