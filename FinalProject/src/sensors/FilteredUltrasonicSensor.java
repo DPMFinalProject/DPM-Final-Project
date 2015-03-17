@@ -17,7 +17,8 @@ import lejos.nxt.UltrasonicSensor;
  * @author Oleg
  */
 public class FilteredUltrasonicSensor extends FilteredSensor {
-	UltrasonicSensor sensor;
+	private UltrasonicSensor sensor;
+	private final static int outlier = 255;
 	
 	public FilteredUltrasonicSensor(SensorPort port, Filter... filters) {
 		super(filters);
@@ -29,5 +30,9 @@ public class FilteredUltrasonicSensor extends FilteredSensor {
 		double distance = sensor.getDistance();
 		
 		return applyFilters(distance);
+	}
+	
+	public static int USOutlier() {
+		return outlier;
 	}
 }

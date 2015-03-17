@@ -26,7 +26,7 @@ public class OutlierFilter extends Filter {
 	
 	@Override
 	public double filter(double value) {
-		if (value != outlierValue) { // If the value is normal
+		if (value < outlierValue) { // If the value is normal
 			window.add(value);
 			lastValue = value;
 			return value;

@@ -8,6 +8,7 @@
  */
 package navigation.avoidance;
 
+import util.Direction;
 import navigation.Driver;
 import navigation.odometry.Odometer;
 
@@ -17,14 +18,32 @@ import navigation.odometry.Odometer;
  */
 public abstract class ObstacleAvoidance {
 	protected final Driver driver;
-	protected final Odometer odo;
 	
-	public ObstacleAvoidance(Driver driver, Odometer odo) {
+	protected int BAND_WIDTH, BAND_CENTER;
+	protected Direction wallDirection;
+	
+	public ObstacleAvoidance(Driver driver, Direction wallDirection) {
 		this.driver = driver;
-		this.odo = odo;
+		this.wallDirection = wallDirection;
 	}
 	/**
 	 *	Executes an obstacle avoidance maneuver.
 	 */
 	public abstract void avoid();
+	
+	public void setWallDirection(Direction direction) {
+		wallDirection = direction;
+	}
+	
+	public Direction towardsWall() {
+		return wallDirection;
+	}
+	
+	public Direction awayFromWall() {
+		if (wallDirection == Direction.LEFT) {
+			return Direction.RIGHT;
+		} else {
+			return Direction.LEFT;
+		}
+	}
 }

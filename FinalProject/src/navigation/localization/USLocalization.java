@@ -44,7 +44,7 @@ public class USLocalization extends Localization {
 	private double[] pos = new double[3];
 	private int usSensorOutlier = 255;
 	
-	private final double SENSOR_OFFSET = 8; 
+	private final double SENSOR_OFFSET = 9.3; 
 	
 	public USLocalization(Odometer odo, Driver driver, Navigation nav) {
 		super(odo, driver, nav);
@@ -59,22 +59,22 @@ public class USLocalization extends Localization {
 	public void doLocalization() {
 		
 		faceWall();
-		System.out.println(obstacleDetection.rightDistance() + "," + obstacleDetection.leftDistance());
 		/* 
 		 * Do multiple iterations of adjustments of the X and Y positions,
 		 * the robot will converge onto (0, 0) provided SENSOR_OFFSET is calibrated
 		 * correctly.
 		 */
-
-		adjustYPosition(true);
-		adjustXPosition(true);
+		for (int i = 0; i < 2; i++) {
+			adjustYPosition(true);
+			adjustXPosition(true);
+		}
 		
 		/*
 		 * 	It will have an approximate final orientation of 0 degrees,
 		 * 	which should be accurate enough for the LS localization to adjust.
 		 */
 		driver.turn(Direction.RIGHT, 90);
-		odo.setTheta(0);
+		
 	}
 	
 	private void adjustXPosition(boolean move) {
@@ -82,26 +82,32 @@ public class USLocalization extends Localization {
 		
 		obstacleDetection.setRunning(true);
 		faceAwayFromWall(Direction.RIGHT);
-		driver.turn(Direction.RIGHT, 45);
+		driver.turn(Direction.RIGHT, 30);
 		xPosition = obstacleDetection.leftDistance() + SENSOR_OFFSET - Measurements.TILE;
-		driver.turn(Direction.LEFT, 45);
-		odo.setX(0);
+		driver.turn(Direction.LEFT, 30);
+		
+		System.out.println("XPos: " + xPosition);
 		
 		if (move)
 			driver.move(xPosition, false);
+		
+		odo.setX(0);
 	}
 	
 	private void adjustYPosition(boolean move) {
 		double yPosition;
 		
 		faceAwayFromWall(Direction.LEFT);
-		driver.turn(Direction.LEFT, 45);
+		driver.turn(Direction.LEFT, 20);
 		yPosition = obstacleDetection.rightDistance() + SENSOR_OFFSET - Measurements.TILE;
-		driver.turn(Direction.RIGHT, 45);
-		odo.setY(0);
+		driver.turn(Direction.RIGHT, 20);
+		
+		System.out.println("YPos: " + yPosition);
 		
 		if (move)
 			driver.move(yPosition, false);
+		
+		odo.setY(0);
 	}
 	
 	// turn until facing away from wall;
@@ -121,7 +127,7 @@ public class USLocalization extends Localization {
 			}
 			val = dFilter.filter(val);
 			pause(40);
-		} while(val < 50 || val > 240);
+		} while(val < 50 || val > 245);
 		driver.stop();
 	}
 	
