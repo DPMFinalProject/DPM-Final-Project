@@ -28,7 +28,7 @@ public class Driver {
 	private final double WHL_RADIUS = 2.085;//2.09			//smaller radius = go further
 	private final double WHL_SEPARATION = 17.355;		//smaller width = turn less
 
-	private final NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
+	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
 	Object lock;
 	
 	public Driver() {
@@ -98,20 +98,17 @@ public class Driver {
 //		detection.setRunning(true);
 		int a=convertDistance(WHL_RADIUS, distance);
 				
-		
-		
-			leftMotor.rotate(a, true);
-			rightMotor.rotate(a,immediateReturn);
-		
+		leftMotor.rotate(a, true);
+		rightMotor.rotate(a,immediateReturn);
 			
 		setAcceleration(acc);
 		
 //		detection.setRunning(false);
 	}
 	
-	private void setAcceleration(int i) {
-		leftMotor.setAcceleration(i);
-		rightMotor.setAcceleration(i);
+	private void setAcceleration(int acceleration) {
+		leftMotor.setAcceleration(acceleration);
+		rightMotor.setAcceleration(acceleration);
 		
 	}
 
@@ -250,6 +247,9 @@ public class Driver {
 	public void stop() {
 		leftMotor.stop(true);
 		rightMotor.stop();
+		
+		leftMotor.flt();
+		rightMotor.flt();
 	}
 	
 	private void setSpeed(int speed) {

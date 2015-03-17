@@ -35,15 +35,13 @@ public class USLocalizationTest extends TestCase {
 		Navigation nav = new Navigation(odo, driver);
 		
 		
-		USLocalization usl=new USLocalization(odo,driver,nav);
-		odo.setX(40);
-		odo.setY(40);
+		USLocalization usl= new USLocalization(odo,driver,nav);
+		//odo.setX(40);
+		//odo.setY(40);
 	
 		usl.doLocalization();
-		
 	
-	
-		System.out.println("Localization Finished");
+		//System.out.println("Localization Finished");
 		System.out.println("X: " + odo.getX());
 		System.out.println("Y: " + odo.getY());
 		System.out.println("Theta: " + odo.getTheta());

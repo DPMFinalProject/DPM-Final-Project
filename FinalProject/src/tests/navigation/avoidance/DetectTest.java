@@ -8,6 +8,7 @@
  */
 package tests.navigation.avoidance;
 
+import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import tests.TestCase;
 
@@ -28,9 +29,20 @@ public class DetectTest extends TestCase {
 		
 		detection.setRunning(true);
 		
-		while(true) {
-			System.out.println(detection.isLeftObstacle() + "," + detection.isRightObstacle() + "," + detection.isFrontObstacle());
+		/*while(true) {
+			System.out.println(detection.isLeftObstacle() + "," + detection.isRightObstacle() + "," + detection.isFrontObstacle() +
+					detection.leftDistance() + "," + detection.rightDistance() + "," + detection.frontDistance());
+		}*/
+		
+		while(!detection.isFrontObstacle()) {
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		Sound.beep();
 	}
 
 }
