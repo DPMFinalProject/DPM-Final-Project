@@ -33,7 +33,7 @@ public class LSLocalizationIntercept extends Localization {
 	
 	private double[] pos = new double[3];
 	
-	public LSLocalizationIntercept(Odometer odo, Driver driver, Navigation nav) {
+	public LSLocalizationIntercept(Odometer odo, Navigation nav) {
 		super(odo, nav);
 		(new Thread(grid)).start();
 	}

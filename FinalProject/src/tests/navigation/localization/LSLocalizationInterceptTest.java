@@ -8,13 +8,10 @@
  */
 package tests.navigation.localization;
 
-import navigation.Driver;
 import navigation.Navigation;
 import navigation.localization.LSLocalizationIntercept;
-import navigation.localization.LSLocalizationRotation;
 import navigation.odometry.Odometer;
 import tests.TestCase;
-import util.Direction;
 
 /**
  * 
@@ -27,14 +24,14 @@ public class LSLocalizationInterceptTest extends TestCase {
 	 */
 	@Override
 	public void runTest() {
-		Driver driver = new Driver();
-		Odometer odo = new Odometer(driver);
+	
+		Odometer odo = new Odometer();
 		
 		(new Thread(odo)).start();
-		Navigation nav = new Navigation(odo, driver);
+		Navigation nav = new Navigation(odo);
 		
 		
-		LSLocalizationIntercept lsl=new LSLocalizationIntercept(odo,driver,nav);
+		LSLocalizationIntercept lsl = new LSLocalizationIntercept(odo, nav);
 		odo.setX(20);
 		odo.setY(20);
 		

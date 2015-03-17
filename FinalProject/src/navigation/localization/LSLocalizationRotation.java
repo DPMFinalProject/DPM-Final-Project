@@ -35,7 +35,7 @@ public class LSLocalizationRotation extends Localization {
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
 	
-	public LSLocalizationRotation(Odometer odo, Driver driver, Navigation nav) {
+	public LSLocalizationRotation(Odometer odo, Navigation nav) {
 		super(odo, nav);
 		(new Thread(grid)).start();
 		double[] temp = new double[2];

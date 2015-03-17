@@ -21,15 +21,14 @@ import lejos.nxt.Motor;
 public class Driver {
 
 	private final static int FWD_SPEED = 500;
-	private final static int FWD_ACCEL = 6000;
+	//private final static int FWD_ACCEL = 6000;
 	private final static int TURN_SPEED = 200;
 	private final static int DRIFT_FACTOR = 50;
 	
-	private static double WHL_RADIUS = 2.085;//2.09			//smaller radius = go further
-	private static double WHL_SEPARATION = 17.355;		//smaller width = turn less
+	private static double WHL_RADIUS = 2.085;			//smaller radius = go further
+	private static double WHL_SEPARATION = 16.9;		//smaller width = turn less
 
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
-	private static Object lock;
 	
 	/**
 	 * Moves continuously until stop() is called.

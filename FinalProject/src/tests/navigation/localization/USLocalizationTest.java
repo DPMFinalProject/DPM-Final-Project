@@ -8,14 +8,10 @@
  */
 package tests.navigation.localization;
 
-import navigation.Driver;
 import navigation.Navigation;
-import navigation.localization.LSLocalizationIntercept;
-import navigation.localization.LSLocalizationRotation;
 import navigation.localization.USLocalization;
 import navigation.odometry.Odometer;
 import tests.TestCase;
-import util.Direction;
 
 /**
  * 
@@ -28,14 +24,14 @@ public class USLocalizationTest extends TestCase {
 	 */
 	@Override
 	public void runTest() {
-		Driver driver = new Driver();
-		Odometer odo = new Odometer(driver);
+
+		Odometer odo = new Odometer();
 		
 		(new Thread(odo)).start();
-		Navigation nav = new Navigation(odo, driver);
+		Navigation nav = new Navigation(odo);
 		
 		
-		USLocalization usl= new USLocalization(odo,driver,nav);
+		USLocalization usl= new USLocalization(odo, nav);
 		//odo.setX(40);
 		//odo.setY(40);
 	

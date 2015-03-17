@@ -19,12 +19,11 @@ import util.Direction;
  */
 public class OdoTest extends TestCase {
 	
-	final Driver driver;
 	final Odometer odo;
 	
 	public OdoTest() {
-		driver = new Driver();
-		odo = new Odometer(driver);
+
+		odo = new Odometer();
 	}
 	
 	/**
@@ -49,17 +48,17 @@ public class OdoTest extends TestCase {
 	
 	private void driveSquare()
 	{
-		driver.move(2*30.48, false);
-		driver.turn(Direction.RIGHT, 90);
+		Driver.move(2*30.48, false);
+		Driver.turn(Direction.RIGHT, 90);
 		System.out.println("Turn");
-		driver.move(10*30.48, false);
-		driver.turn(Direction.RIGHT, 90);
+		Driver.move(4*30.48, false);
+		Driver.turn(Direction.RIGHT, 90);
 		System.out.println("Turn");
-		driver.move(2*30.48, false);
-		driver.turn(Direction.RIGHT, 90);
+		Driver.move(2*30.48, false);
+		Driver.turn(Direction.RIGHT, 90);
 		System.out.println("Turn");
-		driver.move(10*30.48, false);
-		driver.turn(Direction.RIGHT, 90);
+		Driver.move(4*30.48, false);
+		Driver.turn(Direction.RIGHT, 90);
 		System.out.println("Turn");
 	}
 	
