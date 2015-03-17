@@ -80,17 +80,17 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	private void correctOrientation() {
 		SensorID sensor = grid.whichSensorDetected();
-		System.out.println("correcting... orientation");
-		
-		System.out.println(""+sensor+" sensor(s) detected");
+//		System.out.println("correcting... orientation");
+//		
+//		System.out.println(""+sensor+" sensor(s) detected");
 		
 		if (sensor == SensorID.BOTH && rightCrossed) {
-			System.out.println("RIGHT already detected... correcting LEFT");
+//			System.out.println("RIGHT already detected... correcting LEFT");
 			
 			sensor = SensorID.LEFT;
 		}
 		else if (sensor == SensorID.BOTH && leftCrossed) {
-			System.out.println("LEFT already detected... correcting LEFT");
+//			System.out.println("LEFT already detected... correcting LEFT");
 			
 			sensor = SensorID.RIGHT;
 		}
@@ -109,7 +109,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 
 				double newTheta = Math.round(odo.getTheta()/90)*90;
 				
-				System.out.println("correcting theta to: "+newTheta);
+//				System.out.println("correcting theta to: "+newTheta);
 				
 				odo.setTheta(newTheta);
 
@@ -132,12 +132,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					double odoTheta = Math.round(odo.getTheta()/90.0)*90;
 					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 					
-					System.out.println("correcting theta to: "+ (odoTheta + correctionTheta));
+//					System.out.println("correcting theta to: "+ (odoTheta + correctionTheta));
 					
 					odo.setTheta(odoTheta + correctionTheta);
 				}
 				else {
-					System.out.println("detected different lines... reseting");
+//					System.out.println("detected different lines... reseting");
 				}
 
 				break;
@@ -160,37 +160,37 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					double odoTheta = Math.round(odo.getTheta()/90.0)*90;
 					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 					
-					System.out.println("correcting theta to: "+ (odoTheta - correctionTheta));
+//					System.out.println("correcting theta to: "+ (odoTheta - correctionTheta));
 					
 					odo.setTheta(odoTheta - correctionTheta);
 				}
 				else {
-					System.out.println("detected different lines... reseting");
+//					System.out.println("detected different lines... reseting");
 				}
 
 				break; 
 			case NONE:
-				System.out.println("ERROR: no line detected");
+//				System.out.println("ERROR: no line detected");
 				break;
 		}
 		
-		System.out.println("------------------------");
+//		System.out.println("------------------------");
 	}
 	
 	private void correctPosition() {
 		
 		double[] sensorPos = getSensorPos(grid.getSensorCoor(grid.whichSensorDetected()));
 		
-		System.out.println("correcting... position");
+//		System.out.println("correcting... position");
 		
 		if(whichLineCrossed(sensorPos) == Line.xAxis) {
 			
-			System.out.println("Robot COOR x: "+odo.getX()+" y: "+odo.getY());
-			System.out.println("Sensor COOR x: "+sensorPos[0]+" y: "+sensorPos[1]);
+//			System.out.println("Robot COOR x: "+odo.getX()+" y: "+odo.getY());
+//			System.out.println("Sensor COOR x: "+sensorPos[0]+" y: "+sensorPos[1]);
 			
 			if (isParallelToX()) {
-				System.out.println("Tried to correct Y");
-				System.out.println("Robot is too close to being parallel to x-axis");
+//				System.out.println("Tried to correct Y");
+//				System.out.println("Robot is too close to being parallel to x-axis");
 				return;
 			}
 			
@@ -200,18 +200,18 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				yError -= SIZE_OF_TILE;
 			}
 			
-			System.out.println("correcting sensorY to: "+ (sensorPos[1]-yError));
+//			System.out.println("correcting sensorY to: "+ (sensorPos[1]-yError));
 			
 			odo.setY(odo.getY() - yError);
 		}
 		else {
 			
-			System.out.println("Robot COOR x: "+odo.getX()+" y: "+odo.getY());
-			System.out.println("Sensor COOR x: "+sensorPos[0]+" y: "+sensorPos[1]);
+//			System.out.println("Robot COOR x: "+odo.getX()+" y: "+odo.getY());
+//			System.out.println("Sensor COOR x: "+sensorPos[0]+" y: "+sensorPos[1]);
 			
 			if (isParallelToY()) {
-				System.out.println("Tried to correct X");
-				System.out.println("Robot is too close to being parallel to y-axis");
+//				System.out.println("Tried to correct X");
+//				System.out.println("Robot is too close to being parallel to y-axis");
 				return;
 			}
 			
@@ -221,12 +221,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				xError -= SIZE_OF_TILE;
 			}
 			
-			System.out.println("correcting sensorX to: "+(sensorPos[0]-xError));
+//			System.out.println("correcting sensorX to: "+(sensorPos[0]-xError));
 			
 			odo.setX(odo.getX() - xError);
 		}
 		
-		System.out.println("------------------------");
+//		System.out.println("------------------------");
 	}
 	
 	private Line whichLineCrossed() {
@@ -305,11 +305,11 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				
 				waitingForSecondCross = true;
 				
-				System.out.println("error checking");
+//				System.out.println("error checking");
 				
 				pause(1500);//wait 1.5 seconds
 				if (leftCrossed || rightCrossed)//if either is still true. error occurred! reset flags!
-					System.out.println("error occured, reseting flags...");
+//					System.out.println("error occured, reseting flags...");
 					setFlags(false);
 			}
 		}).start();

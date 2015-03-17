@@ -20,7 +20,7 @@ import lejos.nxt.Motor;
 
 public class Driver {
 
-	private final static int FWD_SPEED = 500;
+	private final static int FWD_SPEED = 300;
 	private final static int TURN_SPEED = 200;
 	private final static int DRIFT_FACTOR = 50;
 	
@@ -54,18 +54,21 @@ public class Driver {
 		int rotations=convertDistance(WHL_RADIUS, distance);
 				
 		leftMotor.rotate(rotations, true);
-		rightMotor.rotate(rotations,immediateReturn);
+		rightMotor.rotate(rotations, immediateReturn);
 			
 	}
 	
 	private static void setAcceleration(int acceleration) {
 		leftMotor.setAcceleration(acceleration);
 		rightMotor.setAcceleration(acceleration);
-		
 	}
 
-	/*
+	/**
 	 * 	Moves the robot with different wheel spins. This method should stay hidden.
+	 * 
+	 * @param direction
+	 * @param leftSpeed
+	 * @param rightSpeed
 	 */
 	private static void move(Direction direction, int leftSpeed, int rightSpeed) {
 		if (!validMoveDirection(direction)) {
@@ -187,6 +190,12 @@ public class Driver {
 		else {
 			System.out.println("Cannot turn forward or backwards.");
 		}
+	}
+	
+	public static void driveCircle (double radius) {
+		setSpeed(FWD_SPEED ,(int)(FWD_SPEED*((2*Math.PI*radius)/(2*Math.PI*radius+WHL_SEPARATION))));
+		leftMotor.forward();
+		rightMotor.forward();
 	}
 	
 	private static boolean validTurnDirection(Direction direction) {

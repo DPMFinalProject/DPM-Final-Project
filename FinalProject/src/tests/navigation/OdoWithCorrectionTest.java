@@ -43,11 +43,17 @@ public class OdoWithCorrectionTest extends TestCase {
 		(new Thread(correct)).start();
 		(new Thread(display)).start();
 		
-		//odo.setY(0);
-		//odo.setX(-15);
+		(new Thread() {
+			public void run() {
+				while(true) {
+					System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
+					pause(500);
+				}
+			}
+		}).start();
 			
-		driveSquareIsh();
-		//driveLolRectangle();
+		//driveSquareIsh();
+		driveCircle();
 	}
 	
 	private void driveSquareIsh() {
@@ -71,18 +77,17 @@ public class OdoWithCorrectionTest extends TestCase {
 		System.out.println("final Theta: "+odo.getTheta());
 	}
 	
-	private void driveLolRectangle() {
-		Driver.move(180, false);
+	private void driveCircle() {
+		Driver.move(30.48, false);
 		correct.stall();
 		Driver.turn(Direction.RIGHT, 90);
 		correct.resume();
-		Driver.move(30, false);
-		correct.stall();
-		Driver.turn(Direction.RIGHT, 90);
-		correct.resume();
-		Driver.move(180, false);
-		System.out.println("final X: "+odo.getX());
-		System.out.println("final Y: "+odo.getY());
-		System.out.println("final Theta: "+odo.getTheta());
+		Driver.driveCircle(30.48);
+	}
+	
+	private void pause(int ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {}
 	}
 }
