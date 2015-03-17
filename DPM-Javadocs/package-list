@@ -5,8 +5,11 @@ navigation.odometry
 navigation.odometry.correction
 sensors
 sensors.filters
+sensors.managers
 tests
 tests.navigation
+tests.navigation.avoidance
+tests.navigation.localization
 tests.sensors
 tests.sensors.filters
 util
