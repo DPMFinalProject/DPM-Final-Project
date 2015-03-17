@@ -20,50 +20,22 @@ import lejos.nxt.Motor;
 
 public class Driver {
 
-	private final int FWD_SPEED = 500;
-	private final int FWD_ACCEL = 6000;
-	private final int TURN_SPEED = 200;
-	private final int DRIFT_FACTOR = 50;
+	private final static int FWD_SPEED = 500;
+	private final static int FWD_ACCEL = 6000;
+	private final static int TURN_SPEED = 200;
+	private final static int DRIFT_FACTOR = 50;
 	
-	private double WHL_RADIUS = 2.085;//2.09			//smaller radius = go further
-	private  double WHL_SEPARATION = 17.355;		//smaller width = turn less
+	private static double WHL_RADIUS = 2.085;//2.09			//smaller radius = go further
+	private static double WHL_SEPARATION = 17.355;		//smaller width = turn less
 
-	private final NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
-	Object lock;
-	
-	public Driver() {		
-		// start the obstacle detector.
-		//(new Thread(detection)).start();
-	}
-	
-	//	The constructors nested here should only be used for testing.
-	public Driver(double wheelRadius, double wheelSeparation) {
-		
-		this(400, 100, 100, 50, wheelRadius, wheelSeparation);
-	}
-	
-	private Driver(int fwdSpeed, int turnSpeed,
-			double wheelRadius, double wheelSeparation) {
-		
-		this(fwdSpeed, 6000, turnSpeed, 20, wheelRadius, wheelSeparation);
-	}
-	
-	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed, int driftFactor,
-			double wheelRadius, double wheelSeparation) {
-		
-//		FWD_SPEED = fwdSpeed;
-//		FWD_ACCEL = fwdAccel;
-//		TURN_SPEED = turnSpeed;
-//		DRIFT_FACTOR = driftFactor;
-		WHL_RADIUS = wheelRadius;
-		WHL_SEPARATION  = wheelSeparation;
-	}
+	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
+	private static Object lock;
 	
 	/**
 	 * Moves continuously until stop() is called.
 	 * @param direction	The direction in which to move: FWD or BACK
 	 */
-	public void move(Direction direction) {
+	public static void move(Direction direction) {
 		if (!validMoveDirection(direction)) {
 			return;
 		}
@@ -77,7 +49,7 @@ public class Driver {
 	 * @param distance	The distance by which to move, in cm
 	 * @param immediateReturn return immediately if true
 	 */
-	public void move(double distance, boolean immediateReturn) {
+	public static void move(double distance, boolean immediateReturn) {
 		int acc=leftMotor.getAcceleration();
 		setAcceleration(acc/10);
 			
@@ -94,7 +66,7 @@ public class Driver {
 //		detection.setRunning(false);
 	}
 	
-	private void setAcceleration(int acceleration) {
+	private static void setAcceleration(int acceleration) {
 		leftMotor.setAcceleration(acceleration);
 		rightMotor.setAcceleration(acceleration);
 		
@@ -103,7 +75,7 @@ public class Driver {
 	/*
 	 * 	Moves the robot with different wheel spins. This method should stay hidden.
 	 */
-	private void move(Direction direction, int leftSpeed, int rightSpeed) {
+	private static void move(Direction direction, int leftSpeed, int rightSpeed) {
 		if (!validMoveDirection(direction)) {
 			return;
 		}
@@ -120,7 +92,7 @@ public class Driver {
 		}
 	}
 	
-	private boolean validMoveDirection(Direction direction) {
+	private static boolean validMoveDirection(Direction direction) {
 		if (direction == Direction.LEFT || direction == Direction.RIGHT) {
 			System.out.println("Cannot move " + direction + "\n");
 			System.out.println("Must move forward or backward");
@@ -134,7 +106,7 @@ public class Driver {
 	 * 	the robot will follow a curved path in the direction specified
 	 * @param direction	The direction in which to turn: LEFT or RIGHT
 	 */
-	public void drift(Direction direction) {
+	public static void drift(Direction direction) {
 		if (!validTurnDirection(direction)) {
 			return;
 		}
@@ -151,7 +123,7 @@ public class Driver {
 	 * 	Turns continuously until stop() is called.
 	 * @param direction The direction in which to turn: LEFT or RIGHT.
 	 */
-	public void turn(Direction direction) {
+	public static void turn(Direction direction) {
 		if (!validTurnDirection(direction)) {
 			return;
 		}
@@ -174,7 +146,7 @@ public class Driver {
 	 * @param direction	The direction in which to turn. RIGHT or LEFT.
 	 * @param angle The angle by which to turn, in degrees. 
 	 */
-	public void turn(Direction direction, double angle) {
+	public static void turn(Direction direction, double angle) {
 		if (!validTurnDirection(direction)) {
 			return;
 		}
@@ -194,7 +166,7 @@ public class Driver {
 	 * @param direction	The direction in which to turn. RIGHT or LEFT.
 	 * @param angle The angle by which to turn, in degrees. 
 	 */
-	public void turn(Direction direction, double angle, boolean immediateReturn) {
+	public static void turn(Direction direction, double angle, boolean immediateReturn) {
 		if (!validTurnDirection(direction)) {
 			return;
 		}
@@ -208,7 +180,7 @@ public class Driver {
 		angleTurn(direction, angle, immediateReturn);
 	}
 	
-	private void angleTurn(Direction direction, double angle, boolean immediateReturn) {
+	private static void angleTurn(Direction direction, double angle, boolean immediateReturn) {
 		if (direction == Direction.LEFT) {
 			leftMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
 			rightMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), immediateReturn);
@@ -220,7 +192,7 @@ public class Driver {
 		}
 	}
 	
-	private boolean validTurnDirection(Direction direction) {
+	private static boolean validTurnDirection(Direction direction) {
 		if (direction == Direction.FWD || direction == Direction.BACK) {
 			System.out.println("Cannot turn " + direction + "\n");
 			System.out.println("Must turn left or right");
@@ -232,7 +204,7 @@ public class Driver {
 	/**
 	 * 	Stops any movement.
 	 */
-	public void stop() {
+	public static void stop() {
 		leftMotor.stop(true);
 		rightMotor.stop();
 		
@@ -240,11 +212,11 @@ public class Driver {
 		rightMotor.flt();
 	}
 	
-	private void setSpeed(int speed) {
+	private static void setSpeed(int speed) {
 		setSpeed(speed, speed);
 	}
 	
-	private void setSpeed(int leftSpeed, int rightSpeed) {
+	private static void setSpeed(int leftSpeed, int rightSpeed) {
 			leftMotor.setSpeed(leftSpeed);
 			rightMotor.setSpeed(rightSpeed);
 	}
@@ -253,7 +225,7 @@ public class Driver {
 	 * Returns the state of the robot.
 	 * @return	Returns true if the robot is moving.
 	 */
-	public boolean isMoving(){
+	public static boolean isMoving(){
 		return rightMotor.isMoving() || leftMotor.isMoving();
 	}
 	
@@ -264,7 +236,7 @@ public class Driver {
 	 * @param tachoTotal
 	 * @param delTacho
 	 */
-	public void getDelTachoCount(int[] tachoTotal, int[] delTacho){
+	public static void getDelTachoCount(int[] tachoTotal, int[] delTacho){
 		delTacho[0]=rightMotor.getTachoCount() - tachoTotal[0];
 		delTacho[1]=leftMotor.getTachoCount() - tachoTotal[1];
 	}
@@ -274,7 +246,7 @@ public class Driver {
 	 * @param delTacho
 	 * @return Returns the charge in arclength
 	 */
-	public double getDelArc(int[] delTacho){
+	public static double getDelArc(int[] delTacho){
 		return ((delTacho[0]+delTacho[1])*WHL_RADIUS*Math.PI)/360;
 	}
 	
@@ -283,7 +255,7 @@ public class Driver {
 	 * @param delTacho
 	 * @return Returns the change in heading
 	 */
-	public double getDelTheta(int[] delTacho){
+	public static double getDelTheta(int[] delTacho){
 		return ((delTacho[1]-delTacho[0])*WHL_RADIUS)/WHL_SEPARATION;
 	}
 	
