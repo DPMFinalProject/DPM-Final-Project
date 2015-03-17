@@ -2,6 +2,9 @@
 
 *.class
 
+# Exclude TestMain
+TestMain.java
+
 # Package Files #
 *.jar
 *.war
