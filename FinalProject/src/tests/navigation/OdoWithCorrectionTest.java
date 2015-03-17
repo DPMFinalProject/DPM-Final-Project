@@ -43,27 +43,27 @@ public class OdoWithCorrectionTest extends TestCase {
 		(new Thread(correct)).start();
 		(new Thread(display)).start();
 		
-		odo.setY(0);
-		odo.setX(-15);
+		//odo.setY(0);
+		//odo.setX(-15);
 			
-		//driveSquareIsh();
-		driveLolRectangle();
+		driveSquareIsh();
+		//driveLolRectangle();
 	}
 	
 	private void driveSquareIsh() {
-		Driver.move(75, false);
+		Driver.move(2*30.48, false);
 		correct.stall();
 		Driver.turn(Direction.RIGHT, 90);
 		correct.resume();
-		Driver.move(60, false);
+		Driver.move(4*30.48, false);
 		correct.stall();
 		Driver.turn(Direction.RIGHT, 90);
 		correct.resume();
-		Driver.move(60, false);
+		Driver.move(2*30.48, false);
 		correct.stall();
 		Driver.turn(Direction.RIGHT, 90);
 		correct.resume();
-		Driver.move(60, false);
+		Driver.move(4*30.48, false);
 		correct.stall();
 		Driver.turn(Direction.RIGHT, 90);
 		System.out.println("final X: "+odo.getX());

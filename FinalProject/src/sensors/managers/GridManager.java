@@ -22,17 +22,16 @@ import util.SensorID;
 
 public class GridManager extends SensorManager {
 	
-	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
-	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S2, new DifferentialFilter(2));
-	private final double LINE_THRESHOLD = 1.5;
+	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S4, new DifferentialFilter(2));
+	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
+	private final double LINE_THRESHOLD = 2.0;
+	private final double NO_LINE_THRESHOLD = 0.4;
 	private boolean leftCSOnLine = false;
 	private boolean rightCSOnLine = false;
-	private final double[] leftSensorCoor = {-4.8, 6.5};//{x, y}
-	private final double[] rightSensorCoor = {4.8, 6.5};//{x, y}
+	private final double[] leftSensorCoor = {-7.5, 6.0};//{x, y}
+	private final double[] rightSensorCoor = {7.5, 6.0};//{x, y}
 	
-	private GridManager () {
-		
-	}
+	private GridManager() {}
 	
 	public static GridManager getGridManager() { 
 		if (gridManager == null) {
@@ -51,7 +50,7 @@ public class GridManager extends SensorManager {
 		if (leftCSMeasure < -LINE_THRESHOLD) {
 			setLeftCSDetected(true);
 		}
-		else if (leftCSMeasure > LINE_THRESHOLD) {
+		else if (leftCSMeasure > NO_LINE_THRESHOLD) {
 			setLeftCSDetected(false);
 		}
 
@@ -60,7 +59,7 @@ public class GridManager extends SensorManager {
 		if (rightCSMeasure < -LINE_THRESHOLD) {
 			setRightCSDetected(true);
 		}
-		else if (rightCSMeasure > LINE_THRESHOLD) {
+		else if (rightCSMeasure > NO_LINE_THRESHOLD) {
 			setRightCSDetected(false);
 		}
 
@@ -129,58 +128,5 @@ public class GridManager extends SensorManager {
 			return (!rightCSOnLine && !leftCSOnLine);
 		}
 	}
-	
-///**
-// * 	Returns boolean condition if just entered a line
-// * @return Return true if just ENTERED a line
-// */
-//	public boolean hasEnterLine( ){
-//		return lineCrossingCondition(-lineCrossingThreshold, true);
-//	}
-//	/**
-//	 * 	Returns boolean condition if just exited a line
-//	 * @return Return true if just EXITED a line
-//	 */
-//	public boolean hasExitLine(){
-//		return lineCrossingCondition(lineCrossingThreshold, false);
-//	}
-//	
-//	//returns boolean value of a change in light happenning
-//	private boolean lineCrossingCondition(double treshold, boolean below){
-//		double val;
-//		val= cs.getFilteredData();
-//		try {	Thread.sleep(10);	} catch (InterruptedException e) {}
-//		
-//		if(below){			
-//			if(val < treshold ){	return true;	}
-//		}else{
-//			if(val > treshold ){	return true;	}
-//		}
-//		
-//		return false;
-//		
-//		
-//	}
-//		
-//	/**
-//	 * Update position to the midpoint between the line entry and exit
-//	 * @param pos
-//	 */
-//	public void getPosMidLineCrossing(double[] pos){
-//		double[] lineEnter = new double[3];
-//		double[] lineExit = new double[3];
-//		
-//		while(!hasEnterLine()){
-//		}
-//		odo.getPosition(lineEnter);
-//		
-//		while(!hasExitLine()){
-//		}
-//		odo.getPosition(lineExit);
-//	
-//		for(int i=0; i<pos.length;i++){
-//			pos[i]=(lineEnter[i]+lineExit[i])/2;
-//		}
-//	}
 }
 	

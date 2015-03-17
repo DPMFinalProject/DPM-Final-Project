@@ -21,7 +21,6 @@ import lejos.nxt.Motor;
 public class Driver {
 
 	private final static int FWD_SPEED = 500;
-	//private final static int FWD_ACCEL = 6000;
 	private final static int TURN_SPEED = 200;
 	private final static int DRIFT_FACTOR = 50;
 	
@@ -49,20 +48,14 @@ public class Driver {
 	 * @param immediateReturn return immediately if true
 	 */
 	public static void move(double distance, boolean immediateReturn) {
-		int acc=leftMotor.getAcceleration();
-		setAcceleration(acc/10);
 			
 		setSpeed(FWD_SPEED);
 
-//		detection.setRunning(true);
-		int a=convertDistance(WHL_RADIUS, distance);
+		int rotations=convertDistance(WHL_RADIUS, distance);
 				
-		leftMotor.rotate(a, true);
-		rightMotor.rotate(a,immediateReturn);
+		leftMotor.rotate(rotations, true);
+		rightMotor.rotate(rotations,immediateReturn);
 			
-		setAcceleration(acc);
-		
-//		detection.setRunning(false);
 	}
 	
 	private static void setAcceleration(int acceleration) {
@@ -149,6 +142,7 @@ public class Driver {
 		if (!validTurnDirection(direction)) {
 			return;
 		}
+		
 		if (angle < 0) {
 			System.out.println("Cannot turn by a negative angle");
 			return;
@@ -169,6 +163,7 @@ public class Driver {
 		if (!validTurnDirection(direction)) {
 			return;
 		}
+		
 		if (angle < 0) {
 			System.out.println("Cannot turn by a negative angle");
 			return;
@@ -180,13 +175,16 @@ public class Driver {
 	}
 	
 	private static void angleTurn(Direction direction, double angle, boolean immediateReturn) {
+		
 		if (direction == Direction.LEFT) {
 			leftMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
 			rightMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), immediateReturn);
-		} else if (direction == Direction.RIGHT){
+		} 
+		else if (direction == Direction.RIGHT) {
 			leftMotor.rotate(convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), true);
 			rightMotor.rotate(-convertAngle(WHL_RADIUS, WHL_SEPARATION, angle), immediateReturn);
-		} else {
+		} 
+		else {
 			System.out.println("Cannot turn forward or backwards.");
 		}
 	}
@@ -204,11 +202,12 @@ public class Driver {
 	 * 	Stops any movement.
 	 */
 	public static void stop() {
+		setAcceleration(9000);
+		
 		leftMotor.stop(true);
 		rightMotor.stop();
 		
-		leftMotor.flt();
-		rightMotor.flt();
+		setAcceleration(6000);
 	}
 	
 	private static void setSpeed(int speed) {

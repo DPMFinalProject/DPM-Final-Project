@@ -95,11 +95,11 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			sensor = SensorID.RIGHT;
 		}
 		else if (sensor == SensorID.RIGHT && rightCrossed) {
-			pause(8);
+			pause(10);
 			return;
 		}
 		else if (sensor == SensorID.LEFT && leftCrossed) {
-			pause(8);
+			pause(10);
 			return;
 		}
 		
