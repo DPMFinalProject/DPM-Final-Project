@@ -50,6 +50,10 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				pause(10);
 			}
 			
+			if (stall) {
+				continue;
+			}
+			
 			correctOrientation();
 			
 			if (rightCrossed && leftCrossed) {
@@ -80,6 +84,25 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		
 		System.out.println(""+sensor+" sensor(s) detected");
 		
+		if (sensor == SensorID.BOTH && rightCrossed) {
+			System.out.println("RIGHT already detected... correcting LEFT");
+			
+			sensor = SensorID.LEFT;
+		}
+		else if (sensor == SensorID.BOTH && leftCrossed) {
+			System.out.println("LEFT already detected... correcting LEFT");
+			
+			sensor = SensorID.RIGHT;
+		}
+		else if (sensor == SensorID.RIGHT && rightCrossed) {
+			pause(8);
+			return;
+		}
+		else if (sensor == SensorID.LEFT && leftCrossed) {
+			pause(8);
+			return;
+		}
+		
 		switch (sensor) {
 			case BOTH:
 				setFlags(true);
@@ -106,27 +129,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					double distanceTravelled = euclideanDistance(firstCross, secondCross);
 					double sensorSeperation = euclideanDistance(grid.getSensorCoor(SensorID.LEFT), grid.getSensorCoor(SensorID.RIGHT));
 					
-					double odoTheta = odo.getTheta() % 90;
+					double odoTheta = Math.round(odo.getTheta()/90.0)*90;
 					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 					
-					double thetaError;
+					System.out.println("correcting theta to: "+ (odoTheta + correctionTheta));
 					
-					if (odoTheta < correctionTheta) {
-						thetaError = odoTheta - correctionTheta;
-					}
-					else {
-						thetaError = correctionTheta - odoTheta;
-					}
-					
-					System.out.println("_________distanceTravelled: "+distanceTravelled);
-					System.out.println("_________sensorSeperation: "+sensorSeperation);
-					System.out.println("_________odoTheta: "+odoTheta);
-					System.out.println("_________correctionTheta: "+correctionTheta);
-					System.out.println("_________thetaError: "+thetaError);
-					
-					System.out.println("correcting theta to: "+ (odo.getTheta() - thetaError));
-					
-					odo.setTheta(odo.getTheta() - thetaError);
+					odo.setTheta(odoTheta + correctionTheta);
 				}
 				else {
 					System.out.println("detected different lines... reseting");
@@ -149,27 +157,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 					double distanceTravelled = euclideanDistance(firstCross, secondCross);
 					double sensorSeperation = euclideanDistance(grid.getSensorCoor(SensorID.LEFT), grid.getSensorCoor(SensorID.RIGHT));
 
-					double odoTheta = odo.getTheta() % 90;
+					double odoTheta = Math.round(odo.getTheta()/90.0)*90;
 					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 					
-					double thetaError;
+					System.out.println("correcting theta to: "+ (odoTheta - correctionTheta));
 					
-					if (odoTheta < correctionTheta) {
-						thetaError = correctionTheta - odoTheta;
-					}
-					else {
-						thetaError = odoTheta - correctionTheta;
-					}
-					
-					System.out.println("_________distanceTravelled: "+distanceTravelled);
-					System.out.println("_________sensorSeperation: "+sensorSeperation);
-					System.out.println("_________odoTheta: "+odoTheta);
-					System.out.println("_________correctionTheta: "+correctionTheta);
-					System.out.println("_________thetaError: "+thetaError);
-					
-					System.out.println("correcting theta to: "+ (odo.getTheta() - thetaError));
-					
-					odo.setTheta(odo.getTheta() - thetaError);
+					odo.setTheta(odoTheta - correctionTheta);
 				}
 				else {
 					System.out.println("detected different lines... reseting");
@@ -181,7 +174,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				break;
 		}
 		
-		System.out.println("-----------------------");
+		System.out.println("------------------------");
 	}
 	
 	private void correctPosition() {
@@ -232,6 +225,8 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			
 			odo.setX(odo.getX() - xError);
 		}
+		
+		System.out.println("------------------------");
 	}
 	
 	private Line whichLineCrossed() {

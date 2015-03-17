@@ -22,6 +22,9 @@ public abstract class SensorManager extends Thread {
 			if (running) {
 				execute();
 			}
+			else {
+				pause(100);
+			}
 		}
 	}
 	

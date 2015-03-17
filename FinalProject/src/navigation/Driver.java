@@ -21,55 +21,43 @@ import lejos.nxt.Motor;
 public class Driver {
 
 	private final int FWD_SPEED = 250;
-	//private final int FWD_ACCEL = 6000;
+	private final int FWD_ACCEL = 6000;
 	private final int TURN_SPEED = 100;
 	private final int DRIFT_FACTOR = 50;
 	
-	private final double WHL_RADIUS = 2.085;//2.09			//smaller radius = go further
-	private final double WHL_SEPARATION = 17.355;		//smaller width = turn less
+	private double WHL_RADIUS = 2.085;//2.09			//smaller radius = go further
+	private  double WHL_SEPARATION = 17.355;		//smaller width = turn less
 
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.B;
 	Object lock;
 	
-	public Driver() {
-		//this(100, 100, 100, 50, 2.5, 15, Motor.A, Motor.B);
-//		leftMotor.setAcceleration(FWD_ACCEL);
-//		rightMotor.setAcceleration(FWD_ACCEL);
-		
+	public Driver() {		
 		// start the obstacle detector.
 		//(new Thread(detection)).start();
 	}
 	
-	/*	The constructors nested here should only be used for testing.
+	//	The constructors nested here should only be used for testing.
 	public Driver(double wheelRadius, double wheelSeparation) {
-		this(400, 100, 100, 50, wheelRadius, wheelSeparation, Motor.A, Motor.B);
-	}
-	
-	public Driver(double wheelRadius, double wheelSeparation, 
-			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
-		this(100, 100, 100, 50, wheelRadius, wheelSeparation, leftMotor, rightMotor);
-	}
-	
-	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed,
-			double wheelRadius, double wheelSeparation, 
-			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		
-		this(fwdSpeed, fwdAccel, turnSpeed, 20, wheelRadius, wheelSeparation, leftMotor, rightMotor);
+		this(400, 100, 100, 50, wheelRadius, wheelSeparation);
+	}
+	
+	private Driver(int fwdSpeed, int turnSpeed,
+			double wheelRadius, double wheelSeparation) {
+		
+		this(fwdSpeed, 6000, turnSpeed, 20, wheelRadius, wheelSeparation);
 	}
 	
 	private Driver(int fwdSpeed, int fwdAccel, int turnSpeed, int driftFactor,
-			double wheelRadius, double wheelSeparation, 
-			NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
+			double wheelRadius, double wheelSeparation) {
 		
-		FWD_SPEED = fwdSpeed;
-		FWD_ACCEL = fwdAccel;
-		TURN_SPEED = turnSpeed;
-		DRIFT_FACTOR = driftFactor;
+//		FWD_SPEED = fwdSpeed;
+//		FWD_ACCEL = fwdAccel;
+//		TURN_SPEED = turnSpeed;
+//		DRIFT_FACTOR = driftFactor;
 		WHL_RADIUS = wheelRadius;
 		WHL_SEPARATION  = wheelSeparation;
-		this.leftMotor = leftMotor;
-		this.rightMotor = rightMotor;
-	}*/
+	}
 	
 	/**
 	 * Moves continuously until stop() is called.
