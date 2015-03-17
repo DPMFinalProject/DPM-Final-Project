@@ -28,8 +28,8 @@ public class ObstacleDetection extends SensorManager {
 	private double leftDistance = 0, rightDistance = 0; 
 	
 	private ObstacleDetection() {
-		leftSensor = new FilteredUltrasonicSensor(SensorPort.S4, new OutlierFilter(10, US_SENSOR_OUTLIER));
-		rightSensor = new FilteredUltrasonicSensor(SensorPort.S3, new OutlierFilter(10, US_SENSOR_OUTLIER));
+		leftSensor = new FilteredUltrasonicSensor(SensorPort.S3, new OutlierFilter(10, US_SENSOR_OUTLIER));
+		rightSensor = new FilteredUltrasonicSensor(SensorPort.S2, new OutlierFilter(10, US_SENSOR_OUTLIER));
 	}
 	
 	public static ObstacleDetection getObstacleDetection() {
