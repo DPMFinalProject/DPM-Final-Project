@@ -20,7 +20,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	private enum Line {xAxis, yAxis};
 	
-	final double SIZE_OF_TILE = 30.48;
+	final double SIZE_OF_TILE = util.Measurements.TILE;
 	final GridManager grid;
 	
 	//Orientationcorrection flags and position variables

@@ -75,7 +75,7 @@ public class Navigation {
 			turnTo(targetAngle);
 			
 			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-			Driver.move(distance, false);
+			Driver.move(distance);
 		}
 		
 	}

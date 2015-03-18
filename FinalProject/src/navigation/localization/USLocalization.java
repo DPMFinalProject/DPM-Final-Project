@@ -89,7 +89,7 @@ public class USLocalization extends Localization {
 		System.out.println("XPos: " + xPosition);
 		
 		if (move)
-			Driver.move(xPosition, false);
+			Driver.move(xPosition);
 		
 		odo.setX(0);
 	}
@@ -105,7 +105,7 @@ public class USLocalization extends Localization {
 		System.out.println("YPos: " + yPosition);
 		
 		if (move)
-			Driver.move(yPosition, false);
+			Driver.move(yPosition);
 		
 		odo.setY(0);
 	}

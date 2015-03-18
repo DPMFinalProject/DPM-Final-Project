@@ -11,7 +11,7 @@ package tests.sensors;
 import navigation.Driver;
 import sensors.managers.GridManager;
 import tests.TestCase;
-import util.*;
+import util.Paths;
 
 /**
  * Line detection test
@@ -47,19 +47,7 @@ public class GridManagerTest extends TestCase {
 		}
 		).start();
 		
-		driveSquare();
-	}
-	
-	public void driveSquare()
-	{
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
+		Paths.square();
 	}
 	
 	private void pause(int ms) {

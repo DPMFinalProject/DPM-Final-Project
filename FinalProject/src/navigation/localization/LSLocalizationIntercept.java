@@ -163,7 +163,7 @@ public class LSLocalizationIntercept extends Localization {
 
 	//knowing one position and the angle, orient the robot towards the other line, by making it go forward and then turning clockwise of counter clockwaise
 	private void toOtherLine() {
-		Driver.move(15, false);
+		Driver.move(15);
 		if(needClockWiseMovement(pos[2])){
 			Driver.turn(Direction.RIGHT, 90, false);
 		}else{
@@ -215,10 +215,3 @@ public class LSLocalizationIntercept extends Localization {
 	}
 	
 }
-
-
-
-
-	
-
-

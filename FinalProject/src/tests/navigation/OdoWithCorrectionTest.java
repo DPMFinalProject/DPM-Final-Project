@@ -8,11 +8,10 @@
  */
 package tests.navigation;
 
-import navigation.Driver;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
-import util.Direction;
+import util.Paths;
 import util.OdometryDisplay;
 
 /**
@@ -52,37 +51,7 @@ public class OdoWithCorrectionTest extends TestCase {
 			}
 		}).start();
 			
-		//driveSquareIsh();
-		driveCircle();
-	}
-	
-	private void driveSquareIsh() {
-		Driver.move(2*30.48, false);
-		correct.stall();
-		Driver.turn(Direction.RIGHT, 90);
-		correct.resume();
-		Driver.move(4*30.48, false);
-		correct.stall();
-		Driver.turn(Direction.RIGHT, 90);
-		correct.resume();
-		Driver.move(2*30.48, false);
-		correct.stall();
-		Driver.turn(Direction.RIGHT, 90);
-		correct.resume();
-		Driver.move(4*30.48, false);
-		correct.stall();
-		Driver.turn(Direction.RIGHT, 90);
-		System.out.println("final X: "+odo.getX());
-		System.out.println("final Y: "+odo.getY());
-		System.out.println("final Theta: "+odo.getTheta());
-	}
-	
-	private void driveCircle() {
-		Driver.move(30.48, false);
-		correct.stall();
-		Driver.turn(Direction.RIGHT, 90);
-		correct.resume();
-		Driver.driveCircle(30.48);
+		Paths.square();
 	}
 	
 	private void pause(int ms) {

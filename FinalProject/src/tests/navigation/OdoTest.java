@@ -8,10 +8,9 @@
  */
 package tests.navigation;
 
-import navigation.Driver;
 import navigation.odometry.Odometer;
 import tests.TestCase;
-import util.Direction;
+import util.Paths;
 
 /**
  * Odometer calibration and testing class
@@ -43,23 +42,7 @@ public class OdoTest extends TestCase {
 			}
 		}).start();
 		
-		driveSquare();
-	}
-	
-	private void driveSquare()
-	{
-		Driver.move(2*30.48, false);
-		Driver.turn(Direction.RIGHT, 90);
-		System.out.println("Turn");
-		Driver.move(4*30.48, false);
-		Driver.turn(Direction.RIGHT, 90);
-		System.out.println("Turn");
-		Driver.move(2*30.48, false);
-		Driver.turn(Direction.RIGHT, 90);
-		System.out.println("Turn");
-		Driver.move(4*30.48, false);
-		Driver.turn(Direction.RIGHT, 90);
-		System.out.println("Turn");
+		Paths.square();
 	}
 	
 	private void pause(int ms) {

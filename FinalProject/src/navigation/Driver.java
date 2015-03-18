@@ -232,6 +232,39 @@ public class Driver {
 		rightMotor.setAcceleration(acceleration);
 	}
 	
+	/**
+	 *  make robot drive circle path
+	 *  only used for testing purposes in the util.Paths class
+	 * 
+	 * @param direction
+	 * @param radius
+	 */
+	public static void driveCircle(Direction direction, double radius) {
+		
+		int leftSpeed;
+		int rightSpeed;
+		int leftDistance;
+		int rightDistance;
+		
+		if(direction == Direction.RIGHT) {
+			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
+			rightSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
+			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));
+			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
+		}
+		else {
+			leftSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
+			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
+			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
+			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));;
+		}
+		
+		setSpeed(leftSpeed, rightSpeed);
+		leftMotor.rotate(leftDistance, true);
+		rightMotor.rotate(rightDistance);
+		
+	}
+	
 //--------------------------------------- Methods to complement the odometer class ---------------------------------------
 	
 	/**
@@ -263,11 +296,26 @@ public class Driver {
 	}
 	
 //--------------------------------------- Utility methods provided in lab 2 ---------------------------------------
-	
+	 
+	/**
+	  * determine necessary wheel rotation for robot to turn angle on itself
+	  * 
+	  * @param radius
+	  * @param width
+	  * @param angle
+	  * @return wheel rotation in degrees to rotate by angle
+	  */
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
 	
+	/**
+	 *  determine necessary wheel rotation to travel distance based on wheel radius
+	 * 
+	 * @param radius
+	 * @param distance
+	 * @return wheel rotation in degrees to travel distance 
+	 */
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
