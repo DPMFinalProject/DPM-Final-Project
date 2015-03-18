@@ -9,11 +9,7 @@
  */
 package tests;
 
-import tests.navigation.*;
-import tests.navigation.avoidance.*;
-import tests.navigation.localization.*;
-import tests.sensors.*;
-import tests.sensors.filters.*;
+import tests.navigation.avoidance.BangBangAvoidanceTest;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -26,7 +22,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new OdoWithCorrectionTest();
+		TestCase test = new BangBangAvoidanceTest();
 		test.runTest();
 	}
 
@@ -59,7 +55,7 @@ public class TestMain {
 		final String[] passedArgs = args;
 		try {
 			init();
-			
+
 			(new Thread() {
 				public void run() {
 					execute(passedArgs);

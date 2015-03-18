@@ -40,5 +40,4 @@ public class DetectTest extends TestCase {
 		}
 		Sound.beep();
 	}
-
 }

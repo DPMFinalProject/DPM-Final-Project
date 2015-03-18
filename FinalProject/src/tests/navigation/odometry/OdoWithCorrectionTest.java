@@ -6,7 +6,7 @@
  *	OdoWithCorrectionTest.java
  *	Created On:	Mar 3, 2015
  */
-package tests.navigation;
+package tests.navigation.odometry;
 
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;

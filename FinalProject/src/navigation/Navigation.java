@@ -9,7 +9,6 @@
 package navigation;
 
 import util.Direction;
-import navigation.localization.Localization;
 import navigation.odometry.Odometer;
 import static util.Utilities.pause;
 

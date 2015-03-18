@@ -21,11 +21,12 @@ import lejos.nxt.Motor;
 public class Driver {
 
 	private final static int FWD_SPEED = 300;
+	private final static int ACCEL = 3000;
 	private final static int TURN_SPEED = 200;
-	private final static int DRIFT_FACTOR = 50;
+	private final static int DRIFT_FACTOR = 95;
 	
 	private final static double WHL_RADIUS = 2.085;			//smaller radius = go further
-	private final static double WHL_SEPARATION = 16.9;		//smaller width = turn less
+	private final static double WHL_SEPARATION = 16.1;		//smaller width = turn less
 
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
 
@@ -52,6 +53,7 @@ public class Driver {
 			return;
 		}
 		
+		setAcceleration(ACCEL);
 		setSpeed(leftSpeed, rightSpeed);
 		
 		if (direction == Direction.FWD) {
@@ -73,7 +75,7 @@ public class Driver {
 	public static void move(double distance) {
 			
 		move(distance, false);
-			
+
 	}
 	
 	/**
@@ -83,14 +85,15 @@ public class Driver {
 	 * @param immediateReturn return immediately if true
 	 */
 	public static void move(double distance, boolean immediateReturn) {
-			
+		
+		setAcceleration(ACCEL);
 		setSpeed(FWD_SPEED);
 
 		int rotations = convertDistance(WHL_RADIUS, distance);
-				
+		
 		leftMotor.rotate(rotations, true);
 		rightMotor.rotate(rotations, immediateReturn);
-			
+		
 	}
 
 //--------------------------------------- TURN ---------------------------------------	
@@ -104,6 +107,7 @@ public class Driver {
 			return;
 		}
 		
+		setAcceleration(ACCEL);
 		setSpeed(TURN_SPEED);
 		
 		if (direction == Direction.LEFT) {
@@ -144,6 +148,7 @@ public class Driver {
 			return;
 		}
 		
+		setAcceleration(ACCEL);
 		setSpeed(TURN_SPEED);
 		
 		int rotations = convertAngle(WHL_RADIUS, WHL_SEPARATION, angle);
@@ -188,7 +193,7 @@ public class Driver {
 		leftMotor.stop(true);
 		rightMotor.stop();
 		
-		setAcceleration(6000);
+		setAcceleration(ACCEL);
 	}
 	
 	/**

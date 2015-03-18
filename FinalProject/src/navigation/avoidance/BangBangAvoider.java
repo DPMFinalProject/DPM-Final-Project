@@ -29,7 +29,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	public BangBangAvoider(Direction wallDirection, Odometer odo) {
 		super(wallDirection, odo);
 		BAND_WIDTH = 8;
-		BAND_CENTER = 20;
+		BAND_CENTER = 18;
 		detector = ObstacleDetection.getObstacleDetection();
 	}
 	
@@ -49,6 +49,8 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		while(!hasAvoided()) {
 			bangBang();
 		}
+		
+		Driver.stop();
 	}
 	
 	private void bangBang() {
@@ -66,7 +68,11 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	}
 	
 	private boolean hasAvoided() {
-		if (isNear(initialOrientation + wallDirection.getAngle() , odo.getTheta(), 30)) {
+		
+		double endAngle = initialOrientation + wallDirection.getAngle();
+		endAngle = (endAngle < 0) ? (endAngle % 360) + 360 : endAngle % 360;
+		
+		if (isNear(endAngle , odo.getTheta(), 30)) {
 			return true;
 		}
 		return false;
