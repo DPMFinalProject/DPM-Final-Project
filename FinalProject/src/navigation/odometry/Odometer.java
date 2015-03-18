@@ -9,7 +9,7 @@
 package navigation.odometry;
 
 import navigation.Driver;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Keeps track of the position and orientation of the robot.

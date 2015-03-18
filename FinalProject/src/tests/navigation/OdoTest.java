@@ -11,7 +11,7 @@ package tests.navigation;
 import navigation.odometry.Odometer;
 import tests.TestCase;
 import util.Paths;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Odometer calibration and testing class

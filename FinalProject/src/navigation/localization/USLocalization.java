@@ -22,7 +22,7 @@ import util.Measurements;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Performs localization using the ultrasonic sensor.

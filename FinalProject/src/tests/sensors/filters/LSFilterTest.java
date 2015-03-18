@@ -15,7 +15,7 @@ import sensors.FilteredSensor;
 import sensors.filters.*;
 import tests.TestCase;
 import util.Direction;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  *	This class is used to test various filtering behaviors with the light sensor

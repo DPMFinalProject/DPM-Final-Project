@@ -11,7 +11,7 @@ package tests.navigation.avoidance;
 import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import tests.TestCase;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * 	Tests the quality of dual sensor obstacle detection.

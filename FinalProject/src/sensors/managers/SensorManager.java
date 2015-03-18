@@ -7,7 +7,7 @@
  *	Created On:	Mar 10, 2015
  */
 package sensors.managers;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Manages the sensor to control thread access to the lejos sensor classes

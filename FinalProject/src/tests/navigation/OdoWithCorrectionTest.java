@@ -13,7 +13,7 @@ import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
 import util.Paths;
 import util.OdometryDisplay;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Odometry Correction test

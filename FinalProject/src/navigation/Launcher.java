@@ -8,7 +8,7 @@
  */
 package navigation;
 
-import static util.Measurements.TILE;
+import util.Measurements;
 import navigation.odometry.Odometer;
 
 /**
@@ -20,7 +20,7 @@ public class Launcher {
 	private Odometer odo;
 	private Navigation nav;
 	private final double[] target = new double[2];
-	private final double[] range = {TILE*9,TILE*12};
+	private final double[] range = {Measurements.TILE*9,Measurements.TILE*12};
 	
 	
 	public Launcher(Odometer odo, Navigation nav) {

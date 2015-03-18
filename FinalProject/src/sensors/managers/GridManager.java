@@ -13,10 +13,10 @@ import lejos.nxt.SensorPort;
 import sensors.FilteredColorSensor;
 import sensors.filters.DifferentialFilter;
 import util.SensorID;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
- *	This will take take of everything that deals with the colorsensors
+ *	This will take take of everything that deals with the color sensors
  *	start this class in a thread at the beginning of any class interacting with the color sensors
  * @author GregoryBrookes, Auguste
  */
@@ -130,4 +130,3 @@ public class GridManager extends SensorManager {
 		}
 	}
 }
-	

@@ -15,7 +15,7 @@ import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
 import sensors.filters.DifferentialFilter;
 import tests.TestCase;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**A simple test consisting of a robot moving at a steady speed
  * and recording the light values as it moves forward. 

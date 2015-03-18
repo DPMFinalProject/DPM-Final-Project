@@ -12,7 +12,7 @@ import navigation.Driver;
 import sensors.managers.GridManager;
 import tests.TestCase;
 import util.Paths;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Line detection test
