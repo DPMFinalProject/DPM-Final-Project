@@ -39,5 +39,4 @@ public class Commander {
 			ResourceManager.init();
 		}
 	}
-
 }

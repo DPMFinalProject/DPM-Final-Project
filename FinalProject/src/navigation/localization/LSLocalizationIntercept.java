@@ -14,6 +14,7 @@ import util.SensorID;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
+import static util.Pause.pause;
 
 /**
  * 	Performs localization using the light sensor
@@ -94,7 +95,7 @@ public class LSLocalizationIntercept extends Localization {
 			optimalRotation(1);
 		}
 		while(Driver.isMoving()){
-			try {	Thread.sleep(100);	} catch (InterruptedException e) {}
+			pause(100);
 		}
 		System.out.println("Forward");
 		Driver.move(Direction.FWD);
@@ -122,7 +123,7 @@ public class LSLocalizationIntercept extends Localization {
 	private void perpendicularToLine(){
 		//wait until a line is detected, then stop and turn depending on which sensor detected the line
 		while(!grid.lineDetected()) {
-			try {Thread.sleep(10);} catch (InterruptedException e) {}
+			pause(10);
 		}
 		Driver.stop();
 		Driver.turn(rotationDirection());

@@ -15,6 +15,7 @@ import util.SensorID;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
+import static util.Pause.pause;
 
 /**
  * 	Performs localization using the light sensor
@@ -56,7 +57,7 @@ public class LSLocalizationRotation extends Localization {
 		getlineAngle(lineAngle);
 		
 		while(Driver.isMoving()){
-			try {	Thread.sleep(500);	} catch (InterruptedException e) {}
+			pause(500);
 		}
 		updateOdometer(lineAngle,pos);
 		
@@ -79,7 +80,7 @@ public class LSLocalizationRotation extends Localization {
 			while(lineAngle[i]==-1){
 				
 				while(!grid.lineDetectedRS()){
-					try { Thread.sleep(10); } catch (InterruptedException e) {}
+					pause(10);
 				}
 				odo.getPosition(pos);
 				System.out.println(pos[2]);
@@ -115,7 +116,7 @@ public class LSLocalizationRotation extends Localization {
 		do{
 			val[0] = cs.getFilteredData();
 			System.out.println(val[0]);
-			try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+			pause(50);
 //			if(!driver.isMoving()){
 //				return val;
 //			}
@@ -168,7 +169,7 @@ public class LSLocalizationRotation extends Localization {
 //				val[0] = val[1];
 				val[1 0] = cs.getFilteredData();
 				System.out.println("\t " +val);
-				try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+				pause(50);
 			}
 		}else{
 			//crossing the line from below
@@ -176,7 +177,7 @@ public class LSLocalizationRotation extends Localization {
 //				val[0] = val[1];
 				val[1 0] = cs.getFilteredData();
 				System.out.println("\t " +val);
-				try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+				pause(50);
 			}
 		}
 		return 0;

@@ -12,6 +12,7 @@ import lejos.nxt.SensorPort;
 import sensors.FilteredUltrasonicSensor;
 import sensors.filters.OutlierFilter;
 import util.Direction;
+import static util.Pause.pause;
 
 /**
  * Runs in a separate thread, waiting until it detects an obstacle.

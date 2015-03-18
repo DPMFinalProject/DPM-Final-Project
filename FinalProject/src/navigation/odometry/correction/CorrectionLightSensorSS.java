@@ -11,6 +11,7 @@ package navigation.odometry.correction;
 import navigation.odometry.Odometer;
 import sensors.managers.GridManager;
 import util.SensorID;
+import static util.Pause.pause;
 
 /**
  * Odometry correction assuming <<TWO>> light sensors both placed at the <<FRONT>> of the robot
@@ -324,14 +325,5 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	private boolean isNear(double targetAngle, double actualAngle) {
 		return Math.abs(targetAngle - actualAngle) < 20;
-	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} 
-		catch (InterruptedException e) {
-			System.out.println("SOMETHING WEIRD HAPPENED");
-		}
 	}
 }

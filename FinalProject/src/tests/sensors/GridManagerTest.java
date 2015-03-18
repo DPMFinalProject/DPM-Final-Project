@@ -12,6 +12,7 @@ import navigation.Driver;
 import sensors.managers.GridManager;
 import tests.TestCase;
 import util.Paths;
+import static util.Pause.pause;
 
 /**
  * Line detection test
@@ -48,11 +49,5 @@ public class GridManagerTest extends TestCase {
 		).start();
 		
 		Paths.square();
-	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
 	}
 }

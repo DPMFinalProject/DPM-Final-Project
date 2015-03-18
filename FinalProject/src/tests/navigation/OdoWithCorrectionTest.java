@@ -13,6 +13,7 @@ import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
 import util.Paths;
 import util.OdometryDisplay;
+import static util.Pause.pause;
 
 /**
  * Odometry Correction test
@@ -52,11 +53,5 @@ public class OdoWithCorrectionTest extends TestCase {
 		}).start();
 			
 		Paths.square();
-	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
 	}
 }

@@ -11,6 +11,7 @@ package tests.navigation;
 import navigation.Driver;
 import navigation.odometry.Odometer;
 import tests.TestCase;
+import static util.Pause.pause;
 
 /**
  * Odometer calibration and testing class
@@ -43,11 +44,5 @@ public class OdoCalibration extends TestCase {
 	
 	private void distanceTest(int tiles){
 		Driver.move(30.48*tiles);
-	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
 	}
 }

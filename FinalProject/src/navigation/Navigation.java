@@ -11,6 +11,7 @@ package navigation;
 import util.Direction;
 import navigation.localization.Localization;
 import navigation.odometry.Odometer;
+import static util.Pause.pause;
 
 /**
  * 	The Navigation class is responsible for odometer-adjusted movement.
@@ -100,7 +101,7 @@ public class Navigation {
 				System.out.println("Robot trying to turn by 0 degrees for some reason");
 			}
 			
-			pause();
+			pause(15);
 			
 		} while (shortestAngle(odo.getTheta(), theta) > ANGLE_ERROR);
 	}
@@ -142,15 +143,4 @@ public class Navigation {
 				return 90 - angle;
 			}
 	}
-	
-	private void pause() {
-		try {
-			Thread.sleep(15);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	
 }

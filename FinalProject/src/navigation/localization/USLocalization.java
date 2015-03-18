@@ -22,6 +22,7 @@ import util.Measurements;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
+import static util.Pause.pause;
 
 /**
  * Performs localization using the ultrasonic sensor.
@@ -141,14 +142,4 @@ public class USLocalization extends Localization {
 		Driver.stop();
 		Driver.turn(Direction.RIGHT, 90);
 	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 }

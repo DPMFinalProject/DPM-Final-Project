@@ -15,6 +15,7 @@ import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
 import sensors.filters.DifferentialFilter;
 import tests.TestCase;
+import static util.Pause.pause;
 
 /**A simple test consisting of a robot moving at a steady speed
  * and recording the light values as it moves forward. 
@@ -53,7 +54,7 @@ public class LSFLMoving extends TestCase {
 		//get light measurements and print them to the console
 		while(motorB.isMoving() || motorA.isMoving()) {
 			System.out.println(ls.getFilteredData());
-			try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+			pause(50);
 		}
 	}
 

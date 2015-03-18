@@ -15,6 +15,7 @@ import sensors.FilteredSensor;
 import sensors.filters.*;
 import tests.TestCase;
 import util.Direction;
+import static util.Pause.pause;
 
 /**
  *	This class is used to test various filtering behaviors with the light sensor
@@ -35,7 +36,7 @@ public class LSFilterTest extends TestCase {
 	
 		while (Driver.isMoving()) { 
 			System.out.println(cs.getFilteredData());
-			try {	Thread.sleep(100);	} catch (InterruptedException e) {}
+			pause(100);
 		}
 	}
 

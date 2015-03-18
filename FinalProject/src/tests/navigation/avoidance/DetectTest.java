@@ -11,6 +11,7 @@ package tests.navigation.avoidance;
 import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import tests.TestCase;
+import static util.Pause.pause;
 
 /**
  * 	Tests the quality of dual sensor obstacle detection.
@@ -35,12 +36,7 @@ public class DetectTest extends TestCase {
 		}*/
 		
 		while(!detection.isFrontObstacle()) {
-			try {
-				Thread.sleep(30);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			pause(30);
 		}
 		Sound.beep();
 	}

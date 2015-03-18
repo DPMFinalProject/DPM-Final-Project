@@ -9,6 +9,7 @@
 package navigation.odometry;
 
 import navigation.Driver;
+import static util.Pause.pause;
 
 /**
  * Keeps track of the position and orientation of the robot.
@@ -68,10 +69,7 @@ public class Odometer implements Runnable {
 			// this ensures that the odometer only runs once every period
 			updateEnd = System.currentTimeMillis();
 			if (updateEnd - updateStart < ODOMETER_PERIOD) {
-				try {
-					Thread.sleep(ODOMETER_PERIOD - (updateEnd - updateStart));
-				} catch (InterruptedException e) {
-				}
+				pause((int)(ODOMETER_PERIOD - (updateEnd - updateStart)));
 			}
 		}
 	}

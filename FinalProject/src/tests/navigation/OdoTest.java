@@ -11,6 +11,7 @@ package tests.navigation;
 import navigation.odometry.Odometer;
 import tests.TestCase;
 import util.Paths;
+import static util.Pause.pause;
 
 /**
  * Odometer calibration and testing class
@@ -43,11 +44,5 @@ public class OdoTest extends TestCase {
 		}).start();
 		
 		Paths.square();
-	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
 	}
 }

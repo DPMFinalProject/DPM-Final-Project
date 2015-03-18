@@ -13,6 +13,7 @@ import lejos.nxt.SensorPort;
 import sensors.FilteredColorSensor;
 import sensors.filters.DifferentialFilter;
 import util.SensorID;
+import static util.Pause.pause;
 
 /**
  *	This will take take of everything that deals with the colorsensors

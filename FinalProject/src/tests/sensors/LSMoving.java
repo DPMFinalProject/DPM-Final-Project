@@ -13,6 +13,7 @@ import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import tests.TestCase;
+import static util.Pause.pause;
 
 /** A simple test consisting of a robot moving at a steady speed
  * and recording the light values as it moves forward. 
@@ -51,7 +52,7 @@ public class LSMoving extends TestCase {
 		//get light measurements and print them to the console
 		while(motorB.isMoving() || motorA.isMoving()) {
 			System.out.println(ls.getLightValue());
-			try {	Thread.sleep(100);	} catch (InterruptedException e) {}
+			pause(100);
 		}
 	}
 
