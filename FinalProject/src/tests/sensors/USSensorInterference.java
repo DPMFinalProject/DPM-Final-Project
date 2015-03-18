@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	ExampleTest.java
+ *	USSensorInterference.java
  *	Created On:	Feb 20, 2015
  */
 package tests.sensors;
@@ -11,8 +11,6 @@ package tests.sensors;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
-import sensors.FilteredUltrasonicSensor;
-import sensors.filters.ExampleFilter;
 import tests.TestCase;
 
 /**A simple test consisting of two ultrasonic sensor
@@ -36,8 +34,8 @@ public class USSensorInterference extends TestCase {
 		RConsole.openUSB(10000);
 
 		//get distances measurements and print them to the console
-		for (int i=0; i<61; i++){
-		RConsole.println(us1.getDistance()+"\t"+ us2.getDistance());
+		for (int i=0; i<61; i++) {
+			RConsole.println(us1.getDistance()+"\t"+ us2.getDistance());
 		}
 
 	}

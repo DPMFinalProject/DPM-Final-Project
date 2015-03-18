@@ -8,8 +8,6 @@
  */
 package tests.navigation;
 
-import lejos.nxt.Sound;
-import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
 import tests.TestCase;

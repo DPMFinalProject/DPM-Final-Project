@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	OdoTest.java
+ *	GridManagerTest.java
  *	Created On:	Mar 7, 2015
  */
 package tests.sensors;

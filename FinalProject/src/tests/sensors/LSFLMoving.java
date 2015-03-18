@@ -3,16 +3,14 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	NewTest.java
+ *	LSFLMoving.java
  *	Created On:	Feb 24, 2015
  */
 package tests.sensors;
 
-import lejos.nxt.ColorSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
-import lejos.nxt.comm.RConsole;
 import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
 import sensors.filters.DifferentialFilter;
@@ -53,9 +51,9 @@ public class LSFLMoving extends TestCase {
 		motorB.rotate(360*2, true);
 		
 		//get light measurements and print them to the console
-		while(motorB.isMoving() || motorA.isMoving()){
-		System.out.println(ls.getFilteredData());
-		try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+		while(motorB.isMoving() || motorA.isMoving()) {
+			System.out.println(ls.getFilteredData());
+			try {	Thread.sleep(50);	} catch (InterruptedException e) {}
 		}
 	}
 

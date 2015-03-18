@@ -9,7 +9,6 @@
 package sensors.managers;
 
 import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
 import sensors.FilteredUltrasonicSensor;
 import sensors.filters.OutlierFilter;
 import util.Direction;

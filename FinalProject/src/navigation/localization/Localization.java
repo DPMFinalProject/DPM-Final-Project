@@ -8,8 +8,6 @@
  */
 package navigation.localization;
 
-import sensors.FilteredSensor;
-import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
 

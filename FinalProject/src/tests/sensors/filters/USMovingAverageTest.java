@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	USMovingAverage.java
+ *	USMovingAverageTest.java
  *	Created On:	Feb 27, 2015
  */
 package tests.sensors.filters;
@@ -11,10 +11,7 @@ package tests.sensors.filters;
 import lejos.nxt.SensorPort;
 import sensors.FilteredColorSensor;
 import sensors.FilteredSensor;
-import sensors.FilteredUltrasonicSensor;
-import sensors.filters.AveragingFilter;
 import sensors.filters.DifferentialFilter;
-import sensors.filters.OutlierFilter;
 import tests.TestCase;
 
 /**

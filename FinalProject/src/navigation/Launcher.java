@@ -3,12 +3,11 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	Navigation.java
+ *	Launcher.java
  *	Created On:	Feb 28, 2015
  */
 package navigation;
 
-import util.Direction;
 import util.Measurements;
 import navigation.odometry.Odometer;
 
@@ -18,16 +17,14 @@ import navigation.odometry.Odometer;
  */
 
 public class Launcher {
-	private Driver driver;
 	private Odometer odo;
 	private Navigation nav;
 	private final double[] target = new double[2];
 	private final double[] range = {Measurements.TILE*9,Measurements.TILE*12};
 	
 	
-	public Launcher(Odometer odo, Driver driver, Navigation nav) {
+	public Launcher(Odometer odo, Navigation nav) {
 		this.odo = odo;
-		this.driver = driver;
 		this.nav=nav;
 	}
 	

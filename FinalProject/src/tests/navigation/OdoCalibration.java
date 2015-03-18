@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	OdoTest.java
+ *	OdoCalibration.java
  *	Created On:	Mar 3, 2015
  */
 package tests.navigation;

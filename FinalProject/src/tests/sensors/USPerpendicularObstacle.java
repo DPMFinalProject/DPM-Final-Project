@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	NewTest.java
+ *	USPerpendicularObstacle.java
  *	Created On:	Feb 24, 2015
  */
 package tests.sensors;
@@ -12,7 +12,6 @@ package tests.sensors;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
 import tests.TestCase;
@@ -37,16 +36,16 @@ public class USPerpendicularObstacle extends TestCase {
 		NXTRegulatedMotor motorA =Motor.B,motorB=Motor.C;
 		UltrasonicSensor us = new UltrasonicSensor(SensorPort.S1);
 		RConsole.openUSB(10000);
-		
+
 		//drive the robot
 		motorA.setSpeed(200);
 		motorB.setSpeed(200);
 		motorA.rotate(-360*10, true);
 		motorB.rotate(-360*10, true);
-		
+
 		//get distances measurements and print them to the console
-		while(motorB.isMoving()|| motorB.isMoving()){
-		RConsole.println(us.getDistance()+"");;
+		while(motorB.isMoving()|| motorB.isMoving()) {
+			RConsole.println(us.getDistance()+"");
 		}
 		
 	}
