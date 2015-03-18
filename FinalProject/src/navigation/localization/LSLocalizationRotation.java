@@ -3,7 +3,7 @@ a *	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	LSLocalization.java
+ *	LSLocalizationRotation.java
  *	Created On:	Feb 26, 2015
  */
 package navigation.localization;

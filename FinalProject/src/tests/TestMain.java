@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	Test.java
+ *	TestMain.java
  *	Created On:	Feb 18, 2015
  *	
  */

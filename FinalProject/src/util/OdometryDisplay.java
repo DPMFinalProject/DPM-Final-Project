@@ -1,8 +1,20 @@
+/**
+ *	DPM Final Project
+ *	Team 10
+ *	ECSE 211: Design Principles and Methods
+ *
+ *	OdometryDisplay.java
+ *	Created On:	Feb 20, 2015
+ */
 package util;
 
 import navigation.odometry.Odometer;
 import lejos.nxt.LCD;
+import static util.Utilities.pause;
 
+/**
+ *  OdometryDisplay slightly modified form what is provided in the labs
+ */
 public class OdometryDisplay implements Runnable {
 	private static final long DISPLAY_PERIOD = 50;
 	private Odometer odometer;
@@ -39,13 +51,7 @@ public class OdometryDisplay implements Runnable {
 			// throttle the OdometryDisplay
 			displayEnd = System.currentTimeMillis();
 			if (displayEnd - displayStart < DISPLAY_PERIOD) {
-				try {
-					Thread.sleep(DISPLAY_PERIOD - (displayEnd - displayStart));
-				} catch (InterruptedException e) {
-					// there is nothing to be done here because it is not
-					// expected that OdometryDisplay will be interrupted
-					// by another thread
-				}
+				pause((int)(DISPLAY_PERIOD - (displayEnd - displayStart)));
 			}
 		}
 	}
@@ -90,5 +96,4 @@ public class OdometryDisplay implements Runnable {
 		
 		return result;
 	}
-
 }
