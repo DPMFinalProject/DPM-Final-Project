@@ -12,5 +12,4 @@ public class ExampleFilter extends Filter {
 		
 		return lastValue;
 	}
-
 }

@@ -27,5 +27,4 @@ public class MedianFilter extends Filter {
 		window.add(value);
 		return window.median();
 	}
-
 }
