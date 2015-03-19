@@ -3,7 +3,7 @@ a *	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	LSLocalization.java
+ *	LSLocalizationRotation.java
  *	Created On:	Feb 26, 2015
  */
 package navigation.localization;
@@ -15,7 +15,7 @@ import util.SensorID;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * 	Performs localization using the light sensor

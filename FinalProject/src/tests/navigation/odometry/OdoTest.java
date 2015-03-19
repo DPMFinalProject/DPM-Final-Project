@@ -6,12 +6,12 @@
  *	OdoTest.java
  *	Created On:	Mar 3, 2015
  */
-package tests.navigation;
+package tests.navigation.odometry;
 
 import navigation.odometry.Odometer;
 import tests.TestCase;
 import util.Paths;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Odometer calibration and testing class

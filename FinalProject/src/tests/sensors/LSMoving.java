@@ -13,7 +13,7 @@ import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import tests.TestCase;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /** A simple test consisting of a robot moving at a steady speed
  * and recording the light values as it moves forward. 

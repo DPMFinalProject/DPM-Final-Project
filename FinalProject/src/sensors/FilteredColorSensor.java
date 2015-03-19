@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	FilteredLightSensor.java
+ *	FilteredColorSensor.java
  *	Created On:	Feb 24, 2015
  */
 package sensors;
@@ -13,7 +13,7 @@ import lejos.nxt.ColorSensor;
 import lejos.nxt.SensorPort;
 
 /**
- * Wrapper around the LeJOS ultrasonic class adding filtering capabilities.
+ * Wrapper around the LeJOS ColorSensor class adding filtering capabilities.
  * @author Oleg
  */
 public class FilteredColorSensor extends FilteredSensor {

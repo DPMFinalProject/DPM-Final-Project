@@ -11,7 +11,7 @@ package navigation.odometry.correction;
 import navigation.odometry.Odometer;
 import sensors.managers.GridManager;
 import util.SensorID;
-import static util.Pause.pause;
+import static util.Utilities.*;
 
 /**
  * Odometry correction assuming <<TWO>> light sensors both placed at the <<FRONT>> of the robot
@@ -266,7 +266,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	private boolean isParallelToY() {
-		if (isNear(0, odo.getTheta() % 180) || isNear(180, odo.getTheta() % 180)) {
+		if (isNear(0, odo.getTheta() % 180, 20) || isNear(180, odo.getTheta() % 180, 20)) {
 			return true;
 		}
 		
@@ -274,7 +274,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	private boolean isParallelToX() {
-		if (isNear(90, odo.getTheta() % 180) || isNear(270, odo.getTheta() % 180)) {
+		if (isNear(90, odo.getTheta() % 180, 20) || isNear(270, odo.getTheta() % 180, 20)) {
 			return true;
 		}
 		
@@ -321,9 +321,5 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		rightCrossed = bool;
 		leftCrossed = bool;
 		waitingForSecondCross = bool;
-	}
-	
-	private boolean isNear(double targetAngle, double actualAngle) {
-		return Math.abs(targetAngle - actualAngle) < 20;
 	}
 }

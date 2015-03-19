@@ -9,9 +9,8 @@
 package navigation;
 
 import util.Direction;
-import navigation.localization.Localization;
 import navigation.odometry.Odometer;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * 	The Navigation class is responsible for odometer-adjusted movement.
@@ -126,21 +125,23 @@ public class Navigation {
 	private double computeAbsError(double current, double target) {
 		return Math.abs(computeError(current, target));
 	}
+	
 	private double computeError(double current, double target) {
 		return target - current;
 	}
 	
 	private double adjustRefFrame(double angle) {
 		//Convert the destination angle to the same reference frame as the odometer angle
-			if (angle > 0){
-				if (angle < 90) {
-					return 90 - angle;
-				}
-				else {
-					return 450 - angle;
-				}
-			} else {
+		if (angle > 0){
+			if (angle < 90) {
 				return 90 - angle;
 			}
+			else {
+				return 450 - angle;
+			}
+		} 
+		else {
+			return 90 - angle;
+		}
 	}
 }

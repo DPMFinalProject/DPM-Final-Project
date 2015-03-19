@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	oneLsLocalisaion.java
+ *	LSLocalizationInterceptTest.java
  *	Created On:	Mar 4, 2015
  */
 package tests.navigation.localization;

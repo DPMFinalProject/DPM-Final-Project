@@ -6,14 +6,14 @@
  *	OdoWithCorrectionTest.java
  *	Created On:	Mar 3, 2015
  */
-package tests.navigation;
+package tests.navigation.odometry;
 
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
 import util.Paths;
 import util.OdometryDisplay;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * Odometry Correction test
@@ -52,11 +52,6 @@ public class OdoWithCorrectionTest extends TestCase {
 			}
 		}).start();
 			
-		Paths.square(util.Direction.RIGHT, 2*30.48);
-//		Paths.square(util.Direction.RIGHT, 2*30.48);
-//		Paths.square(util.Direction.RIGHT, 2*30.48);
-//		Paths.square(util.Direction.RIGHT, 2*30.48);
-//		Paths.square(util.Direction.RIGHT, 2*30.48);
-//		Paths.square(util.Direction.RIGHT, 2*30.48);
+		Paths.square();
 	}
 }

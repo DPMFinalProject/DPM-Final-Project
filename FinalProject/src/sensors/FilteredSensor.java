@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	Sensor.java
+ *	FilteredSensor.java
  *	Created On:	Feb 19, 2015
  */
 package sensors;
