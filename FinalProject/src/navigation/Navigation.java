@@ -22,7 +22,7 @@ public class Navigation {
 	private Odometer odo;
 	
 	private final double ANGLE_ERROR = 10.0;
-	private final double POS_ERROR= 2.0;
+	private final double POS_ERROR= 1.0;
 	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
@@ -93,11 +93,11 @@ public class Navigation {
 			dTheta = shortestAngle(odo.getTheta(), theta);
 			
 			if (dTheta > 0) {
-				System.out.println("LEFT");
-				Driver.turn(Direction.LEFT, dTheta);
+				//System.out.println("LEFT");
+				Driver.turn(Direction.RIGHT, dTheta);
 			} else if (dTheta < 0) {
-				System.out.println("RIGHT");
-				Driver.turn(Direction.RIGHT, Math.abs(dTheta));
+				//System.out.println("RIGHT");
+				Driver.turn(Direction.LEFT, Math.abs(dTheta));
 			} else { // Should never happen
 				System.out.println("Robot trying to turn by 0 degrees for some reason");
 			}
