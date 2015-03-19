@@ -17,6 +17,30 @@ import static util.Pause.pause;
  */
 public class Paths {
 	
+	public static void slalom(int turns,int pause) {
+		Driver.turn(Direction.RIGHT, 90);
+		oneSlalomTurn(turns,pause );
+	}
+	
+	private static void oneSlalomTurn(int turns, int pause){
+		for(int i=0; i<turns; i++){
+			Driver.move(Measurements.TILE);
+			Driver.turn(Direction.LEFT, 90);
+			pause(pause);
+			Driver.move(Measurements.TILE);
+			Driver.turn(Direction.LEFT, 90);
+			pause(pause);
+			Driver.move(Measurements.TILE*2);
+			Driver.turn(Direction.RIGHT, 90);
+			pause(pause);
+			Driver.move(Measurements.TILE);
+			Driver.turn(Direction.RIGHT, 90);
+			pause(pause);
+			Driver.move(Measurements.TILE);
+			pause(pause);
+		}
+	}
+	
 	public static void square() {
 		square(Direction.RIGHT, Measurements.TILE);
 	}
@@ -36,16 +60,16 @@ public class Paths {
 	public static void rectangle(Direction direction, double length, double width) {
 		Driver.move(length);
 		Driver.turn(direction, 90);
-		pause(3000);
+		pause(1000);
 		Driver.move(width);
 		Driver.turn(direction, 90);
-		pause(3000);
+		pause(1000);
 		Driver.move(length);
 		Driver.turn(direction, 90);
-		pause(3000);
+		pause(1000);
 		Driver.move(width);
 		Driver.turn(direction, 90);
-		pause(3000);
+		pause(1000);
 	}
 	
 	public static void circle(Direction direction, double radius) {

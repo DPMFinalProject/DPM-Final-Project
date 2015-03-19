@@ -8,6 +8,7 @@ a *	DPM Final Project
  */
 package navigation.localization;
 
+import lejos.nxt.Sound;
 import sensors.managers.GridManager;
 import util.Direction;
 import util.SensorID;
@@ -45,19 +46,22 @@ public class LSLocalizationIntercept extends Localization {
 	 */
 	@Override
 	public void doLocalization() {		
-		//probelem: if in tile 1, more towardscloseWall??
-																							//		|	2	|	3
+		
+		/*																					//		|	2	|	3
 		//The goal is to intercept the first X or first Y grid line, so we want to move				|-------|-------
 		//away from the closest wall or towards it if we are in the 3rd tile: following this -->	|___0___|___1___				
 		if(isInTile3()){
 			moveTowardsClosestWall();
 		}else{
 			moveAwayClosestWall();
-		}
+		}*/
+		
+		Driver.move(Direction.FWD);
 		
 		//orient the robot perpendicular to the line
 		perpendicularToLine();
-		getCorrectedPos(pos);
+		
+		/*getCorrectedPos(pos);
 		
 		//orient the robot facing the other line
 		toOtherLine();
@@ -66,7 +70,7 @@ public class LSLocalizationIntercept extends Localization {
 		perpendicularToLine();
 		getCorrectedPos(pos);
 		
-		odo.setPosition(pos, new boolean[] {true,true,true});
+		odo.setPosition(pos, new boolean[] {true,true,true});*/
 			
 	}
 	//#######################################
@@ -126,7 +130,7 @@ public class LSLocalizationIntercept extends Localization {
 			pause(10);
 		}
 		Driver.stop();
-		Driver.turn(rotationDirection());
+		rotationDirection();
 		
 		//find the what is the other sensor
 		SensorID untriggeredSensor = findUntriggeredSensor();
@@ -153,13 +157,13 @@ public class LSLocalizationIntercept extends Localization {
 	}
 	
 	//find out which sensor detected a line and return the direction to turn
-	private Direction rotationDirection(){
+	private void rotationDirection(){
 		triggeredSensor=grid.whichSensorDetected();
 		
 		if(triggeredSensor == SensorID.RIGHT){
-			return Direction.LEFT;
+			Driver.turn(Direction.RIGHT);
 		}
-		return Direction.RIGHT;
+			Driver.turn(Direction.LEFT);
 	}
 
 	//knowing one position and the angle, orient the robot towards the other line, by making it go forward and then turning clockwise of counter clockwaise

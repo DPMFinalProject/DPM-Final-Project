@@ -11,6 +11,8 @@ package tests.navigation.odometry;
 import navigation.Driver;
 import navigation.odometry.Odometer;
 import tests.TestCase;
+import util.Direction;
+import util.Measurements;
 import static util.Utilities.pause;
 
 /**
@@ -39,10 +41,14 @@ public class OdoCalibration extends TestCase {
 			}
 		}).start();
 		
-		distanceTest(6);
+		rotateTest(1);
 	}
 	
 	private void distanceTest(int tiles){
-		Driver.move(30.48*tiles);
+		Driver.move(Measurements.TILE*tiles);
+	}
+	
+	private void rotateTest(int turns){
+		Driver.turn(Direction.RIGHT, turns*360);
 	}
 }

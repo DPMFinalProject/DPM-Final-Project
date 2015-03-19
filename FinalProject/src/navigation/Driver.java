@@ -26,8 +26,8 @@ public class Driver {
 	private final static int TURN_SPEED = 200;
 	private final static int DRIFT_FACTOR = 95;
 	
-	private final static double WHL_RADIUS = 2.1;			//smaller radius = go further
-	private final static double WHL_SEPARATION = 16.4;		//smaller width = turn less
+	private final static double WHL_RADIUS = 2.09;			//smaller radius = go further
+	private final static double WHL_SEPARATION = 16.09;//16.1;//16.175;		//smaller width = turn less
 
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
 

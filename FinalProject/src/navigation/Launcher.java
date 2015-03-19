@@ -8,8 +8,11 @@
  */
 package navigation;
 
+import lejos.nxt.Motor;
+import lejos.nxt.NXTRegulatedMotor;
 import util.Measurements;
 import navigation.odometry.Odometer;
+import static util.Utilities.pause;
 
 /**
  * 	The Navigation class is responsible for the launching of the projectile.
@@ -23,6 +26,7 @@ public class Launcher {
 	private final double[] range = new double[2];
 
 	private final double[] shootingArea = {Measurements.TILE*9,Measurements.TILE*12};
+	private final static NXTRegulatedMotor Shooter = Motor.C;
 	
 	public Launcher(Odometer odo, Navigation nav) {
 		this.odo = odo;
@@ -37,12 +41,17 @@ public class Launcher {
 	 */
 	public void ShootTo(double x, double y) {
 		nav.travelTo(findCoordinatesToTravelTo(x,y));
-		
-		
-//		#############################################################
-//					TODO: make it shoot 3x 
-//		#############################################################
+		shoot(3);
 
+	}
+
+	private void shoot(int launchs) {
+		Shooter.setSpeed(100);
+		for(int i=0; i<launchs; i++){
+			Shooter.rotate(360);
+			pause(1000);
+		}
+		
 	}
 
 	private double[] findCoordinatesToTravelTo(double x, double y) {
