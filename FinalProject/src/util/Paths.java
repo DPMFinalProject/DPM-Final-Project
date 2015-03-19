@@ -9,6 +9,7 @@
 package util;
 
 import navigation.Driver;
+import static util.Pause.pause;
 
 /**
  * 	defines paths which the robot can be made to do for testing purposes.
@@ -35,12 +36,16 @@ public class Paths {
 	public static void rectangle(Direction direction, double length, double width) {
 		Driver.move(length);
 		Driver.turn(direction, 90);
+		pause(3000);
 		Driver.move(width);
 		Driver.turn(direction, 90);
+		pause(3000);
 		Driver.move(length);
 		Driver.turn(direction, 90);
+		pause(3000);
 		Driver.move(width);
 		Driver.turn(direction, 90);
+		pause(3000);
 	}
 	
 	public static void circle(Direction direction, double radius) {

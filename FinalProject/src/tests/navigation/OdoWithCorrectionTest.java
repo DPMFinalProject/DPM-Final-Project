@@ -52,6 +52,11 @@ public class OdoWithCorrectionTest extends TestCase {
 			}
 		}).start();
 			
-		Paths.square();
+		Paths.square(util.Direction.RIGHT, 2*30.48);
+//		Paths.square(util.Direction.RIGHT, 2*30.48);
+//		Paths.square(util.Direction.RIGHT, 2*30.48);
+//		Paths.square(util.Direction.RIGHT, 2*30.48);
+//		Paths.square(util.Direction.RIGHT, 2*30.48);
+//		Paths.square(util.Direction.RIGHT, 2*30.48);
 	}
 }

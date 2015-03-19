@@ -24,8 +24,8 @@ public class Driver {
 	private final static int TURN_SPEED = 200;
 	private final static int DRIFT_FACTOR = 50;
 	
-	private final static double WHL_RADIUS = 2.085;			//smaller radius = go further
-	private final static double WHL_SEPARATION = 16.9;		//smaller width = turn less
+	private final static double WHL_RADIUS = 2.1;//2.085;			//smaller radius = go further
+	private final static double WHL_SEPARATION = 16.4;//16.5;//16.9;		//smaller width = turn less
 
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
 
@@ -248,12 +248,12 @@ public class Driver {
 		
 		if(direction == Direction.RIGHT) {
 			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
-			rightSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
+			rightSpeed = FWD_SPEED;//(int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
 			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));
 			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
 		}
 		else {
-			leftSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
+			leftSpeed = FWD_SPEED;//(int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
 			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
 			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
 			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));;

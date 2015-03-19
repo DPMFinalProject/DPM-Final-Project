@@ -20,7 +20,8 @@ public class Launcher {
 	private Odometer odo;
 	private Navigation nav;
 	private final double[] target = new double[2];
-	private final double[] range = {TILE*9,TILE*12};
+	private final double[] range = new double[2];
+	private final double[] shootingArea = {TILE*9,TILE*12};
 	
 	
 	public Launcher(Odometer odo, Navigation nav) {
@@ -37,6 +38,7 @@ public class Launcher {
 	public void ShootTo(double x, double y) {
 		nav.travelTo(findCoordinatesToTravelTo(x,y));
 		
+		
 //		#############################################################
 //					TODO: make it shoot 3x 
 //		#############################################################
@@ -51,14 +53,11 @@ public class Launcher {
 	}
 
 	private void findTheta(double x, double y, double[] coordinates) {
-//		#############################################################
-//				TODO: Find Heading 
-//		#############################################################
-		
+		coordinates[2] = (Math.atan((x-odo.getX())/(y-odo.getY()))-getRangeTheta()+360)%360;
 	}
 
 	private void findXY(double x, double y, double[] coordinates) {
-		while(! (range[0]<x && x<range[1] && range[0]<y && y<range[1]) ){
+		while(! (shootingArea[0]<x && x<shootingArea[1] && shootingArea[0]<y && y<shootingArea[1]) ){
 			x++;
 			y = target[1] - Math.sqrt( Math.pow(rangeNormal(), 2) - Math.pow( (target[2]-x), 2));
 		}
@@ -67,7 +66,10 @@ public class Launcher {
 		coordinates[1] = y;
 		
 	}
-	
+	private double getRangeTheta(){
+		return Math.atan2(range[0],range[1]);
+	}
+
 	private double rangeNormal(){
 		return Math.sqrt( Math.pow(range[0], 2)+Math.pow(range[1], 2));
 	}
