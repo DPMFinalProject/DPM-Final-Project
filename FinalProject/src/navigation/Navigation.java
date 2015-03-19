@@ -8,6 +8,7 @@
  */
 package navigation;
 
+import lejos.nxt.Sound;
 import util.Direction;
 import navigation.odometry.Odometer;
 import static util.Utilities.pause;
@@ -68,7 +69,7 @@ public class Navigation {
 			
 			targetAngle = Math.toDegrees(Math.atan2(yErr, xErr));
 			
-			System.out.println("Target: " + targetAngle);
+			//System.out.println("Target: " + targetAngle);
 			
 			targetAngle = adjustRefFrame(targetAngle);
 			
@@ -76,6 +77,7 @@ public class Navigation {
 			
 			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
 			Driver.move(distance);
+			Sound.beep();
 		}
 		
 	}
