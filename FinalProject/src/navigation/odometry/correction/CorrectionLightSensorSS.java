@@ -65,12 +65,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				continue;
 			}
 			
-			if(!isNear(odo.getTheta()%90, 45, 15)) {
-				correctOrientation();
-			}
-			else {
-				setFlags(true);
-			}
+			correctOrientation();
 			
 			if (rightCrossed && leftCrossed) {
 				
@@ -122,7 +117,14 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		switch (sensor) {
 			case BOTH:
 				setFlags(true);
-
+				
+				Line rightLineCrossed = whichLineCrossed(getSensorPos(grid.getSensorCoor(SensorID.RIGHT)));
+				Line leftLineCrossed = whichLineCrossed(getSensorPos(grid.getSensorCoor(SensorID.LEFT)));
+				
+				if(rightLineCrossed != leftLineCrossed) {
+					break;
+				}
+				
 				double newTheta = Math.round(odo.getTheta()/90)*90;
 				
 //				System.out.println("correcting theta to: "+newTheta);

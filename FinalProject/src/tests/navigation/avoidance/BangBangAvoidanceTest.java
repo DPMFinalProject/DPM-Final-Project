@@ -12,7 +12,6 @@ import tests.TestCase;
 import util.Direction;
 import navigation.avoidance.BangBangAvoider;
 import navigation.odometry.Odometer;
-import static util.Utilities.pause;
 
 /**
  * 	Tests avoidance capability of the robot.

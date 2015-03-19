@@ -68,9 +68,7 @@ public class OdoWithCorrectionTest extends TestCase {
 		nav.travelTo(Measurements.TILE, 2*Measurements.TILE);
 		nav.travelTo(-Measurements.TILE, 2*Measurements.TILE);
 		nav.travelTo(-3*Measurements.TILE, 0);
-		nav.travelTo(0, 0);
-		
-		
+		nav.travelTo(0, 0, 0);
 	}
 
 	public void slalom(int turns,int pause) {
