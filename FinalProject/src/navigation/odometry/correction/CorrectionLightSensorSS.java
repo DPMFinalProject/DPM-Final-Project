@@ -8,6 +8,7 @@
  */
 package navigation.odometry.correction;
 
+import navigation.Driver;
 import navigation.odometry.Odometer;
 import sensors.managers.GridManager;
 import util.SensorID;
@@ -45,10 +46,19 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		{
 			while(stall) {
 				pause(100);
+				
+				if(!Driver.isTurning()) {
+					resume();
+				}
 			}
 			
 			while(!grid.lineDetected()) {
 				pause(10);
+				
+				if(Driver.isTurning()) {
+					stall();
+					break;
+				}
 			}
 			
 			if (stall) {
