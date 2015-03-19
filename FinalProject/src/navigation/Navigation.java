@@ -40,11 +40,11 @@ public class Navigation {
 		travelTo(x, y);
 		turnTo(theta);
 	}
+	
 	/**
 	 * Moves the robot to a specific coordinate facing the supplied direction.
 	 * @param coordinates
 	 */
-	
 	public void travelTo(double[] coordinates) {
 		travelTo(coordinates[0],coordinates[1],coordinates[2]);
 	}

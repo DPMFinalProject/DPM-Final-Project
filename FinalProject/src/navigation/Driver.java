@@ -30,6 +30,8 @@ public class Driver {
 	private final static double WHL_SEPARATION = 16.09;//16.1;//16.175;		//smaller width = turn less
 
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
+	
+	private static boolean isTurning = false;
 
 //--------------------------------------- MOVE ---------------------------------------	
 	
@@ -108,6 +110,8 @@ public class Driver {
 			return;
 		}
 		
+		isTurning = true;
+		
 		setAcceleration(ACCEL);
 		setSpeed(TURN_SPEED);
 		
@@ -119,6 +123,8 @@ public class Driver {
 			leftMotor.forward();
 			rightMotor.backward();
 		}
+		
+		isTurning = false;
 	}
 	
 	/**
@@ -149,6 +155,8 @@ public class Driver {
 			return;
 		}
 		
+		isTurning = true;
+		
 		setAcceleration(ACCEL);
 		setSpeed(TURN_SPEED);
 		
@@ -161,7 +169,9 @@ public class Driver {
 		else if (direction == Direction.RIGHT) {
 			leftMotor.rotate(rotations, true);
 			rightMotor.rotate(-rotations, immediateReturn);
-		} 
+		}
+		
+		isTurning = false;
 	}
 
 //--------------------------------------- MISCELLANEOUS ---------------------------------------
@@ -203,6 +213,10 @@ public class Driver {
 	 */
 	public static boolean isMoving(){
 		return rightMotor.isMoving() || leftMotor.isMoving();
+	}
+	
+	public static boolean isTurning() {
+		return isTurning;
 	}
 	
 	private static boolean validMoveDirection(Direction direction) {
