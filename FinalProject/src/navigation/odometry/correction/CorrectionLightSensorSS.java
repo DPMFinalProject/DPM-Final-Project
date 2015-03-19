@@ -65,7 +65,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				continue;
 			}
 			
-			correctOrientation();
+			if(!isNear(odo.getTheta()%90, 45, 15)) {
+				correctOrientation();
+			}
+			else {
+				setFlags(true);
+			}
 			
 			if (rightCrossed && leftCrossed) {
 				
