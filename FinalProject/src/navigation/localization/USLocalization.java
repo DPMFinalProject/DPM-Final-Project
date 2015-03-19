@@ -59,7 +59,8 @@ public class USLocalization extends Localization {
 	@Override
 	public void doLocalization() {
 		
-		faceWall();
+		if(!obstacleDetection.isFrontObstacle())
+			faceWall();
 		/* 
 		 * Do multiple iterations of adjustments of the X and Y positions,
 		 * the robot will converge onto (0, 0) provided SENSOR_OFFSET is calibrated
@@ -74,7 +75,7 @@ public class USLocalization extends Localization {
 		 * 	It will have an approximate final orientation of 0 degrees,
 		 * 	which should be accurate enough for the LS localization to adjust.
 		 */
-		Driver.turn(Direction.RIGHT, 90);
+		Driver.turn(Direction.RIGHT, 60);
 		
 	}
 	
@@ -99,9 +100,9 @@ public class USLocalization extends Localization {
 		double yPosition;
 		
 		faceAwayFromWall(Direction.LEFT);
-		Driver.turn(Direction.LEFT, 20);
+		Driver.turn(Direction.LEFT, 30);
 		yPosition = obstacleDetection.rightDistance() + SENSOR_OFFSET - Measurements.TILE;
-		Driver.turn(Direction.RIGHT, 20);
+		Driver.turn(Direction.RIGHT, 30);
 		
 		System.out.println("YPos: " + yPosition);
 		
