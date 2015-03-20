@@ -107,10 +107,22 @@ public class GridManager extends SensorManager {
 	}
 	
 	public double[] getSensorCoor(SensorID ID) {
-		if (ID == SensorID.LEFT) {
+		switch(ID) {
+		case LEFT:
 			return leftSensorCoor;
-		}
-		else {
+		case RIGHT:
+			return rightSensorCoor;
+		case NONE:
+			System.out.println("_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "Cannot get NONE sensor coordinate"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n");
+		default:
 			return rightSensorCoor;
 		}
 	}

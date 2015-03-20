@@ -60,6 +60,8 @@ public class Navigation {
 		double yPos, yErr;
 		double targetAngle, distance;
 		
+		boolean firstRun = true;
+		
 		while (computeAbsError(odo.getX(), x) > POS_ERROR || computeAbsError(odo.getY(), y) > POS_ERROR) {
 			xPos = odo.getX();
 			yPos = odo.getY();
@@ -73,13 +75,29 @@ public class Navigation {
 			
 			targetAngle = adjustRefFrame(targetAngle);
 			
-			turnTo(targetAngle);
+			if (!firstRun && targetBehindRobot(targetAngle)) {
+				//move backwards towards target
+				if (targetAngle<0) {
+					turnTo(targetAngle+180);
+				}
+				else {
+					turnTo(targetAngle-180);
+				}
+				
+				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
+				Driver.move(-distance);
+			}
+			else {
+				turnTo(targetAngle);
+				
+				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
+				Driver.move(distance);
+			}
 			
-			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-			Driver.move(distance);
+			firstRun = false;
+			
 			Sound.beep();
 		}
-		
 	}
 	
 	/**
@@ -145,5 +163,12 @@ public class Navigation {
 		else {
 			return 90 - angle;
 		}
+	}
+	
+	private boolean targetBehindRobot(double targetAngle) {
+		if (Math.abs(shortestAngle(odo.getTheta(), targetAngle)) > 90) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -32,6 +32,7 @@ public class Driver {
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
 	
 	private static boolean isTurning = false;
+	private static boolean movingBackwards = false;
 
 //--------------------------------------- MOVE ---------------------------------------	
 	
@@ -64,8 +65,12 @@ public class Driver {
 			rightMotor.forward();
 		}
 		else {
+			movingBackwards = true;
+			
 			leftMotor.backward();
 			rightMotor.backward();
+			
+			movingBackwards = false;
 		}
 	}
 	
@@ -91,12 +96,15 @@ public class Driver {
 		
 		setAcceleration(ACCEL);
 		setSpeed(FWD_SPEED);
-
+		
+		movingBackwards = (distance < 0) ? true : false;
+		
 		int rotations = convertDistance(WHL_RADIUS, distance);
 		
 		leftMotor.rotate(rotations, true);
 		rightMotor.rotate(rotations, immediateReturn);
 		
+		movingBackwards = false;
 	}
 
 //--------------------------------------- TURN ---------------------------------------	
@@ -217,6 +225,10 @@ public class Driver {
 	
 	public static boolean isTurning() {
 		return isTurning;
+	}
+	
+	public static boolean isMovingBackwards() {
+		return movingBackwards;
 	}
 	
 	private static boolean validMoveDirection(Direction direction) {

@@ -22,6 +22,14 @@ public class Utilities {
 		} catch (InterruptedException e) {}
 	}
 	
+	/**
+	 * checks if acualValue is within an error of +- erorr from targetValue
+	 * 
+	 * @param targetValue
+	 * @param actualValue
+	 * @param error
+	 * @return
+	 */
 	public static boolean isNear(double targetValue, double actualValue, double error) {
 		return Math.abs(targetValue - actualValue) < error;
 	}

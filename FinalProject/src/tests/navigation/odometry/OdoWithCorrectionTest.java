@@ -58,7 +58,7 @@ public class OdoWithCorrectionTest extends TestCase {
 			}
 		}).start();
 			
-		//slalom(1,5000);
+//		slalom(1,5000);
 		
 		raysNavigator();
 	}
