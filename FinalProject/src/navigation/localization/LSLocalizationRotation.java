@@ -52,7 +52,7 @@ public class LSLocalizationRotation extends Localization {
 	@Override
 	public void doLocalization() {		
 		//nav.travelTo(-2, -2, 0);
-		Driver.turn(Direction.LEFT); // make one full CCW turn 
+		Driver.turn(Direction.RIGHT); // make one full CCW turn 
 		
 		getlineAngle(lineAngle);
 		

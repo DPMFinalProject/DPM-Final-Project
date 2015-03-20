@@ -28,12 +28,6 @@ import static util.Utilities.pause;
  * Performs localization using the ultrasonic sensor.
  * @author Gregory Brookes, Oleg Zhilin
  */
-//###################################################################
-//#            IDEA: Use the two US to come closer to 1st tile		#	
-//#					and position yourself at 45 degrees or so		#
-//#				then only one one US to do the localization			#
-//###################################################################
-
 
 public class USLocalization extends Localization {
 	

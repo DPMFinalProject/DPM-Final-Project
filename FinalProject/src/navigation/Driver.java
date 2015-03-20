@@ -340,4 +340,21 @@ public class Driver {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
 
+	public static void moveOneMotor(Direction motor, Direction direction){
+		if(motor == Direction.LEFT){
+			if(direction == Direction.FWD){
+				leftMotor.forward();
+			}else{
+				leftMotor.backward();
+			}
+		}else if(motor == Direction.RIGHT){
+			if(direction == Direction.FWD){
+				rightMotor.forward();
+			}else{
+				rightMotor.backward();
+			}
+		}else{
+			System.out.println("MoveOneMotor direction input UNDEFINED");
+		}
+	}
 }
