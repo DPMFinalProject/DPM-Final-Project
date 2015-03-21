@@ -8,14 +8,7 @@
  */
 package navigation.localization;
 
-import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
-import lejos.nxt.UltrasonicSensor;
-import sensors.FilteredColorSensor;
-import sensors.FilteredSensor;
-import sensors.FilteredUltrasonicSensor;
 import sensors.filters.DifferentialFilter;
-import sensors.filters.OutlierFilter;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
 import util.Measurements;

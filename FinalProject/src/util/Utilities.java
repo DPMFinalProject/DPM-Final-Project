@@ -16,6 +16,11 @@ package util;
  */
 public class Utilities {
 	
+	/**
+	 * abstraction of Thread.sleep()
+	 * 
+	 * @param ms time in milliseconds to sleep
+	 */
 	public static void pause(int ms) {
 		try {
 			Thread.sleep(ms);
@@ -23,7 +28,7 @@ public class Utilities {
 	}
 	
 	/**
-	 * checks if acualValue is within an error of +- erorr from targetValue
+	 * checks if acualValue is within an error of +- error from targetValue
 	 * 
 	 * @param targetValue
 	 * @param actualValue

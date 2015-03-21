@@ -16,6 +16,7 @@ import static util.Utilities.*;
 
 /**
  * Odometry correction assuming <<TWO>> light sensors both placed at the <<FRONT>> of the robot
+ * this class corrects both odometry position and orientation.
  * @author Auguste
  */
 public class CorrectionLightSensorSS extends OdometryCorrection {
@@ -25,15 +26,13 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	final double SIZE_OF_TILE = util.Measurements.TILE;
 	final GridManager grid;
 	
-	//Orientationcorrection flags and position variables
+	//Orientation correction flags and position variables
 	private boolean rightCrossed = false, leftCrossed = false;
 	private boolean waitingForSecondCross = false;
 	private Line axisCrossed;
 	private double[] firstCross = new double[3];
 	private double[] secondCross = new double[3];
 	
-	//stall flag - stall() should be called whenever the robot is turning
-	private boolean stall = false;
 	
 	public CorrectionLightSensorSS(Odometer odo) {
 		super(odo);
@@ -43,33 +42,26 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	@Override
 	public void run() {
 		while(true)
-		{
-			while(stall) {
-				pause(100);
-				
-				if(!Driver.isTurning() && !Driver.isMovingBackwards()) {
-					resume();
-				}
-			}
-			
+		{			
 			while(!grid.lineDetected()) {
 				pause(10);
 				
-				if(Driver.isTurning() || Driver.isMovingBackwards()) {
-					stall();
-					break;
+				while(Driver.isTurning() || Driver.isMovingBackwards()) {
+					pause(100);
+					setFlags(false);
 				}
 			}
 			
-			if (stall) {
-				continue;
-			}
+			SensorID sensor = grid.whichSensorDetected();
 			
-			correctOrientation();
+			correctOrientation(sensor);
 			
 			if (rightCrossed && leftCrossed) {
+				//position correction is only called once both sensors have been
+				//detected by orientation correction so as to not affect the distance
+				//traveled used in theta calculations
 				
-				correctPosition();
+				correctPosition(sensor);
 				
 				setFlags(false);
 				
@@ -78,32 +70,25 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		}
 	}
 	
-	public void stall() {
-		//set all orientation correction flags to default
-		setFlags(false);
-		
-		//stall
-		stall = true;
-	}
-	
-	public void resume() {
-		stall = false;
-	}
-	
-	private void correctOrientation() {
-		SensorID sensor = grid.whichSensorDetected();
-//		System.out.println("correcting... orientation");
-//		
-//		System.out.println(""+sensor+" sensor(s) detected");
+	/**
+	 * corrects orientation:
+	 * this is done in a two step process:
+	 * 1. when 1 sensor detects a line, its ID is passed and the sensor position is recorded
+	 * flags are set to indicate that one sensor has detected a line
+	 * 2. when the second sensor detects a line, its ID is passed and its position is calculated
+	 * using the sensor separation and distance traveled by the robot between the two detections,
+	 * the orientation of the robot is calibrated.
+	 * 
+	 * the flags are reset externally
+	 * 
+	 * @param sensor ID of sensor that has just detected a line
+	 */
+	private void correctOrientation(SensorID sensor) {
 		
 		if (sensor == SensorID.BOTH && rightCrossed) {
-//			System.out.println("RIGHT already detected... correcting LEFT");
-			
 			sensor = SensorID.LEFT;
 		}
 		else if (sensor == SensorID.BOTH && leftCrossed) {
-//			System.out.println("LEFT already detected... correcting RIGHT");
-			
 			sensor = SensorID.RIGHT;
 		}
 		else if (sensor == SensorID.RIGHT && rightCrossed) {
@@ -115,164 +100,162 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			return;
 		}
 		
-//		System.out.println(">> "+sensor);
 		
 		switch (sensor) {
-			case BOTH:
-				setFlags(true);
-				
-				Line rightLineCrossed = whichLineCrossed(SensorID.RIGHT);
-				Line leftLineCrossed = whichLineCrossed(SensorID.LEFT);
-				
-				if((rightLineCrossed != leftLineCrossed) || rightLineCrossed == Line.unsure) {
+		case BOTH:
+			setFlags(true);
+
+			Line rightLineCrossed = whichLineCrossed(SensorID.RIGHT);
+			Line leftLineCrossed = whichLineCrossed(SensorID.LEFT);
+
+			if((rightLineCrossed != leftLineCrossed) || rightLineCrossed == Line.unsure) {
+				break;
+			}
+
+			double newTheta = Math.round(odo.getTheta()/90)*90;
+
+			odo.setTheta(newTheta);
+
+			break;
+
+		case RIGHT:
+			rightCrossed = true;
+
+			errorCheck();
+
+			if (!leftCrossed) {
+				axisCrossed = whichLineCrossed(sensor);
+
+				if (axisCrossed == Line.unsure) {
+					setFlags(true);
 					break;
 				}
-				
-				double newTheta = Math.round(odo.getTheta()/90)*90;
-				
-//				System.out.println("Line: "+rightLineCrossed+" Theta:"+newTheta);
-				
-				odo.setTheta(newTheta);
 
-				break;	
-			case RIGHT:
-				rightCrossed = true;
-				
-				errorCheck();
+				odo.getPosition(firstCross);
+			}
+			else if (axisCrossed == whichLineCrossed(sensor)) {
+				odo.getPosition(secondCross);
 
-				if (!leftCrossed) {
-					axisCrossed = whichLineCrossed(sensor);
-					if (axisCrossed == Line.unsure) {
-						setFlags(true);
-						break;
-					}
-					odo.getPosition(firstCross);
-				}
-				else if (axisCrossed == whichLineCrossed(sensor)) {
-					odo.getPosition(secondCross);
+				double roundedTheta = Math.round(odo.getTheta()/90.0)*90;
 
-					double distanceTravelled = euclideanDistance(firstCross, secondCross);
-					double sensorSeperation = euclideanDistance(grid.getSensorCoor(SensorID.LEFT), grid.getSensorCoor(SensorID.RIGHT));
-					
-					double odoTheta = Math.round(odo.getTheta()/90.0)*90;
-					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
-					
-//					System.out.println("Line: "+axisCrossed+" Theta:"+ (odoTheta + correctionTheta));
-					
-					odo.setTheta(odoTheta + correctionTheta);
-				}
-				else {
-//					System.out.println("detected different lines... reseting");
+				odo.setTheta(roundedTheta + thetaOffSet());
+			}
+
+			break;
+
+		case LEFT:
+			leftCrossed = true;
+
+			errorCheck();
+
+			if (!rightCrossed) {
+				axisCrossed = whichLineCrossed(sensor);
+
+				if (axisCrossed == Line.unsure) {
+					setFlags(true);
+					break;
 				}
 
-				break;
-			case LEFT:
-				leftCrossed = true;
-				
-				errorCheck();
+				odo.getPosition(firstCross);
+			}
+			else if (axisCrossed == whichLineCrossed(sensor)) {
+				odo.getPosition(secondCross);
 
-				if (!rightCrossed) {
-					leftCrossed = true;
-					axisCrossed = whichLineCrossed(sensor);
-					if (axisCrossed == Line.unsure) {
-						setFlags(true);
-						break;
-					}
-					odo.getPosition(firstCross);
-				}
-				else if (axisCrossed == whichLineCrossed(sensor)) {
-					odo.getPosition(secondCross);
+				double roundedTheta = Math.round(odo.getTheta()/90.0)*90;
 
-					double distanceTravelled = euclideanDistance(firstCross, secondCross);
-					double sensorSeperation = euclideanDistance(grid.getSensorCoor(SensorID.LEFT), grid.getSensorCoor(SensorID.RIGHT));
+				odo.setTheta(roundedTheta - thetaOffSet());
+			}
 
-					double odoTheta = Math.round(odo.getTheta()/90.0)*90;
-					double correctionTheta = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
-					
-//					System.out.println("Line: "+axisCrossed+" Theta:"+ (odoTheta - correctionTheta));
-					
-					odo.setTheta(odoTheta - correctionTheta);
-				}
-				else {
-//					System.out.println("detected different lines... reseting");
-				}
+			break;
 
-				break; 
-			case NONE:
-//				System.out.println("ERROR: no line detected");
-				break;
+		case NONE:
+			//no line detected
+
+			break;
 		}
-		
-//		System.out.println("------------------------");
 	}
 	
-	private void correctPosition() {
+	/**
+	 * calculates theta offset from 0 degrees, based on distance traveled between two line detections
+	 * 
+	 * @return theta offset from 0 degree heading
+	 */
+	private double thetaOffSet() {
+		double distanceTravelled = euclideanDistance(firstCross, secondCross);
+		double sensorSeperation = euclideanDistance(grid.getSensorCoor(SensorID.LEFT), grid.getSensorCoor(SensorID.RIGHT));
+
+		double thetaOffSet = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 		
-		SensorID sensor = grid.whichSensorDetected();
+		return thetaOffSet;
+	}
+	
+	/**
+	 * corrects robot position based on which sensor has just crossed a line
+	 * 
+	 * @param sensor which has just crossed a line
+	 */
+	private void correctPosition(SensorID sensor) {
 		
 		double[] sensorPos = getSensorPos(grid.getSensorCoor(sensor));
 		
-//		System.out.println("correcting... position");
-		
 		if(whichLineCrossed(sensorPos) == Line.xAxis) {
 			
-//			System.out.println("Robot COOR x: "+odo.getX()+" y: "+odo.getY());
-//			System.out.println("Sensor COOR x: "+sensorPos[0]+" y: "+sensorPos[1]);
-			
 			if (isParallelToX()) {
-//				System.out.println("Tried to correct Y");
-//				System.out.println("Robot is too close to being parallel to x-axis");
 				return;
 			}
 			
-			double yError = sensorPos[1] % SIZE_OF_TILE;
-			
-			if (yError > (SIZE_OF_TILE/2)) {
-				yError -= SIZE_OF_TILE;
-			}
-			else if (yError < (-SIZE_OF_TILE/2)) {
-				yError += SIZE_OF_TILE;
-			}
-			
-//			System.out.println("correcting sensorY to: "+ (sensorPos[1]-yError));
+			double yError = positionError(sensorPos[1]);
 			
 			odo.setY(odo.getY() - yError);
 		}
 		else if (whichLineCrossed(sensorPos) == Line.yAxis) {
 			
-//			System.out.println("Robot COOR x: "+odo.getX()+" y: "+odo.getY());
-//			System.out.println("Sensor COOR x: "+sensorPos[0]+" y: "+sensorPos[1]);
-			
 			if (isParallelToY()) {
-//				System.out.println("Tried to correct X");
-//				System.out.println("Robot is too close to being parallel to y-axis");
 				return;
 			}
 			
-			double xError = sensorPos[0] % SIZE_OF_TILE;
-			
-			if (xError > (SIZE_OF_TILE/2)) {
-				xError -= SIZE_OF_TILE;
-			}
-			else if (xError < (-SIZE_OF_TILE/2)) {
-				xError += SIZE_OF_TILE;
-			}
-			
-//			System.out.println("correcting sensorX to: "+(sensorPos[0]-xError));
+			double xError = positionError(sensorPos[0]);
 			
 			odo.setX(odo.getX() - xError);
 		}
-		else {
-			//System.out.println("could be either line. no correction made");
-		}
-		
-//		System.out.println("------------------------");
 	}
 	
+	/**
+	 * calculates position error of the robot based on one sensor global coordinate (i.e x or y)
+	 * assumed to be called when sensor has just crossed a line
+	 * 
+	 * @param sensorPos	sensor global coordinate corresponding to one dimension
+	 * @return position error in the given dimension
+	 */
+	private double positionError(double sensorPos) {
+		double error = sensorPos % SIZE_OF_TILE;
+		
+		if (error > (SIZE_OF_TILE/2)) {
+			error -= SIZE_OF_TILE;
+		}
+		else if (error < (-SIZE_OF_TILE/2)) {
+			error += SIZE_OF_TILE;
+		}
+		
+		return error;
+	}
+	
+	/**
+	 * same as below, but will calculate sensor global coordinates based on SensorID
+	 * 
+	 * @param sensor SensorID representing the sensor which has in theory just crossed a line
+	 * @return
+	 */
 	private Line whichLineCrossed(SensorID sensor) {
 		return whichLineCrossed(getSensorPos(grid.getSensorCoor(sensor)));
 	}
 	
+	/**
+	 * Approximates which line was crossed from the sensor global coordinates
+	 * 
+	 * @param sensorPos	sensor global coordinates
+	 * @return line which was just crossed (i.e "xAxis", "yAxis") or "unsure" if the lines cannot be differentiated 
+	 */
 	private Line whichLineCrossed(double[] sensorPos) {
 		
 		double xError = Math.abs(sensorPos[0]) % SIZE_OF_TILE;
@@ -294,6 +277,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		}
 	}
 	
+	/**
+	 * return sensor position on the global coordinate system
+	 * 
+	 * @param sensorCoor  sensor coordinates relative to the robot origin
+	 * @return array representing global sensor coordinate {x, y}
+	 */
 	private double[] getSensorPos(double[] sensorCoor) {
 		
 		double[] sensorPolar = convertToPolar(sensorCoor);
@@ -307,6 +296,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		return sensorPos;
 	}
 	
+	/**
+	 * converts cartesian coordinates to polar coordinates {x, y} --> {r, theta}
+	 * 
+	 * @param cartCoor coordinates to be converted
+	 * @return polar coordinates in the form {r, theta}
+	 */
 	private double[] convertToPolar(double[] cartCoor) {
 		double distance = Math.sqrt(Math.pow(cartCoor[0], 2)+Math.pow(cartCoor[1],2));
 		double angle = Math.atan(cartCoor[0]/cartCoor[1]);
@@ -315,26 +310,41 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		return result;
 	}
 	
+	/**
+	 * @return true if robot is within 15 degrees of being parallel to the yAxis. false otherwise 
+	 */
 	private boolean isParallelToY() {
 		if (isNear(0, odo.getTheta() % 180, 15) || isNear(180, odo.getTheta() % 180, 15)) {
 			return true;
 		}
-		
 		return false;
 	}
 	
+	/**
+	 * @return true if robot is within 15 degrees of being parallel to the xAxis. false otherwise 
+	 */
 	private boolean isParallelToX() {
 		if (isNear(90, odo.getTheta() % 180, 15) || isNear(270, odo.getTheta() % 180, 15)) {
 			return true;
 		}
-		
 		return false;
 	}
 	
-	private double euclideanDistance(double[] posA, double[] posB) {
-		return Math.sqrt(Math.pow(posA[0]-posB[0], 2) + Math.pow(posA[1]-posB[1], 2));
+	/**
+	 * calculate euclidean distance between two points
+	 * 
+	 * @param pointA cartesian coordinates of first point {x, y, ...}
+	 * @param pointB cartesian coordinates of second point {x, y, ...}
+	 * @return distance between two points
+	 */
+	private double euclideanDistance(double[] pointA, double[] pointB) {
+		return Math.sqrt(Math.pow(pointA[0]-pointB[0], 2) + Math.pow(pointA[1]-pointB[1], 2));
 	}
 	
+	/**
+	 * starts a timer which will reset the orientation correction flags
+	 * if the second sensor does not detect a line within 3 seconds
+	 */
 	private void errorCheck() {
 		(new Thread() {
 			public void run() {
@@ -344,16 +354,20 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				
 				waitingForSecondCross = true;
 				
-//				System.out.println("error checking");
-				
-				pause(2000);//wait 2 seconds
-				if (leftCrossed || rightCrossed)//if either is still true. error occurred! reset flags!
-//					System.out.println("error occured, reseting flags...");
+				pause(2000);
+				if (leftCrossed || rightCrossed) {
+					//if either is still true. error occurred! reset flags!
 					setFlags(false);
+				}
 			}
 		}).start();
 	}
 	
+	/**
+	 * set all orientation correction flags to value bool
+	 * 
+	 * @param bool value to set flags to
+	 */
 	private void setFlags(boolean bool)
 	{
 		rightCrossed = bool;

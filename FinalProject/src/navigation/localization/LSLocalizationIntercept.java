@@ -87,7 +87,7 @@ public class LSLocalizationIntercept extends Localization {
 	}
 	
 	private void rotateToLine() {
-		if(triggeredSensor==SensorID.LEFT){
+		if(triggeredSensor == SensorID.LEFT){
 			Driver.moveOneMotor(Direction.RIGHT,Direction.FWD);
 		}else if(triggeredSensor == SensorID.RIGHT){
 			Driver.moveOneMotor(Direction.LEFT,Direction.FWD);

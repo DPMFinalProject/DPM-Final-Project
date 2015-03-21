@@ -8,14 +8,11 @@
  */
 package tests.navigation.odometry;
 
-import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
-import util.Direction;
 import util.Measurements;
-import util.Paths;
 import util.OdometryDisplay;
 import static util.Utilities.pause;
 
@@ -57,49 +54,17 @@ public class OdoWithCorrectionTest extends TestCase {
 				}
 			}
 		}).start();
-			
-//		slalom(1,5000);
+
+		raysPath();
 		
-		raysNavigator();
+		util.Songs.tetris.play();
 	}
 	
 	
-	private void raysNavigator() {
+	private void raysPath() {
 		nav.travelTo(Measurements.TILE, 2*Measurements.TILE);
 		nav.travelTo(-Measurements.TILE, 2*Measurements.TILE);
 		nav.travelTo(-3*Measurements.TILE, 0);
 		nav.travelTo(0, 0, 0);
-	}
-
-	public void slalom(int turns,int pause) {
-		Driver.turn(Direction.RIGHT, 90);
-		oneSlalomTurn(turns,pause );
-	}
-	
-	private void oneSlalomTurn(int turns, int pause){
-		for(int i=0; i<turns; i++){
-			Driver.move(Measurements.TILE/2);
-				correct.stall();
-			Driver.turn(Direction.LEFT, 90);
-			pause(pause);
-				correct.resume();
-			Driver.move(Measurements.TILE/2);
-				correct.stall();
-			Driver.turn(Direction.LEFT, 90);
-			pause(pause);
-				correct.resume();
-			Driver.move(Measurements.TILE);
-				correct.stall();
-			Driver.turn(Direction.RIGHT, 90);
-			pause(pause);
-				correct.resume();
-			Driver.move(Measurements.TILE/2);
-				correct.stall();
-			Driver.turn(Direction.RIGHT, 90);
-			pause(pause);
-				correct.resume();
-			Driver.move(Measurements.TILE/2);
-			pause(pause);
-		}
 	}
 }

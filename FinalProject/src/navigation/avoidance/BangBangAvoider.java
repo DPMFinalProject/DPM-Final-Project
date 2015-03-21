@@ -44,7 +44,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			wallDirection = Direction.LEFT;
 		}
 		
-		Driver.turn(Direction.opposite(wallDirection), 90);
+		Driver.turn(wallDirection.opposite(), 90);
 		
 		while(!hasAvoided()) {
 			bangBang();
@@ -63,7 +63,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			Driver.drift(wallDirection);
 		}
 		else {
-			Driver.drift(Direction.opposite(wallDirection));
+			Driver.drift(wallDirection.opposite());
 		}
 	}
 	
