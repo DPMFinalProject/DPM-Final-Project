@@ -3,17 +3,17 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	Test.java
+ *	TestMain.java
  *	Created On:	Feb 18, 2015
  *	
  */
 package tests;
 
-import tests.navigation.*;
-import tests.navigation.avoidance.*;
-import tests.navigation.localization.*;
-import tests.sensors.*;
-import tests.sensors.filters.*;
+import tests.navigation.avoidance.BangBangAvoidanceTest;
+import tests.navigation.localization.LSLocalizationInterceptTest;
+import tests.navigation.odometry.OdoCalibration;
+import tests.navigation.odometry.OdoWithCorrectionTest;
+import tests.sensors.GridManagerTest;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -59,7 +59,7 @@ public class TestMain {
 		final String[] passedArgs = args;
 		try {
 			init();
-			
+
 			(new Thread() {
 				public void run() {
 					execute(passedArgs);

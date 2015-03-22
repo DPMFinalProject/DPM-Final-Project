@@ -10,76 +10,71 @@ package navigation.avoidance;
 
 import navigation.Driver;
 import navigation.odometry.Odometer;
-import lejos.nxt.SensorPort;
-import sensors.FilteredUltrasonicSensor;
-import sensors.filters.AveragingFilter;
+import sensors.managers.ObstacleDetection;
 import util.Direction;
+import static util.Utilities.isNear;
 
 /**
  * An avoider based on bang-bang control theory
- * when avoid is called, the robot turns 90 degrees, looks towards the wall
- * it follows and and goes around the object until the orientation of the robot
- * is about 90 degrees less than the initial orientation
+ * when avoid is called, the robot turns 90 degrees away from the detected obstacle
+ * then follows and and goes around the obstacle until the robot returns to its original
+ * orientation -90
  * @author Auguste
  */
 public class BangBangAvoider extends ObstacleAvoidance {
-	private final FilteredUltrasonicSensor us = new FilteredUltrasonicSensor(SensorPort.S1, new AveragingFilter(5));
-	private final int BAND_WIDTH = 8;
-	private final int BAND_CENTER = 20;
-	public double initialOrientation;
 	
-	public BangBangAvoider(Driver driver, Odometer odo)
-	{
-		super(driver, odo);
+	private double initialOrientation;
+	private ObstacleDetection detector;
+	
+	public BangBangAvoider(Direction wallDirection, Odometer odo) {
+		super(wallDirection, odo);
+		BAND_WIDTH = 8;
+		BAND_CENTER = 18;
+		detector = ObstacleDetection.getObstacleDetection();
 	}
-
-//	public BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo) {
-//		this(driver, usMotor, us, odo, 8, 20);
-//	}
-	
-//	private BangBangAvoider(Driver driver, NXTRegulatedMotor usMotor, FilteredUltrasonicSensor us, Odometer odo, int bandWidth, int bandCenter) {
-//		super(driver, odo);
-//		this.usMotor = usMotor;
-//		this.us = us;
-//		BAND_WIDTH = bandWidth;
-//		BAND_CENTER = bandCenter;
-//	}
 	
 	@Override
 	public void avoid() {
+		
 		initialOrientation = odo.getTheta();
 		
-		driver.stop();
+		Driver.stop();
 		
-		driver.turn(Direction.RIGHT, 90);
+		if(wallDirection == Direction.FWD) {
+			wallDirection = Direction.LEFT;
+		}
+		
+		Driver.turn(wallDirection.opposite(), 90);
 		
 		while(!hasAvoided()) {
 			bangBang();
 		}
+		
+		Driver.stop();
 	}
 	
 	private void bangBang() {
-		double error = BAND_CENTER - us.getFilteredData();
+		double error = BAND_CENTER - detector.wallDistance(wallDirection);
 		
 		if (Math.abs(error)<BAND_WIDTH)	{
-			driver.move(Direction.FWD);
+			Driver.move(Direction.FWD);
 		}
 		else if (error < 0) {
-			driver.drift(Direction.RIGHT);
+			Driver.drift(wallDirection);
 		}
 		else {
-			driver.drift(Direction.LEFT);
+			Driver.drift(wallDirection.opposite());
 		}
 	}
 	
 	private boolean hasAvoided() {
-		if (isNear(initialOrientation-90, odo.getTheta())) {
+		
+		double endAngle = initialOrientation + wallDirection.getAngle();
+		endAngle = (endAngle < 0) ? (endAngle % 360) + 360 : endAngle % 360;
+		
+		if (isNear(endAngle , odo.getTheta(), 30)) {
 			return true;
 		}
 		return false;
-	}
-
-	private boolean isNear(double targetAngle, double actualAngle) {
-		return Math.abs(targetAngle - actualAngle) < 30;
 	}
 }

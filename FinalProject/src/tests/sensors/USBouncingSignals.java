@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	ExampleTest.java
+ *	USBouncingSignals.java
  *	Created On:	Feb 20, 2015
  */
 package tests.sensors;
@@ -13,8 +13,6 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
-import sensors.FilteredUltrasonicSensor;
-import sensors.filters.ExampleFilter;
 import tests.TestCase;
 
 /**A simple test consisting of a rotating ultrasonic sensor
@@ -35,7 +33,7 @@ public class USBouncingSignals extends TestCase {
 
 	@Override
 	public void runTest() {
-		NXTRegulatedMotor motorA =Motor.A;
+		NXTRegulatedMotor motorA = Motor.A;
 		UltrasonicSensor us = new UltrasonicSensor(SensorPort.S1);
 		RConsole.openUSB(10000);
 		
@@ -44,8 +42,8 @@ public class USBouncingSignals extends TestCase {
 		motorA.rotate(180, true);
 		
 		//get distance measurements and print them to the console
-		while(motorA.isMoving()){
-		RConsole.println(us.getDistance()+"");;
+		while(motorA.isMoving()) {
+			RConsole.println(us.getDistance()+"");;
 		}
 		
 		motorA.rotate(-180, true);

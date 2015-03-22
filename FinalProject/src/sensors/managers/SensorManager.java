@@ -7,6 +7,7 @@
  *	Created On:	Mar 10, 2015
  */
 package sensors.managers;
+import static util.Utilities.pause;
 
 /**
  * Manages the sensor to control thread access to the lejos sensor classes
@@ -37,13 +38,5 @@ public abstract class SensorManager extends Thread {
 	
 	public boolean getRunning() {
 		return running;
-	}
-	
-	protected void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }

@@ -1,3 +1,11 @@
+/**
+ *	DPM Final Project
+ *	Team 10
+ *	ECSE 211: Design Principles and Methods
+ *
+ *	ExampleFilter.java
+ *	Created On:	Feb 25, 2015
+ */
 package sensors.filters;
 
 public class ExampleFilter extends Filter {
@@ -12,5 +20,4 @@ public class ExampleFilter extends Filter {
 		
 		return lastValue;
 	}
-
 }

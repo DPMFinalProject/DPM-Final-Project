@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	OdoTest.java
+ *	GridManagerTest.java
  *	Created On:	Mar 7, 2015
  */
 package tests.sensors;
@@ -11,7 +11,8 @@ package tests.sensors;
 import navigation.Driver;
 import sensors.managers.GridManager;
 import tests.TestCase;
-import util.*;
+import util.Paths;
+import static util.Utilities.pause;
 
 /**
  * Line detection test
@@ -47,24 +48,6 @@ public class GridManagerTest extends TestCase {
 		}
 		).start();
 		
-		driveSquare();
-	}
-	
-	public void driveSquare()
-	{
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-	}
-	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
+		Paths.square();
 	}
 }

@@ -9,7 +9,6 @@
 package navigation.avoidance;
 
 import util.Direction;
-import navigation.Driver;
 import navigation.odometry.Odometer;
 
 /**
@@ -17,14 +16,14 @@ import navigation.odometry.Odometer;
  * @author Oleg
  */
 public abstract class ObstacleAvoidance {
-	protected final Driver driver;
+	protected Odometer odo;
 	
 	protected int BAND_WIDTH, BAND_CENTER;
 	protected Direction wallDirection;
 	
-	public ObstacleAvoidance(Driver driver, Direction wallDirection) {
-		this.driver = driver;
+	public ObstacleAvoidance(Direction wallDirection, Odometer odo) {
 		this.wallDirection = wallDirection;
+		this.odo = odo;
 	}
 	/**
 	 *	Executes an obstacle avoidance maneuver.

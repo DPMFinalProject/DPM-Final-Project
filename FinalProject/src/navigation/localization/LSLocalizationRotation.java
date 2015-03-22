@@ -3,7 +3,7 @@ a *	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	LSLocalization.java
+ *	LSLocalizationRotation.java
  *	Created On:	Feb 26, 2015
  */
 package navigation.localization;
@@ -15,6 +15,7 @@ import util.SensorID;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
+import static util.Utilities.pause;
 
 /**
  * 	Performs localization using the light sensor
@@ -35,8 +36,8 @@ public class LSLocalizationRotation extends Localization {
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
 	
-	public LSLocalizationRotation(Odometer odo, Driver driver, Navigation nav) {
-		super(odo, driver, nav);
+	public LSLocalizationRotation(Odometer odo, Navigation nav) {
+		super(odo, nav);
 		(new Thread(grid)).start();
 		double[] temp = new double[2];
 		temp=grid.getSensorCoor(SensorID.RIGHT);
@@ -51,12 +52,12 @@ public class LSLocalizationRotation extends Localization {
 	@Override
 	public void doLocalization() {		
 		//nav.travelTo(-2, -2, 0);
-		driver.turn(Direction.LEFT); // make one full CCW turn 
+		Driver.turn(Direction.RIGHT); // make one full CCW turn 
 		
 		getlineAngle(lineAngle);
 		
-		while(driver.isMoving()){
-			try {	Thread.sleep(500);	} catch (InterruptedException e) {}
+		while(Driver.isMoving()){
+			pause(500);
 		}
 		updateOdometer(lineAngle,pos);
 		
@@ -79,7 +80,7 @@ public class LSLocalizationRotation extends Localization {
 			while(lineAngle[i]==-1){
 				
 				while(!grid.lineDetectedRS()){
-					try { Thread.sleep(10); } catch (InterruptedException e) {}
+					pause(10);
 				}
 				odo.getPosition(pos);
 				System.out.println(pos[2]);
@@ -89,7 +90,7 @@ public class LSLocalizationRotation extends Localization {
 			Sound.twoBeeps();
 			System.out.println("The angle retrived is:" + lineAngle[i]);
 			}
-		driver.stop();
+		Driver.stop();
 	}
 	
 /*	//gives the average of the entering/leaving of a black line angles
@@ -115,7 +116,7 @@ public class LSLocalizationRotation extends Localization {
 		do{
 			val[0] = cs.getFilteredData();
 			System.out.println(val[0]);
-			try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+			pause(50);
 //			if(!driver.isMoving()){
 //				return val;
 //			}
@@ -168,7 +169,7 @@ public class LSLocalizationRotation extends Localization {
 //				val[0] = val[1];
 				val[1 0] = cs.getFilteredData();
 				System.out.println("\t " +val);
-				try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+				pause(50);
 			}
 		}else{
 			//crossing the line from below
@@ -176,7 +177,7 @@ public class LSLocalizationRotation extends Localization {
 //				val[0] = val[1];
 				val[1 0] = cs.getFilteredData();
 				System.out.println("\t " +val);
-				try {	Thread.sleep(50);	} catch (InterruptedException e) {}
+				pause(50);
 			}
 		}
 		return 0;

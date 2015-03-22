@@ -13,5 +13,38 @@ package util;
  * @author Oleg
  */
 public enum Direction {
-	LEFT, RIGHT, FWD, BACK
+	
+	LEFT (-90),
+	RIGHT (90),
+	FWD (0),
+	BACK (180);
+	
+	private Direction(double angle) {
+		this.angle = angle;
+	}
+	
+	private final double angle;
+	
+	public double getAngle() {
+		return angle;
+	}
+	
+	public Direction opposite() {
+		return opposite(this);
+	}
+	
+	public static Direction opposite(Direction direction) {
+		switch(direction) {
+		case LEFT:
+			return Direction.RIGHT;
+		case RIGHT:
+			return Direction.LEFT;
+		case FWD:
+			return Direction.BACK;
+		case BACK:
+			return Direction.FWD;
+		default:
+			return null;
+		}
+	}
 }

@@ -3,13 +3,16 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	Navigation.java
+ *	Launcher.java
  *	Created On:	Feb 28, 2015
  */
 package navigation;
 
-import util.Direction;
+import lejos.nxt.Motor;
+import lejos.nxt.NXTRegulatedMotor;
+import util.Measurements;
 import navigation.odometry.Odometer;
+import static util.Utilities.pause;
 
 /**
  * 	The Navigation class is responsible for the launching of the projectile.
@@ -17,33 +20,68 @@ import navigation.odometry.Odometer;
  */
 
 public class Launcher {
-	private Driver driver;
+	
 	private Odometer odo;
 	private Navigation nav;
 	
+	private final int LAUNCH_SPEED = 100;
 	
-	public Launcher(Odometer odo, Driver driver, Navigation nav) {
+	private final double[] target = new double[2];
+	private final double[] range = new double[2];
+	private final double[] shootingArea = {Measurements.TILE*9,Measurements.TILE*12};
+	
+	private final static NXTRegulatedMotor shooter = Motor.C;
+	
+	public Launcher(Odometer odo, Navigation nav) {
 		this.odo = odo;
-		this.driver = driver;
-		this.nav=nav;
+		this.nav = nav;
 	}
 	
 	/**
-	 * Position the robot and shoots a projectile to the coordinates (x,y).
+	 * Position the robot and shoots a projectile to the coordinates (targetX, targetY).
 	 * 
-	 * @param x
-	 * @param y
+	 * @param targetX
+	 * @param targetY
 	 */
-	public void ShootTo(double x, double y) {
-		nav.travelTo(findCoordinatesToTravelTo(x,y));
-
+	public void shootTo(double targetX, double targetY) {
+		nav.travelTo(findLaunchingCoordinates(targetX,targetY));
+		shoot(3);
 	}
 
-	private double[] findCoordinatesToTravelTo(double x, double y) {
+	private void shoot(int launchs) {
+		shooter.setSpeed(LAUNCH_SPEED);
+		for(int i=0; i < launchs; i++){
+			shooter.rotate(360);
+			pause(1000);
+		}
+	}
+
+	private double[] findLaunchingCoordinates(double targetX, double targetY) {
 		double[] coordinates = new double [3];
-	
+		findXY(targetX, targetY, coordinates);
+		findTheta(targetX, targetY, coordinates);
 		return coordinates;
 	}
+
+	private void findXY(double x, double y, double[] coordinates) {
+		while(! (shootingArea[0]<x && x<shootingArea[1] && shootingArea[0]<y && y<shootingArea[1]) ){
+			x++;
+			y = target[1] - Math.sqrt(Math.pow(rangeNormal(), 2) - Math.pow( (target[2]-x), 2));
+		}
+		
+		coordinates[0] = x;
+		coordinates[1] = y;
+	}
 	
+	private void findTheta(double x, double y, double[] coordinates) {
+		coordinates[2] = (Math.atan((x-odo.getX())/(y-odo.getY())) - getRangeTheta() + 360)%360;
+	}
 	
+	private double getRangeTheta(){
+		return Math.atan2(range[0], range[1]);
+	}
+
+	private double rangeNormal(){
+		return Math.sqrt(Math.pow(range[0], 2) + Math.pow(range[1], 2));
+	}
 }

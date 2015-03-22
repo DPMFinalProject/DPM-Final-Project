@@ -13,26 +13,29 @@ import lejos.nxt.SensorPort;
 import sensors.FilteredColorSensor;
 import sensors.filters.DifferentialFilter;
 import util.SensorID;
+import static util.Utilities.pause;
 
 /**
- *	This will take take of everything that deals with the colorsensors
+ *	This will take take of everything that deals with the color sensors
  *	start this class in a thread at the beginning of any class interacting with the color sensors
  * @author GregoryBrookes, Auguste
  */
 
 public class GridManager extends SensorManager {
 	
-	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
-	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S2, new DifferentialFilter(2));
-	private final double LINE_THRESHOLD = 1.5;
+	private final int SAMPLING_RATE = 30;
+	private final double LINE_THRESHOLD = 2.5;
+	private final double NO_LINE_THRESHOLD = 0.4;
+	
+	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S4, new DifferentialFilter(2));
+	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
+	private final double[] leftSensorCoor = {-7.5, 6.0};//{x, y}
+	private final double[] rightSensorCoor = {7.5, 6.0};//{x, y}
+	
 	private boolean leftCSOnLine = false;
 	private boolean rightCSOnLine = false;
-	private final double[] leftSensorCoor = {-4.8, 6.5};//{x, y}
-	private final double[] rightSensorCoor = {4.8, 6.5};//{x, y}
 	
-	private GridManager () {
-		
-	}
+	private GridManager() {}
 	
 	public static GridManager getGridManager() { 
 		if (gridManager == null) {
@@ -49,30 +52,22 @@ public class GridManager extends SensorManager {
 		double leftCSMeasure = leftCS.getFilteredData();
 
 		if (leftCSMeasure < -LINE_THRESHOLD) {
-			setLeftCSDetected(true);
+			leftCSOnLine = true;
 		}
-		else if (leftCSMeasure > LINE_THRESHOLD) {
-			setLeftCSDetected(false);
+		else if (leftCSMeasure > NO_LINE_THRESHOLD) {
+			leftCSOnLine = false;
 		}
 
 		double rightCSMeasure = rightCS.getFilteredData();
 
 		if (rightCSMeasure < -LINE_THRESHOLD) {
-			setRightCSDetected(true);
+			rightCSOnLine = true;
 		}
-		else if (rightCSMeasure > LINE_THRESHOLD) {
-			setRightCSDetected(false);
+		else if (rightCSMeasure > NO_LINE_THRESHOLD) {
+			rightCSOnLine = false;
 		}
 
-		pause(30);
-	}
-	
-	private void setLeftCSDetected(boolean detected) {
-		leftCSOnLine = detected;
-	}
-	
-	private void setRightCSDetected(boolean detected) {
-		rightCSOnLine = detected;
+		pause(SAMPLING_RATE);
 	}
 	
 	public boolean lineDetected() {
@@ -106,81 +101,39 @@ public class GridManager extends SensorManager {
 		}
 	}
 	
-	public double[] getSensorCoor(SensorID ID) {
-		if (ID == SensorID.LEFT) {
-			return leftSensorCoor;
+	public boolean isOnLine(SensorID ID){
+		switch(ID) {
+		case BOTH:
+			return (rightCSOnLine && leftCSOnLine);
+		case RIGHT:
+			return rightCSOnLine;
+		case LEFT:
+			return leftCSOnLine;
+		case NONE:
+			return (!rightCSOnLine && !leftCSOnLine);
+		default:
+			return false;
 		}
-		else {
+	}
+	
+	public double[] getSensorCoor(SensorID ID) {
+		switch(ID) {
+		case LEFT:
+			return leftSensorCoor;
+		case RIGHT:
+			return rightSensorCoor;
+		case NONE:
+			System.out.println("_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "Cannot get NONE sensor coordinate"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n");
+		default:
 			return rightSensorCoor;
 		}
 	}
-	
-	public boolean isOnLine(SensorID ID){
-		if (ID == SensorID.BOTH) {
-			return (rightCSOnLine && leftCSOnLine);
-		}
-		else if (ID == SensorID.RIGHT) {
-			return rightCSOnLine;
-		}
-		else if (ID == SensorID.LEFT) {
-			return leftCSOnLine;
-		}
-		else {
-			return (!rightCSOnLine && !leftCSOnLine);
-		}
-	}
-	
-///**
-// * 	Returns boolean condition if just entered a line
-// * @return Return true if just ENTERED a line
-// */
-//	public boolean hasEnterLine( ){
-//		return lineCrossingCondition(-lineCrossingThreshold, true);
-//	}
-//	/**
-//	 * 	Returns boolean condition if just exited a line
-//	 * @return Return true if just EXITED a line
-//	 */
-//	public boolean hasExitLine(){
-//		return lineCrossingCondition(lineCrossingThreshold, false);
-//	}
-//	
-//	//returns boolean value of a change in light happenning
-//	private boolean lineCrossingCondition(double treshold, boolean below){
-//		double val;
-//		val= cs.getFilteredData();
-//		try {	Thread.sleep(10);	} catch (InterruptedException e) {}
-//		
-//		if(below){			
-//			if(val < treshold ){	return true;	}
-//		}else{
-//			if(val > treshold ){	return true;	}
-//		}
-//		
-//		return false;
-//		
-//		
-//	}
-//		
-//	/**
-//	 * Update position to the midpoint between the line entry and exit
-//	 * @param pos
-//	 */
-//	public void getPosMidLineCrossing(double[] pos){
-//		double[] lineEnter = new double[3];
-//		double[] lineExit = new double[3];
-//		
-//		while(!hasEnterLine()){
-//		}
-//		odo.getPosition(lineEnter);
-//		
-//		while(!hasExitLine()){
-//		}
-//		odo.getPosition(lineExit);
-//	
-//		for(int i=0; i<pos.length;i++){
-//			pos[i]=(lineEnter[i]+lineExit[i])/2;
-//		}
-//	}
 }
-	

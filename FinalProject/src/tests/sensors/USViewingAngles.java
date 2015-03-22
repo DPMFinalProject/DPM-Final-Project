@@ -3,7 +3,7 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	ExampleTest.java
+ *	USViewingAngles.java
  *	Created On:	Feb 24, 2015
  */
 package tests.sensors;
@@ -11,8 +11,6 @@ package tests.sensors;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
-import sensors.FilteredUltrasonicSensor;
-import sensors.filters.ExampleFilter;
 import tests.TestCase;
 
 /**A simple test consisting of a fixed ultrasonic sensor
@@ -35,8 +33,8 @@ public class USViewingAngles extends TestCase {
 		RConsole.openUSB(10000);
 		
 		//print distances to the console
-		while(true){
-		RConsole.println(us.getDistance()+"");
+		while(true) {
+			RConsole.println(us.getDistance()+"");
 		}
 	}
 

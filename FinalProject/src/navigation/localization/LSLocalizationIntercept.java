@@ -3,7 +3,7 @@ a *	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	LSLocalization.java
+ *	LSLocalizationIntercept.java
  *	Created On:	Feb 26, 2015
  */
 package navigation.localization;
@@ -15,26 +15,20 @@ import util.SensorID;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
+import static util.Utilities.pause;
 
 /**
- * 	Performs localization using the light sensor
+ * 	Performs localization using the light sensor by positioning the robot perpendicular to a line
  * @author Gregory Brookes
  */
-//###################################################################
-//#            TODO: Figure out how to make the robot be 			#
-//#					  perpendicular to a line.						#
-//#																	#
-//###################################################################
-
 
 public class LSLocalizationIntercept extends Localization {
 	final GridManager grid = GridManager.getGridManager();
-	private SensorID triggeredSensor ;
+	private SensorID triggeredSensor , untriggeredSensor;
+	private double[] sensorCoor = new double[2];
 	
-	private double[] pos = new double[3];
-	
-	public LSLocalizationIntercept(Odometer odo, Driver driver, Navigation nav) {
-		super(odo, driver, nav);
+	public LSLocalizationIntercept(Odometer odo, Navigation nav) {
+		super(odo, nav);
 		(new Thread(grid)).start();
 	}
 
@@ -44,182 +38,70 @@ public class LSLocalizationIntercept extends Localization {
 	 * @see navigation.localization.Localization#doLocalization()
 	 */
 	@Override
-	public void doLocalization() {		
-		//probelem: if in tile 1, more towardscloseWall??
-																							//		|	2	|	3
-		//The goal is to intercept the first X or first Y grid line, so we want to move				|-------|-------
-		//away from the closest wall or towards it if we are in the 3rd tile: following this -->	|___0___|___1___				
-		if(isInTile3()){
-			moveTowardsClosestWall();
-		}else{
-			moveAwayClosestWall();
-		}
+	public void doLocalization() {	
 		
-		//orient the robot perpendicular to the line
-		perpendicularToLine();
-		getCorrectedPos(pos);
+		/*
+		 * Execute the line intercept 3 times for a better position
+		 */
+		perpendicularToLine(3);
+		grid.setRunning(false);
+		odo.setX(0);
+		odo.setY(0);
+		odo.setTheta(0);
+	}
 		
-		//orient the robot facing the other line
-		toOtherLine();
-		
-		//orient the robot perpendicular to the line
-		perpendicularToLine();
-		getCorrectedPos(pos);
-		
-		odo.setPosition(pos, new boolean[] {true,true,true});
-			
-	}
-	//#######################################
-	//Note: the wheels are wired on the robot used so it turns the wrong way
-	
-	//Utilities methods
-	private boolean isInTile3 (){
-		odo.getPosition(pos);
-		if(pos[0]>30.48 && pos[1]>30.48){
-			return true;
-		}
-		return false;
-	}
-	private void moveTowardsClosestWall(){
-		if(pos[0]<pos[1]){
-			nav.turnTo(270);
-		}else{
-			nav.turnTo(180);
-		}
-		driver.move(Direction.FWD);
-	}
-	private void moveAwayClosestWall(){
-		if(pos[0]<pos[1]){
-			optimalRotation(0);
-		}else{
-			optimalRotation(1);
-		}
-		while(driver.isMoving()){
-			try {	Thread.sleep(100);	} catch (InterruptedException e) {}
-		}
-		System.out.println("Forward");
-		driver.move(Direction.FWD);
-	}
-	private void optimalRotation(int i){
-		if (i == 0){
-			if(pos[i]<30.48){
-				nav.turnTo(0);
-			}else{
-				nav.turnTo(180);
-			}
-		}else if (i == 1){
-			if(pos[i]<30.48){
-				nav.turnTo(90);
-			}else{
-				nav.turnTo(270);
-			}
-		}else{
-			System.out.println("Invatind input to optimalRotation method in LSLocalisationIntercept");
+	//runs the algorithm a set number of times.
+	private void perpendicularToLine(int efficiency){
+		for(int i=0; i<efficiency; i++){
+			//Set up for the next interception
+			Driver.move(-2);
+			triggeredSensor = SensorID.NONE;
+			Driver.move(Direction.FWD);
+			perpendicularToLine();
 		}
 	}
 	
-	
-	//recursive method who will orient the robot perpendicular to a line
 	private void perpendicularToLine(){
-		//wait until a line is detected, then stop and turn depending on which sensor detected the line
-		while(!grid.lineDetected()) {
-			try {Thread.sleep(10);} catch (InterruptedException e) {}
+		while(triggeredSensor == SensorID.NONE) {
+			triggeredSensor = grid.whichSensorDetected();
 		}
-		driver.stop();
-		driver.turn(rotationDirection());
+		Driver.stop();
 		
-		//find the what is the other sensor
-		SensorID untriggeredSensor = findUntriggeredSensor();
-		
-		//now: if triggered ls is off line, stop, move forward by 1 and rotate again
-		//rotate as long as the triggered light sensor is on the line and until the second is on a line aswell
-		while(grid.isOnLine(triggeredSensor)){
-			if(grid.isOnLine(untriggeredSensor) ){
-				driver.stop();
-				return;
-			}
+		if(triggeredSensor == SensorID.BOTH){
+			return;
 		}
-		//if the triggered light sensor leaves the line, recall this method
-		driver.stop();
-		driver.move(Direction.FWD);
-		perpendicularToLine();
+		untriggeredSensor = findUntriggeredSensor();
+		
+		/*
+		 * Rotate only the motor the side of the untriggered sensor.
+		 */
+		rotateToLine();
+		
+		 
+		while(!grid.isOnLine(untriggeredSensor)) {
+			pause(10);
+		}
+		Driver.stop();
+		pause(200);
+		
 	}
 	
+	private void rotateToLine() {
+		if(triggeredSensor == SensorID.LEFT){
+			Driver.moveOneMotor(Direction.RIGHT,Direction.FWD);
+		}else if(triggeredSensor == SensorID.RIGHT){
+			Driver.moveOneMotor(Direction.LEFT,Direction.FWD);
+		}
+		
+	}
+
 	private SensorID findUntriggeredSensor() {
 		if(triggeredSensor == SensorID.RIGHT){
 			return SensorID.LEFT;
 		}
 		return SensorID.RIGHT;
 	}
-	
-	//find out which sensor detected a line and return the direction to turn
-	private Direction rotationDirection(){
-		triggeredSensor=grid.whichSensorDetected();
-		
-		if(triggeredSensor == SensorID.RIGHT){
-			return Direction.LEFT;
-		}
-		return Direction.RIGHT;
-	}
 
-	//knowing one position and the angle, orient the robot towards the other line, by making it go forward and then turning clockwise of counter clockwaise
-	private void toOtherLine() {
-		driver.move(15, false);
-		if(needClockWiseMovement(pos[2])){
-			driver.turn(Direction.RIGHT, 90, false);
-		}else{
-			driver.turn(Direction.LEFT, 90, false);
-		}
-		
-		driver.move(Direction.FWD);
-		
-	}
 	
-	private boolean needClockWiseMovement(double theta){
-		int threshold = 15;
-		//if just over a multiple of 90, turn clockwise, else turn counterclockwise
-		if(theta%90 < 15){
-			return true;
-		}else if( theta%90-90 > -threshold){
-			return false;
-		}
-		System.out.println("An error happened in the method: <<needClockWiseMovement>> 4"
-				+ "maybe the treshold is too small or the robot was not on a line");
-		return false;
-	}
-	
-	
-	private void getCorrectedPos(double[] pos) {
-		double[] tempPos = new double[3];
-		odo.getPosition(tempPos);
-		
-		//figure out which line and at what angle the robot is by roughly knowing it's orientation and knowing it's on a line.
-		//to know this, depends near which angle is the robot positioned.
-		tempPos[2]/=90;
-		
-		if(tempPos[2] < 0.5){
-			pos[0]=30.48;
-			pos[2]=0;
-		}else if (tempPos[2] < 1.5){
-			pos[1]= 30.48;
-			pos[2]=90;
-		}else if(tempPos[2] < 2.5){
-			pos[0]=30.48;
-			pos[2]=180;
-		}else if (tempPos[2] < 3.5 ){
-			pos[1]=30.48;
-			pos[2]=270;
-		}else{
-			pos[0]=30.48;
-			pos[2]=0;
-		}
-	}
-	
+
 }
-
-
-
-
-	
-
-

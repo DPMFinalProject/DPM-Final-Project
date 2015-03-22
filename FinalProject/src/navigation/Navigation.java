@@ -8,9 +8,13 @@
  */
 package navigation;
 
+import lejos.nxt.Sound;
+import sensors.managers.ObstacleDetection;
 import util.Direction;
-import navigation.localization.Localization;
+import navigation.avoidance.BangBangAvoider;
+import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
+import static util.Utilities.pause;
 
 /**
  * 	The Navigation class is responsible for odometer-adjusted movement.
@@ -18,15 +22,13 @@ import navigation.odometry.Odometer;
  */
 
 public class Navigation {
-	private Driver driver;
 	private Odometer odo;
 	
 	private final double ANGLE_ERROR = 10.0;
-	private final double POS_ERROR= 2.0;
+	private final double POS_ERROR= 1.0;
 	
-	public Navigation(Odometer odo, Driver driver) {
+	public Navigation(Odometer odo) {
 		this.odo = odo;
-		this.driver = driver;
 	}
 	
 	/**
@@ -41,13 +43,17 @@ public class Navigation {
 		travelTo(x, y);
 		turnTo(theta);
 	}
-	/**
-	 * Moves the robot to a specific coordinate facing the supplied direction.
-	 * @param coordinates
-	 */
 	
+	/**
+	 * Moves the robot to a specific coordinate facing a desired direction (if provided).
+	 * @param coordinates an array of 2 or 3 elements representing the (x, y, theta) coordinates. The theta value is optional
+	 */
 	public void travelTo(double[] coordinates) {
-		travelTo(coordinates[0],coordinates[1],coordinates[2]);
+		if (coordinates.length == 2) {
+			travelTo(coordinates[0], coordinates[1]);
+		} else {
+			travelTo(coordinates[0],coordinates[1],coordinates[2]);
+		}
 	}
 	
 	
@@ -61,6 +67,8 @@ public class Navigation {
 		double yPos, yErr;
 		double targetAngle, distance;
 		
+		boolean firstRun = true;
+		
 		while (computeAbsError(odo.getX(), x) > POS_ERROR || computeAbsError(odo.getY(), y) > POS_ERROR) {
 			xPos = odo.getX();
 			yPos = odo.getY();
@@ -70,16 +78,45 @@ public class Navigation {
 			
 			targetAngle = Math.toDegrees(Math.atan2(yErr, xErr));
 			
-			System.out.println("Target: " + targetAngle);
+			//System.out.println("Target: " + targetAngle);
 			
 			targetAngle = adjustRefFrame(targetAngle);
 			
-			turnTo(targetAngle);
+			if (!firstRun && targetBehindRobot(targetAngle)) {
+				//move backwards towards target
+				if (targetAngle<0) {
+					turnTo(targetAngle+180);
+				}
+				else {
+					turnTo(targetAngle-180);
+				}
+				
+				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
+				Driver.move(-distance, true);
+			}
+			else {
+				turnTo(targetAngle);
+				
+				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
+				Driver.move(distance, true);
+			}
 			
-			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-			driver.move(distance, false);
+			ObstacleAvoidance avoidance;
+			ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
+			while(Driver.isMoving()) {
+				if (detection.leftDistance() < 30) {
+					avoidance = new BangBangAvoider(Direction.LEFT, odo);
+					avoidance.avoid();
+				} else if (detection.rightDistance() < 30) {
+					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
+					avoidance.avoid();
+				}
+			}
+			
+			firstRun = false;
+			
+			Sound.beep();
 		}
-		
 	}
 	
 	/**
@@ -93,16 +130,16 @@ public class Navigation {
 			dTheta = shortestAngle(odo.getTheta(), theta);
 			
 			if (dTheta > 0) {
-				System.out.println("LEFT");
-				driver.turn(Direction.LEFT, dTheta);
+				//System.out.println("LEFT");
+				Driver.turn(Direction.RIGHT, dTheta);
 			} else if (dTheta < 0) {
-				System.out.println("RIGHT");
-				driver.turn(Direction.RIGHT, Math.abs(dTheta));
+				//System.out.println("RIGHT");
+				Driver.turn(Direction.LEFT, Math.abs(dTheta));
 			} else { // Should never happen
 				System.out.println("Robot trying to turn by 0 degrees for some reason");
 			}
 			
-			pause();
+			pause(15);
 			
 		} while (shortestAngle(odo.getTheta(), theta) > ANGLE_ERROR);
 	}
@@ -127,32 +164,30 @@ public class Navigation {
 	private double computeAbsError(double current, double target) {
 		return Math.abs(computeError(current, target));
 	}
+	
 	private double computeError(double current, double target) {
 		return target - current;
 	}
 	
 	private double adjustRefFrame(double angle) {
 		//Convert the destination angle to the same reference frame as the odometer angle
-			if (angle > 0){
-				if (angle < 90) {
-					return 90 - angle;
-				}
-				else {
-					return 450 - angle;
-				}
-			} else {
+		if (angle > 0){
+			if (angle < 90) {
 				return 90 - angle;
 			}
-	}
-	
-	private void pause() {
-		try {
-			Thread.sleep(15);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			else {
+				return 450 - angle;
+			}
+		} 
+		else {
+			return 90 - angle;
 		}
 	}
-
 	
+	private boolean targetBehindRobot(double targetAngle) {
+		if (Math.abs(shortestAngle(odo.getTheta(), targetAngle)) > 90) {
+			return true;
+		}
+		return false;
+	}
 }

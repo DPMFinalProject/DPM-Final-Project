@@ -3,15 +3,17 @@
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
- *	OdoTest.java
+ *	OdoCalibration.java
  *	Created On:	Mar 3, 2015
  */
-package tests.navigation;
+package tests.navigation.odometry;
 
 import navigation.Driver;
 import navigation.odometry.Odometer;
 import tests.TestCase;
 import util.Direction;
+import util.Measurements;
+import static util.Utilities.pause;
 
 /**
  * Odometer calibration and testing class
@@ -19,18 +21,12 @@ import util.Direction;
  */
 public class OdoCalibration extends TestCase {
 	
-	Driver driver;
-	
-	public OdoCalibration() {
-		driver = new Driver();
-	}
-	
 	/**
 	 * @see tests.TestCase#runTest()
 	 */
 	@Override
 	public void runTest() {
-		final Odometer odo = new Odometer(new Driver());
+		final Odometer odo = new Odometer();
 		
 		(new Thread(odo)).start();
 		
@@ -45,28 +41,14 @@ public class OdoCalibration extends TestCase {
 			}
 		}).start();
 		
-		distanceTest(6);
-	}
-	
-	private void driveSquare()
-	{
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
-		driver.move(60, false);
-		driver.turn(Direction.RIGHT, 90);
+		rotateTest(1);
 	}
 	
 	private void distanceTest(int tiles){
-		driver.move(30.48*tiles,false);
+		Driver.move(Measurements.TILE*tiles);
 	}
 	
-	private void pause(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {}
+	private void rotateTest(int turns){
+		Driver.turn(Direction.RIGHT, turns*360);
 	}
 }

@@ -9,10 +9,10 @@
 package sensors.managers;
 
 import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
 import sensors.FilteredUltrasonicSensor;
 import sensors.filters.OutlierFilter;
 import util.Direction;
+import static util.Utilities.pause;
 
 /**
  * Runs in a separate thread, waiting until it detects an obstacle.
@@ -22,7 +22,7 @@ import util.Direction;
 public class ObstacleDetection extends SensorManager {
 	private FilteredUltrasonicSensor leftSensor, rightSensor;
 	private final int US_SENSOR_OUTLIER = 255;
-	private final int OBSTACLE_THRESHOLD = 200;
+	private final int OBSTACLE_THRESHOLD = 50;
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
 	private double leftDistance = 0, rightDistance = 0; 
@@ -43,7 +43,7 @@ public class ObstacleDetection extends SensorManager {
 
 	@Override
 	public void execute() {
-		// Distance values under 200 are considered to be obstacles
+		// Distance values under OBSTACLE_THRESHOLD are considered to be obstacles
 		leftDistance = leftSensor.getFilteredData();
 		rightDistance = rightSensor.getFilteredData();
 		
@@ -88,5 +88,19 @@ public class ObstacleDetection extends SensorManager {
 	
 	public double frontDistance() {
 		return (leftDistance + rightDistance)/2;
+	}
+	
+	public double wallDistance(Direction direction) {
+		switch(direction) {
+		case RIGHT:
+			return rightDistance();
+		case LEFT:
+			return leftDistance();
+		case FWD:
+			return frontDistance();
+		default:
+			System.out.println("ERROR: no distance for Direction.BACK");
+			return 0.0;
+		}
 	}
 }
