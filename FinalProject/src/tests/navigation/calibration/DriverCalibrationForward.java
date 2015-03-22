@@ -13,16 +13,12 @@ import tests.TestCase;
 import util.Paths;
 import util.Measurements;
 /**
- * 	Used to verify driver capabilities.
- * 	e.g. drive straight, turn angle, stop smoothly...
+ * To calibrate the wheel radius 
  * 
  * @author Michael
  */
 public class DriverCalibrationForward extends TestCase {
 
-	/**
-	 * @see tests.TestCase#runTest()
-	 */
 	@Override
 	public void runTest() {
 		

@@ -20,13 +20,10 @@ import util.Measurements;
  */
 public class DriverCalibrationRotation extends TestCase {
 
-	/**
-	 * @see tests.TestCase#runTest()
-	 */
 	@Override
 	public void runTest() {
 		
-		// 2 tiles aka 60.96
+		// Turns 360
 		Driver.turn(Direction.RIGHT, 360);
 		
 
