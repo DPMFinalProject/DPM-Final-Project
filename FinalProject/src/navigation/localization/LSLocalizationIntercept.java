@@ -44,10 +44,10 @@ public class LSLocalizationIntercept extends Localization {
 		 * Execute the line intercept 3 times for a better position
 		 */
 		perpendicularToLine(3);
-		
-		/*
-		 * TODO: add a way to update the odometer.
-		 */
+		grid.setRunning(false);
+		odo.setX(0);
+		odo.setY(0);
+		odo.setTheta(0);
 	}
 		
 	//runs the algorithm a set number of times.

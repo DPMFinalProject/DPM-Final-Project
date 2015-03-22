@@ -25,7 +25,7 @@ public abstract class Localization {
 	}
 	
 	/**
-	 * 	Updates the odometer with the correct absolute x, y and theta values. 
+	 * 	Localizes the robot and updates the vales of the odometer correctly. 
 	 */
 	public abstract void doLocalization();
 }
