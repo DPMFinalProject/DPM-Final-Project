@@ -43,7 +43,7 @@ public class ObstacleDetection extends SensorManager {
 
 	@Override
 	public void execute() {
-		// Distance values under 200 are considered to be obstacles
+		// Distance values under OBSTACLE_THRESHOLD are considered to be obstacles
 		leftDistance = leftSensor.getFilteredData();
 		rightDistance = rightSensor.getFilteredData();
 		
