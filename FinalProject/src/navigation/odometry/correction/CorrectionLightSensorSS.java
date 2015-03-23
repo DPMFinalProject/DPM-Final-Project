@@ -85,21 +85,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	 */
 	private void correctOrientation(SensorID sensor) {
 		
-		if (sensor == SensorID.BOTH && rightCrossed) {
-			sensor = SensorID.LEFT;
-		}
-		else if (sensor == SensorID.BOTH && leftCrossed) {
-			sensor = SensorID.RIGHT;
-		}
-		else if (sensor == SensorID.RIGHT && rightCrossed) {
-			pause(10);
-			return;
-		}
-		else if (sensor == SensorID.LEFT && leftCrossed) {
-			pause(10);
-			return;
-		}
-		
+		sensor = checkIfCrossed(sensor);
 		
 		switch (sensor) {
 		case BOTH:
@@ -187,6 +173,33 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		double thetaOffSet = Math.toDegrees(Math.atan(distanceTravelled/sensorSeperation));
 		
 		return thetaOffSet;
+	}
+	
+	/**
+	 * checks if the sensor has already crossed a line
+	 * and returns a sensor which has not crossed if possible
+	 * 
+	 * @param sensor which has just detected a line
+	 * @return sensor which has just detected a line but has not yet been taken into account
+	 */
+	private SensorID checkIfCrossed(SensorID sensor) {
+		if (sensor == SensorID.BOTH && rightCrossed) {
+			return SensorID.LEFT;
+		}
+		else if (sensor == SensorID.BOTH && leftCrossed) {
+			return SensorID.RIGHT;
+		}
+		else if (sensor == SensorID.RIGHT && rightCrossed) {
+			pause(10);
+			return SensorID.NONE;
+		}
+		else if (sensor == SensorID.LEFT && leftCrossed) {
+			pause(10);
+			return SensorID.NONE;
+		}
+		else {
+			return sensor;
+		}
 	}
 	
 	/**

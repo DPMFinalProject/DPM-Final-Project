@@ -13,5 +13,24 @@ package util;
  * @author Auguste
  */
 public enum SensorID {
-	LEFT, RIGHT, BOTH, NONE
+	LEFT, RIGHT, BOTH, NONE;
+	
+	public SensorID opposite() {
+		return opposite(this);
+	}
+	
+	public static SensorID opposite(SensorID ID) {
+		switch(ID) {
+		case LEFT:
+			return SensorID.RIGHT;
+		case RIGHT:
+			return SensorID.LEFT;
+		case BOTH:
+			return SensorID.NONE;
+		case NONE:
+			return SensorID.BOTH;
+		default:
+			return null;
+		}
+	}
 }

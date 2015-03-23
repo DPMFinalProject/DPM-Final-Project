@@ -83,7 +83,6 @@ public class LSLocalizationIntercept extends Localization {
 		}
 		Driver.stop();
 		pause(200);
-		
 	}
 	
 	private void rotateToLine() {
@@ -96,12 +95,6 @@ public class LSLocalizationIntercept extends Localization {
 	}
 
 	private SensorID findUntriggeredSensor() {
-		if(triggeredSensor == SensorID.RIGHT){
-			return SensorID.LEFT;
-		}
-		return SensorID.RIGHT;
+		return triggeredSensor.opposite();
 	}
-
-	
-
 }
