@@ -70,7 +70,7 @@ public class Launcher {
 	private void findXY(double targetX, double targetY, double[] coordinates) {
 		double x = shootingArea[0]-1,  yUpperCircle, yLowerCircle, temp;
 		do{
-			yUpperCircle=shootingArea[1];
+			yUpperCircle=shootingArea[1];  //set to max of shooting area
 			yLowerCircle=yUpperCircle;
 			x++;
 			temp = Math.pow(rangeNormal(), 2) - Math.pow( (targetX-x), 2);
@@ -79,15 +79,15 @@ public class Launcher {
 				yLowerCircle = targetY - Math.sqrt(temp);
 				
 			}
-		}while(isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle)) );
+		}while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))) );
 		
 		coordinates[0] = x;
 		if(isInShootingArea(yUpperCircle)){
 			coordinates[1] = yUpperCircle;
-			System.out.println("Using Upper Circle");
+			System.out.println("Using Upper Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
 		}else{
 			coordinates[1] = yLowerCircle;
-			System.out.println("Using Lower Circle");
+			System.out.println("Using Lower Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
 		}
 		
 	}
