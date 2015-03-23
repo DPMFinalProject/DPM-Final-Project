@@ -57,7 +57,7 @@ public class OdoWithCorrectionTest extends TestCase {
 
 		raysPath();
 		
-		util.Songs.tetris.play();
+		util.Songs.superMario.play();
 	}
 	
 	

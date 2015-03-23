@@ -68,20 +68,37 @@ public class Launcher {
 	}
 
 	private void findXY(double targetX, double targetY, double[] coordinates) {
-		double x = shootingArea[0]-1, y, temp;
+		double x = shootingArea[0]-1,  yUpperCircle, yLowerCircle, temp;
 		do{
-			y=shootingArea[1];
+			yUpperCircle=shootingArea[1];
+			yLowerCircle=yUpperCircle;
 			x++;
 			temp = Math.pow(rangeNormal(), 2) - Math.pow( (targetX-x), 2);
 			if(temp>0){
-				y = targetY - Math.sqrt(temp);
+				yUpperCircle = targetY + Math.sqrt(temp);
+				yLowerCircle = targetY - Math.sqrt(temp);
+				
 			}
-		}while(! (x<shootingArea[1] && y>shootingArea[0] && y<shootingArea[1] ) );
+		}while(isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle)) );
 		
 		coordinates[0] = x;
-		coordinates[1] = y;
+		if(isInShootingArea(yUpperCircle)){
+			coordinates[1] = yUpperCircle;
+			System.out.println("Using Upper Circle");
+		}else{
+			coordinates[1] = yLowerCircle;
+			System.out.println("Using Lower Circle");
+		}
+		
 	}
 	
+	private boolean isInShootingArea(double val) {
+		if(val > shootingArea[0] && val < shootingArea[1]){
+			return true;
+		}
+		return false;
+	}
+
 	private void findTheta(double targetX, double targetY, double[] coordinates) {
 		coordinates[2] = (Math.toDegrees(Math.atan2(targetX-odo.getX(), (targetY-odo.getY())))); /*- getRangeTheta() + 360)%360;*/
 	}
