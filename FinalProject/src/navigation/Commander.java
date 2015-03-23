@@ -26,7 +26,7 @@ import util.Utilities;
  */
 public class Commander {
 	
-	private static double[] target1 = {2, 4};
+	private static double[] target1 = {13, 9};
 	private static double[] target2 = {};
 	
 	private static double[] destination = {0.5 * Measurements.TILE, 6 * Measurements.TILE};
@@ -37,7 +37,7 @@ public class Commander {
 		(new Thread(odo)).start();
 		Navigation nav = new Navigation(odo);
 		
-		// Perform localization
+		/*// Perform localization
 		USLocalization usl = new USLocalization(odo, nav);
 		usl.doLocalization();
 		usl = null;
@@ -51,21 +51,26 @@ public class Commander {
 		nav.travelTo(destination[0], destination[1]);
 		
 		completed();
-		
+		*/
 		// Possibly relocalize at the destination
 		/*usl.doLocalization(destination[0], destination[1], 90);
 		
-		/*
-		 * 	Use launcher class to shoot balls into target
+		*/
 		
+		 //	Use launcher class to shoot balls into target
 		
+		odo.setX(Measurements.TILE*9);
+		odo.setY(Measurements.TILE*9);
+		odo.setTheta(0);
+		
+		//Sound.twoBeeps();		
 		Launcher launcher = new Launcher(odo, nav);
 		launcher.shootTo(target1[0]  * Measurements.TILE, 
 				target1[1] * Measurements.TILE);
-		launcher.shootTo(target1[0], target2[1]);
+		//launcher.shootTo(target1[0], target2[1]);
 		
 		completed();
-		
+		/*
 		// Go back to the beginning
 		nav.travelTo(0, 0, 0);
 		usl.doLocalization();*/
