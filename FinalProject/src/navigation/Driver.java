@@ -21,9 +21,8 @@ import lejos.nxt.Motor;
 public class Driver {
 
 	private final static int FWD_SPEED = 300;
-	private final static int ACCEL = 3000;
-	
 	private final static int TURN_SPEED = 200;
+	private final static int ACCEL = 3000;
 	private final static int DRIFT_FACTOR = 95;
 	
 	private final static double WHL_RADIUS = 2.09;			//smaller radius = go further
@@ -32,6 +31,7 @@ public class Driver {
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
 	
 	private static boolean isTurning = false;
+	private static boolean movingBackwards = false;
 
 //--------------------------------------- MOVE ---------------------------------------	
 	
@@ -64,8 +64,12 @@ public class Driver {
 			rightMotor.forward();
 		}
 		else {
+			movingBackwards = true;
+			
 			leftMotor.backward();
 			rightMotor.backward();
+			
+			movingBackwards = false;
 		}
 	}
 	
@@ -91,12 +95,15 @@ public class Driver {
 		
 		setAcceleration(ACCEL);
 		setSpeed(FWD_SPEED);
-
+		
+		movingBackwards = (distance < 0) ? true : false;
+		
 		int rotations = convertDistance(WHL_RADIUS, distance);
 		
 		leftMotor.rotate(rotations, true);
 		rightMotor.rotate(rotations, immediateReturn);
 		
+		movingBackwards = false;
 	}
 
 //--------------------------------------- TURN ---------------------------------------	
@@ -175,10 +182,35 @@ public class Driver {
 	}
 
 //--------------------------------------- MISCELLANEOUS ---------------------------------------
+
+	/**
+	 * move one motor in specified direction
+	 * 
+	 * @param motor to move
+	 * @param direction to move motor in
+	 */
+	public static void moveOneMotor(Direction motor, Direction direction){
+		if(motor == Direction.LEFT){
+			if(direction == Direction.FWD){
+				leftMotor.forward();
+			}else{
+				leftMotor.backward();
+			}
+		}else if(motor == Direction.RIGHT){
+			if(direction == Direction.FWD){
+				rightMotor.forward();
+			}else{
+				rightMotor.backward();
+			}
+		}else{
+			System.out.println("MoveOneMotor direction input UNDEFINED");
+		}
+	}
 	
 	/**
 	 * 	Turns left or right, but not on itself. 
 	 * 	the robot will follow a curved path in the direction specified
+	 * 	based on the DRIFT_FACTOR specified in this class
 	 * 
 	 * @param direction	The direction in which to turn: LEFT or RIGHT
 	 */
@@ -215,8 +247,20 @@ public class Driver {
 		return rightMotor.isMoving() || leftMotor.isMoving();
 	}
 	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is turning.
+	 */
 	public static boolean isTurning() {
 		return isTurning;
+	}
+	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is moving backwards.
+	 */
+	public static boolean isMovingBackwards() {
+		return movingBackwards;
 	}
 	
 	private static boolean validMoveDirection(Direction direction) {
@@ -339,5 +383,4 @@ public class Driver {
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
-
 }

@@ -9,7 +9,10 @@
 package navigation;
 
 import lejos.nxt.Sound;
+import sensors.managers.ObstacleDetection;
 import util.Direction;
+import navigation.avoidance.BangBangAvoider;
+import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
 import static util.Utilities.pause;
 
@@ -42,11 +45,15 @@ public class Navigation {
 	}
 	
 	/**
-	 * Moves the robot to a specific coordinate facing the supplied direction.
-	 * @param coordinates
+	 * Moves the robot to a specific coordinate facing a desired direction (if provided).
+	 * @param coordinates an array of 2 or 3 elements representing the (x, y, theta) coordinates. The theta value is optional
 	 */
 	public void travelTo(double[] coordinates) {
-		travelTo(coordinates[0],coordinates[1],coordinates[2]);
+		if (coordinates.length == 2) {
+			travelTo(coordinates[0], coordinates[1]);
+		} else {
+			travelTo(coordinates[0],coordinates[1],coordinates[2]);
+		}
 	}
 	
 	
@@ -59,6 +66,8 @@ public class Navigation {
 		double xPos, xErr;
 		double yPos, yErr;
 		double targetAngle, distance;
+		
+		boolean firstRun = true;
 		
 		while (computeAbsError(odo.getX(), x) > POS_ERROR || computeAbsError(odo.getY(), y) > POS_ERROR) {
 			xPos = odo.getX();
@@ -73,13 +82,41 @@ public class Navigation {
 			
 			targetAngle = adjustRefFrame(targetAngle);
 			
-			turnTo(targetAngle);
+			if (!firstRun && targetBehindRobot(targetAngle)) {
+				//move backwards towards target
+				if (targetAngle<0) {
+					turnTo(targetAngle+180);
+				}
+				else {
+					turnTo(targetAngle-180);
+				}
+				
+				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
+				Driver.move(-distance, true);
+			}
+			else {
+				turnTo(targetAngle);
+				
+				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
+				Driver.move(distance, true);
+			}
 			
-			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-			Driver.move(distance);
+			ObstacleAvoidance avoidance;
+			ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
+			while(Driver.isMoving()) {
+				if (detection.leftDistance() < 30) {
+					avoidance = new BangBangAvoider(Direction.LEFT, odo);
+					avoidance.avoid();
+				} else if (detection.rightDistance() < 30) {
+					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
+					avoidance.avoid();
+				}
+			}
+			
+			firstRun = false;
+			
 			Sound.beep();
 		}
-		
 	}
 	
 	/**
@@ -145,5 +182,12 @@ public class Navigation {
 		else {
 			return 90 - angle;
 		}
+	}
+	
+	private boolean targetBehindRobot(double targetAngle) {
+		if (Math.abs(shortestAngle(odo.getTheta(), targetAngle)) > 90) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -9,7 +9,7 @@
 package util;
 
 import navigation.Driver;
-import static util.Pause.pause;
+import static util.Utilities.pause;
 
 /**
  * 	defines paths which the robot can be made to do for testing purposes.

@@ -23,14 +23,17 @@ import static util.Utilities.pause;
 
 public class GridManager extends SensorManager {
 	
+	private final int SAMPLING_RATE = 30;
+	private final double LINE_THRESHOLD = 2.5;
+	private final double NO_LINE_THRESHOLD = 0.4;
+	
 	private final FilteredColorSensor leftCS = new FilteredColorSensor(SensorPort.S4, new DifferentialFilter(2));
 	private final FilteredColorSensor rightCS = new FilteredColorSensor(SensorPort.S1, new DifferentialFilter(2));
-	private final double LINE_THRESHOLD = 2.0;
-	private final double NO_LINE_THRESHOLD = 0.4;
-	private boolean leftCSOnLine = false;
-	private boolean rightCSOnLine = false;
 	private final double[] leftSensorCoor = {-7.5, 6.0};//{x, y}
 	private final double[] rightSensorCoor = {7.5, 6.0};//{x, y}
+	
+	private boolean leftCSOnLine = false;
+	private boolean rightCSOnLine = false;
 	
 	private GridManager() {}
 	
@@ -49,30 +52,22 @@ public class GridManager extends SensorManager {
 		double leftCSMeasure = leftCS.getFilteredData();
 
 		if (leftCSMeasure < -LINE_THRESHOLD) {
-			setLeftCSDetected(true);
+			leftCSOnLine = true;
 		}
 		else if (leftCSMeasure > NO_LINE_THRESHOLD) {
-			setLeftCSDetected(false);
+			leftCSOnLine = false;
 		}
 
 		double rightCSMeasure = rightCS.getFilteredData();
 
 		if (rightCSMeasure < -LINE_THRESHOLD) {
-			setRightCSDetected(true);
+			rightCSOnLine = true;
 		}
 		else if (rightCSMeasure > NO_LINE_THRESHOLD) {
-			setRightCSDetected(false);
+			rightCSOnLine = false;
 		}
 
-		pause(30);
-	}
-	
-	private void setLeftCSDetected(boolean detected) {
-		leftCSOnLine = detected;
-	}
-	
-	private void setRightCSDetected(boolean detected) {
-		rightCSOnLine = detected;
+		pause(SAMPLING_RATE);
 	}
 	
 	public boolean lineDetected() {
@@ -106,27 +101,39 @@ public class GridManager extends SensorManager {
 		}
 	}
 	
-	public double[] getSensorCoor(SensorID ID) {
-		if (ID == SensorID.LEFT) {
-			return leftSensorCoor;
-		}
-		else {
-			return rightSensorCoor;
+	public boolean isOnLine(SensorID ID){
+		switch(ID) {
+		case BOTH:
+			return (rightCSOnLine && leftCSOnLine);
+		case RIGHT:
+			return rightCSOnLine;
+		case LEFT:
+			return leftCSOnLine;
+		case NONE:
+			return (!rightCSOnLine && !leftCSOnLine);
+		default:
+			return false;
 		}
 	}
 	
-	public boolean isOnLine(SensorID ID){
-		if (ID == SensorID.BOTH) {
-			return (rightCSOnLine && leftCSOnLine);
-		}
-		else if (ID == SensorID.RIGHT) {
-			return rightCSOnLine;
-		}
-		else if (ID == SensorID.LEFT) {
-			return leftCSOnLine;
-		}
-		else {
-			return (!rightCSOnLine && !leftCSOnLine);
+	public double[] getSensorCoor(SensorID ID) {
+		switch(ID) {
+		case LEFT:
+			return leftSensorCoor;
+		case RIGHT:
+			return rightSensorCoor;
+		case NONE:
+			System.out.println("_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "Cannot get NONE sensor coordinate"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n"
+					+ "_________________________________\n");
+		default:
+			return rightSensorCoor;
 		}
 	}
 }

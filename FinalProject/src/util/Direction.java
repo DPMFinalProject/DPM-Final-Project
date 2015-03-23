@@ -29,6 +29,10 @@ public enum Direction {
 		return angle;
 	}
 	
+	public Direction opposite() {
+		return opposite(this);
+	}
+	
 	public static Direction opposite(Direction direction) {
 		switch(direction) {
 		case LEFT:
