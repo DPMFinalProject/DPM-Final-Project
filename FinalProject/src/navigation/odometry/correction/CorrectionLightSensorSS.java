@@ -11,6 +11,7 @@ package navigation.odometry.correction;
 import navigation.Driver;
 import navigation.odometry.Odometer;
 import sensors.managers.GridManager;
+import util.Measurements;
 import util.SensorID;
 import static util.Utilities.*;
 
@@ -23,7 +24,6 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	private enum Line {xAxis, yAxis, unsure};
 	
-	final double SIZE_OF_TILE = util.Measurements.TILE;
 	final GridManager grid;
 	
 	//Orientation correction flags and position variables
@@ -241,13 +241,13 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	 * @return position error in the given dimension
 	 */
 	private double positionError(double sensorPos) {
-		double error = sensorPos % SIZE_OF_TILE;
+		double error = sensorPos % Measurements.TILE;
 		
-		if (error > (SIZE_OF_TILE/2)) {
-			error -= SIZE_OF_TILE;
+		if (error > (Measurements.TILE/2)) {
+			error -= Measurements.TILE;
 		}
-		else if (error < (-SIZE_OF_TILE/2)) {
-			error += SIZE_OF_TILE;
+		else if (error < (-Measurements.TILE/2)) {
+			error += Measurements.TILE;
 		}
 		
 		return error;
@@ -271,11 +271,11 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	 */
 	private Line whichLineCrossed(double[] sensorPos) {
 		
-		double xError = Math.abs(sensorPos[0]) % SIZE_OF_TILE;
-		xError = (xError > (SIZE_OF_TILE/2)) ? xError - SIZE_OF_TILE : xError;
+		double xError = Math.abs(sensorPos[0]) % Measurements.TILE;
+		xError = (xError > (Measurements.TILE/2)) ? xError - Measurements.TILE : xError;
 
-		double yError = Math.abs(sensorPos[1]) % SIZE_OF_TILE;
-		yError = (yError > (SIZE_OF_TILE/2)) ? yError - SIZE_OF_TILE : yError;
+		double yError = Math.abs(sensorPos[1]) % Measurements.TILE;
+		yError = (yError > (Measurements.TILE/2)) ? yError - Measurements.TILE : yError;
 
 		double delta = Math.abs(xError) - Math.abs(yError);
 
@@ -324,20 +324,20 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	/**
-	 * @return true if robot is within 15 degrees of being parallel to the yAxis. false otherwise 
+	 * @return true if robot is within 10 degrees of being parallel to the yAxis. false otherwise 
 	 */
 	private boolean isParallelToY() {
-		if (isNear(0, odo.getTheta() % 180, 15) || isNear(180, odo.getTheta() % 180, 15)) {
+		if (isNear(0, odo.getTheta() % 180, 10) || isNear(180, odo.getTheta() % 180, 10)) {
 			return true;
 		}
 		return false;
 	}
 	
 	/**
-	 * @return true if robot is within 15 degrees of being parallel to the xAxis. false otherwise 
+	 * @return true if robot is within 10 degrees of being parallel to the xAxis. false otherwise 
 	 */
 	private boolean isParallelToX() {
-		if (isNear(90, odo.getTheta() % 180, 15) || isNear(270, odo.getTheta() % 180, 15)) {
+		if (isNear(90, odo.getTheta() % 180, 10) || isNear(270, odo.getTheta() % 180, 10)) {
 			return true;
 		}
 		return false;
@@ -356,7 +356,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	/**
 	 * starts a timer which will reset the orientation correction flags
-	 * if the second sensor does not detect a line within 3 seconds
+	 * if the second sensor does not detect a line within 2 seconds
 	 */
 	private void errorCheck() {
 		(new Thread() {

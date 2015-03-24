@@ -111,8 +111,8 @@ public class LSLocalizationRotation extends Localization {
 	}
 	
 	
-	private void Useless(){
-		/*	//gives the average of the entering/leaving of a black line angles
+/*/		private void Useless(){
+			//gives the average of the entering/leaving of a black line angles
 		private double getLineAngleAvg( double[] filteredAngles){
 			return (filteredAngles[0] + filteredAngles[1])/2;
 		}
@@ -202,6 +202,6 @@ public class LSLocalizationRotation extends Localization {
 			return 0;
 		}
 		
-		*/
-	}
+		
+	}//*/
 }

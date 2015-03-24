@@ -10,7 +10,6 @@ package tests.navigation.calibration;
 
 import navigation.Driver;
 import tests.TestCase;
-import util.Paths;
 import util.Measurements;
 /**
  * To calibrate the wheel radius 

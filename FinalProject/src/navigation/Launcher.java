@@ -28,9 +28,8 @@ public class Launcher {
 	
 	private final int LAUNCH_SPEED = 100;
 	
-	
-	private final double[] range = {60,60};
-	private final double[] shootingArea = {Measurements.TILE*9,Measurements.TILE*12};
+	private final double[] range = {60, 60};
+	private final double[] shootingArea = {Measurements.TILE*9, Measurements.TILE*12};
 	
 	private final static NXTRegulatedMotor shooter = Motor.C;
 	
@@ -70,26 +69,25 @@ public class Launcher {
 	private void findXY(double targetX, double targetY, double[] coordinates) {
 		double x = shootingArea[0]-1,  yUpperCircle, yLowerCircle, temp;
 		do{
-			yUpperCircle=shootingArea[1];  //set to max of shooting area
-			yLowerCircle=yUpperCircle;
+			yLowerCircle = yUpperCircle = shootingArea[1];  //set to max of shooting area
 			x++;
-			temp = Math.pow(rangeNormal(), 2) - Math.pow( (targetX-x), 2);
-			if(temp>0){
+			temp = Math.pow(rangeNormal(), 2) - Math.pow((targetX - x), 2);
+			if (temp > 0) {
 				yUpperCircle = targetY + Math.sqrt(temp);
 				yLowerCircle = targetY - Math.sqrt(temp);
-				
 			}
-		}while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))) );
+		} while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))));
 		
 		coordinates[0] = x;
-		if(isInShootingArea(yUpperCircle)){
+		
+		if (isInShootingArea(yUpperCircle)) {
 			coordinates[1] = yUpperCircle;
 			System.out.println("Using Upper Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
-		}else{
+		}
+		else {
 			coordinates[1] = yLowerCircle;
 			System.out.println("Using Lower Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
 		}
-		
 	}
 	
 	private boolean isInShootingArea(double val) {
@@ -103,11 +101,11 @@ public class Launcher {
 		coordinates[2] = (Math.toDegrees(Math.atan2(targetX-odo.getX(), (targetY-odo.getY())))); /*- getRangeTheta() + 360)%360;*/
 	}
 	
-	private double getRangeTheta(){
+	private double getRangeTheta() {
 		return Math.toDegrees(Math.atan2(range[0], range[1]));
 	}
 
-	private double rangeNormal(){
+	private double rangeNormal() {
 		return Math.sqrt(Math.pow(range[0], 2) + Math.pow(range[1], 2));
 	}
 }
