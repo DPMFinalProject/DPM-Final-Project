@@ -11,7 +11,6 @@ package navigation;
 import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
-import util.Measurements;
 import navigation.avoidance.BangBangAvoider;
 import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
@@ -27,6 +26,7 @@ public class Navigation {
 	
 	private final double ANGLE_ERROR = 10.0;
 	private final double POS_ERROR= 1.0;
+	private final double BACKWARDS_THRESHOLD = 15.0;
 	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
@@ -68,9 +68,7 @@ public class Navigation {
 		double yPos, yErr;
 		double targetAngle, distance;
 		
-		boolean firstRun = true;
-		
-		while (computeAbsError(odo.getX(), x) > POS_ERROR || computeAbsError(odo.getY(), y) > POS_ERROR) {
+		while (euclideanDistance(odo.getX(), odo.getY(), x, y) > POS_ERROR) {
 			xPos = odo.getX();
 			yPos = odo.getY();
 			
@@ -79,11 +77,13 @@ public class Navigation {
 			
 			targetAngle = Math.toDegrees(Math.atan2(yErr, xErr));
 			
+			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
+			
 			//System.out.println("Target: " + targetAngle);
 			
 			targetAngle = adjustRefFrame(targetAngle);
 			
-			if (!firstRun && targetBehindRobot(targetAngle)) {
+			if ((distance < BACKWARDS_THRESHOLD) && targetBehindRobot(targetAngle)) {
 				//move backwards towards target
 				if (targetAngle<0) {
 					turnTo(targetAngle+180);
@@ -92,22 +92,18 @@ public class Navigation {
 					turnTo(targetAngle-180);
 				}
 				
-				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(-distance, true);
+				Driver.move(-distance, avoiding);
 			}
 			else {
 				turnTo(targetAngle);
 				
-				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(distance, true);
+				Driver.move(distance, avoiding);
 			}
 			
 			if (avoiding) {
 				doAvoidance();
 			}
-			
-			firstRun = false;
-			
+		
 			Sound.beep();
 		}
 	}
@@ -175,12 +171,16 @@ public class Navigation {
 		}
 	}
 	
-	private double computeAbsError(double current, double target) {
-		return Math.abs(computeError(current, target));
-	}
+//	private double computeAbsError(double current, double target) {
+//		return Math.abs(computeError(current, target));
+//	}
 	
 	private double computeError(double current, double target) {
 		return target - current;
+	}
+	
+	private double euclideanDistance(double currentX, double currentY, double targetX, double targetY) {
+		return Math.sqrt(Math.pow(currentX - targetX, 2) + Math.pow(currentY - targetY, 2));
 	}
 	
 	private double adjustRefFrame(double angle) {

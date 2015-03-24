@@ -56,10 +56,10 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		while(!hasAvoided()) {
 			bangBang();
 			
-			if(detector.wallDistance(wallDirection.opposite()) < 30) {
-				//Driver.drift(wallDirection);
-				Driver.turn(wallDirection, 90);
-			}
+//			if(detector.wallDistance(wallDirection.opposite()) < 30) {
+//				//Driver.drift(wallDirection);
+//				Driver.turn(wallDirection, 90);
+//			}
 			
 			pause(20);
 		}

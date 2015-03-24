@@ -17,6 +17,7 @@ import navigation.localization.Localization;
 import navigation.localization.USLocalization;
 import navigation.localization.USLocalizationDiagonal;
 import navigation.odometry.Odometer;
+import navigation.odometry.correction.CorrectionLightSensorSS;
 import util.Measurements;
 import util.ResourceManager;
 import util.Utilities;
@@ -45,7 +46,7 @@ public class Commander {
 		
 		completed();
 		
-		Localization lsl = new LSLocalizationIntercept(odo, nav); // Has to be implemented first.
+		Localization lsl = new LSLocalizationIntercept(odo, nav);
 		lsl.doLocalization();
 		lsl = null;
 		
@@ -55,7 +56,10 @@ public class Commander {
 		
 		completed();
 		
-		nav.travelTo(destination[0], destination[1], false);
+		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
+		(new Thread(correction)).start();
+		
+		nav.travelTo(destination[0], destination[1], true);
 		
 		completed();
 		
@@ -73,7 +77,8 @@ public class Commander {
 		completed();*/
 		
 		// Go back to the beginning
-		nav.travelTo(0, 0, 0, false);
+		
+		nav.travelTo(0, 0, 0, true);
 		usl = new USLocalization(odo, nav);
 		usl.doLocalization();
 	}

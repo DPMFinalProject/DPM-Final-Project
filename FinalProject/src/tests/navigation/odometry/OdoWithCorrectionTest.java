@@ -74,7 +74,7 @@ public class OdoWithCorrectionTest extends TestCase {
 	}
 	
 	private void raysComplexPath() {
-																			printcoordinates();
+																					printcoordinates();
 		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE, false);				printcoordinates();
 		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE, false);				printcoordinates();
 		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
