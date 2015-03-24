@@ -10,6 +10,8 @@ package navigation;
 
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.Sound;
+import util.Direction;
 import util.Measurements;
 import navigation.odometry.Odometer;
 import static util.Utilities.pause;
@@ -26,8 +28,8 @@ public class Launcher {
 	
 	private final int LAUNCH_SPEED = 100;
 	
-	private final double[] target = new double[2];
-	private final double[] range = new double[2];
+	
+	private final double[] range = {60,60};
 	private final double[] shootingArea = {Measurements.TILE*9,Measurements.TILE*12};
 	
 	private final static NXTRegulatedMotor shooter = Motor.C;
@@ -45,10 +47,12 @@ public class Launcher {
 	 */
 	public void shootTo(double targetX, double targetY) {
 		nav.travelTo(findLaunchingCoordinates(targetX,targetY));
+		Sound.twoBeeps();
 		shoot(3);
 	}
 
 	private void shoot(int launchs) {
+		Driver.turn(Direction.LEFT, getRangeTheta());
 		shooter.setSpeed(LAUNCH_SPEED);
 		for(int i=0; i < launchs; i++){
 			shooter.rotate(360);
@@ -63,22 +67,44 @@ public class Launcher {
 		return coordinates;
 	}
 
-	private void findXY(double x, double y, double[] coordinates) {
-		while(! (shootingArea[0]<x && x<shootingArea[1] && shootingArea[0]<y && y<shootingArea[1]) ){
+	private void findXY(double targetX, double targetY, double[] coordinates) {
+		double x = shootingArea[0]-1,  yUpperCircle, yLowerCircle, temp;
+		do{
+			yUpperCircle=shootingArea[1];  //set to max of shooting area
+			yLowerCircle=yUpperCircle;
 			x++;
-			y = target[1] - Math.sqrt(Math.pow(rangeNormal(), 2) - Math.pow( (target[2]-x), 2));
-		}
+			temp = Math.pow(rangeNormal(), 2) - Math.pow( (targetX-x), 2);
+			if(temp>0){
+				yUpperCircle = targetY + Math.sqrt(temp);
+				yLowerCircle = targetY - Math.sqrt(temp);
+				
+			}
+		}while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))) );
 		
 		coordinates[0] = x;
-		coordinates[1] = y;
+		if(isInShootingArea(yUpperCircle)){
+			coordinates[1] = yUpperCircle;
+			System.out.println("Using Upper Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
+		}else{
+			coordinates[1] = yLowerCircle;
+			System.out.println("Using Lower Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
+		}
+		
 	}
 	
-	private void findTheta(double x, double y, double[] coordinates) {
-		coordinates[2] = (Math.atan((x-odo.getX())/(y-odo.getY())) - getRangeTheta() + 360)%360;
+	private boolean isInShootingArea(double val) {
+		if(val > shootingArea[0] && val < shootingArea[1]){
+			return true;
+		}
+		return false;
+	}
+
+	private void findTheta(double targetX, double targetY, double[] coordinates) {
+		coordinates[2] = (Math.toDegrees(Math.atan2(targetX-odo.getX(), (targetY-odo.getY())))); /*- getRangeTheta() + 360)%360;*/
 	}
 	
 	private double getRangeTheta(){
-		return Math.atan2(range[0], range[1]);
+		return Math.toDegrees(Math.atan2(range[0], range[1]));
 	}
 
 	private double rangeNormal(){

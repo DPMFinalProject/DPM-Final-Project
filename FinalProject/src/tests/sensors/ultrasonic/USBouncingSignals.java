@@ -6,7 +6,7 @@
  *	USBouncingSignals.java
  *	Created On:	Feb 20, 2015
  */
-package tests.sensors;
+package tests.sensors.ultrasonic;
 
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;

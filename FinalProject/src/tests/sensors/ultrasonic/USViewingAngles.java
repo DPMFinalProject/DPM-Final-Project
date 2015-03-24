@@ -6,7 +6,7 @@
  *	USViewingAngles.java
  *	Created On:	Feb 24, 2015
  */
-package tests.sensors;
+package tests.sensors.ultrasonic;
 
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;

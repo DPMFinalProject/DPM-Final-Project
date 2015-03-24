@@ -92,26 +92,26 @@ public class Navigation {
 				}
 				
 				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(-distance, true);
+				Driver.move(-distance, false);
 			}
 			else {
 				turnTo(targetAngle);
 				
 				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(distance, true);
+				Driver.move(distance, false);
 			}
 			
-			ObstacleAvoidance avoidance;
-			ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
-			while(Driver.isMoving()) {
-				if (detection.leftDistance() < 30) {
-					avoidance = new BangBangAvoider(Direction.LEFT, odo);
-					avoidance.avoid();
-				} else if (detection.rightDistance() < 30) {
-					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
-					avoidance.avoid();
-				}
-			}
+//			ObstacleAvoidance avoidance;
+//			ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
+//			while(Driver.isMoving()) {
+//				if (detection.leftDistance() < 30) {
+//					avoidance = new BangBangAvoider(Direction.LEFT, odo);
+//					avoidance.avoid();
+//				} else if (detection.rightDistance() < 30) {
+//					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
+//					avoidance.avoid();
+//				}
+//			}
 			
 			firstRun = false;
 			

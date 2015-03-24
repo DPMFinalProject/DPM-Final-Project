@@ -93,97 +93,7 @@ public class LSLocalizationRotation extends Localization {
 		Driver.stop();
 	}
 	
-/*	//gives the average of the entering/leaving of a black line angles
-	private double getLineAngleAvg( double[] filteredAngles){
-		return (filteredAngles[0] + filteredAngles[1])/2;
-	}
-	//give the middle point between entering/leaving of a black line angles
-	private double getLineAngleMid(double[] filteredAngles, byte lineNumber){
-		//vertical line, assuming counterclockwise , facing north
-		if(lineNumber == 0 || lineNumber == 2){
-			return Math.acos( ( Math.cos(filteredAngles[0])+Math.cos(filteredAngles[1]) ) /2);
-		//horizontal line
-		}else {
-			return Math.acos( ( Math.sin(filteredAngles[0])+Math.sin(filteredAngles[1]) ) /2);
-		}
-	}
-	//Line 70: experimental number--| differential filter peak height
-	private double[] filterAnalysis(){ 
-		double[] filteredAngles= new double [2];
-	//	double[] val =new double [2];
-		double val= 0;
-		//make sure to be in a peak (differential filter)
-		do{
-			val[0] = cs.getFilteredData();
-			System.out.println(val[0]);
-			pause(50);
-//			if(!driver.isMoving()){
-//				return val;
-//			}
-		}while(Math.abs(val[0])<2 );
-		System.out.println("-->found a line");
-//			val[1] = val[0];
-		
-		//positive peak
-		if(val[0]>0){
-			//wait until we cross the line from above
-			System.out.println("\t val positive");
-			val=differentialCrossing(val, true);
-			System.out.println("\t val negative");
-			
-			filteredAngles[0]=odo.getTheta();
-//			val[0]=val[1];
-			
-			//wait until we cross the line from below
-			val=differentialCrossing(val, false);
-			System.out.println("\t val positive");
-			
-			filteredAngles[1] = odo.getTheta();
-			System.out.println("we got a filtered angle");
-		}else if(val[0] < 0){
-			
-			//wait until we cross the line from below
-			System.out.println("\t val negative");
-			val=differentialCrossing(val,false);
-			
-			System.out.println("\t val positive");
-			filteredAngles[0]=odo.getTheta();
-//			val[0]=val[1];
-			
-			//wait until we cross the line from above
-			val=differentialCrossing(val, true);
-			System.out.println("\t val negative");
-//			
-			filteredAngles[1] = odo.getTheta();
-			System.out.println("we got a filtered angle");
-		}
-		
-		
-		return filteredAngles;
-	}
-	//detects the zero crossing of the differential filter
-	private double differentialCrossing(double[] val, boolean above){
-		if(above){
-			//crossing the line from above
-			while (val[0] > 0 && val[1] > 0){
-//				val[0] = val[1];
-				val[1 0] = cs.getFilteredData();
-				System.out.println("\t " +val);
-				pause(50);
-			}
-		}else{
-			//crossing the line from below
-			while (val[0] < 0 && val[1] < 0){
-//				val[0] = val[1];
-				val[1 0] = cs.getFilteredData();
-				System.out.println("\t " +val);
-				pause(50);
-			}
-		}
-		return 0;
-	}
-	
-	*/
+
 	private void updateOdometer(double[] lineAng, double[] pos){
 		pos[2]=odo.getTheta();	
 		//TODO: this math is not good, need to adapt depending on position of sensor/rotation
@@ -198,5 +108,100 @@ public class LSLocalizationRotation extends Localization {
 	}
 	private double correctY(double[] lineAng){
 		return CS_DIST*Math.cos(Math.toRadians( ( lineAng[1]+360-lineAng[3])/2) );
+	}
+	
+	
+	private void Useless(){
+		/*	//gives the average of the entering/leaving of a black line angles
+		private double getLineAngleAvg( double[] filteredAngles){
+			return (filteredAngles[0] + filteredAngles[1])/2;
+		}
+		//give the middle point between entering/leaving of a black line angles
+		private double getLineAngleMid(double[] filteredAngles, byte lineNumber){
+			//vertical line, assuming counterclockwise , facing north
+			if(lineNumber == 0 || lineNumber == 2){
+				return Math.acos( ( Math.cos(filteredAngles[0])+Math.cos(filteredAngles[1]) ) /2);
+			//horizontal line
+			}else {
+				return Math.acos( ( Math.sin(filteredAngles[0])+Math.sin(filteredAngles[1]) ) /2);
+			}
+		}
+		//Line 70: experimental number--| differential filter peak height
+		private double[] filterAnalysis(){ 
+			double[] filteredAngles= new double [2];
+		//	double[] val =new double [2];
+			double val= 0;
+			//make sure to be in a peak (differential filter)
+			do{
+				val[0] = cs.getFilteredData();
+				System.out.println(val[0]);
+				pause(50);
+//				if(!driver.isMoving()){
+//					return val;
+//				}
+			}while(Math.abs(val[0])<2 );
+			System.out.println("-->found a line");
+//				val[1] = val[0];
+			
+			//positive peak
+			if(val[0]>0){
+				//wait until we cross the line from above
+				System.out.println("\t val positive");
+				val=differentialCrossing(val, true);
+				System.out.println("\t val negative");
+				
+				filteredAngles[0]=odo.getTheta();
+//				val[0]=val[1];
+				
+				//wait until we cross the line from below
+				val=differentialCrossing(val, false);
+				System.out.println("\t val positive");
+				
+				filteredAngles[1] = odo.getTheta();
+				System.out.println("we got a filtered angle");
+			}else if(val[0] < 0){
+				
+				//wait until we cross the line from below
+				System.out.println("\t val negative");
+				val=differentialCrossing(val,false);
+				
+				System.out.println("\t val positive");
+				filteredAngles[0]=odo.getTheta();
+//				val[0]=val[1];
+				
+				//wait until we cross the line from above
+				val=differentialCrossing(val, true);
+				System.out.println("\t val negative");
+//				
+				filteredAngles[1] = odo.getTheta();
+				System.out.println("we got a filtered angle");
+			}
+			
+			
+			return filteredAngles;
+		}
+		//detects the zero crossing of the differential filter
+		private double differentialCrossing(double[] val, boolean above){
+			if(above){
+				//crossing the line from above
+				while (val[0] > 0 && val[1] > 0){
+//					val[0] = val[1];
+					val[1 0] = cs.getFilteredData();
+					System.out.println("\t " +val);
+					pause(50);
+				}
+			}else{
+				//crossing the line from below
+				while (val[0] < 0 && val[1] < 0){
+//					val[0] = val[1];
+					val[1 0] = cs.getFilteredData();
+					System.out.println("\t " +val);
+					pause(50);
+				}
+			}
+			return 0;
+		}
+		
+		*/
 	}
 }

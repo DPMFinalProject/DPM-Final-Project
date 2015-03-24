@@ -10,6 +10,7 @@ package tests.navigation.odometry;
 
 import navigation.odometry.Odometer;
 import tests.TestCase;
+import util.Direction;
 import util.Paths;
 import static util.Utilities.pause;
 
@@ -43,6 +44,6 @@ public class OdoTest extends TestCase {
 			}
 		}).start();
 		
-		Paths.square();
+		Paths.circle(Direction.RIGHT, 20);
 	}
 }

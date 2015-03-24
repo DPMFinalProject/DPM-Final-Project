@@ -11,7 +11,9 @@ package tests;
 
 import tests.navigation.avoidance.BangBangAvoidanceTest;
 import tests.navigation.localization.LSLocalizationInterceptTest;
+import tests.navigation.localization.OneLSLocalizationTest;
 import tests.navigation.odometry.OdoCalibration;
+import tests.navigation.odometry.OdoTest;
 import tests.navigation.odometry.OdoWithCorrectionTest;
 import tests.sensors.GridManagerTest;
 import lejos.nxt.Button;

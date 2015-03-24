@@ -14,6 +14,7 @@ import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
 import util.Measurements;
 import util.OdometryDisplay;
+import util.songs.Song;
 import static util.Utilities.pause;
 
 /**
@@ -57,7 +58,7 @@ public class OdoWithCorrectionTest extends TestCase {
 
 		raysPath();
 		
-		util.Songs.tetris.play();
+		new util.songs.Tetris().play();
 	}
 	
 	

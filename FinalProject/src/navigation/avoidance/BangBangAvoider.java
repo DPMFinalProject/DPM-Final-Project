@@ -13,6 +13,7 @@ import navigation.odometry.Odometer;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
 import static util.Utilities.isNear;
+import static util.Utilities.pause;
 
 /**
  * An avoider based on bang-bang control theory
@@ -48,6 +49,12 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		
 		while(!hasAvoided()) {
 			bangBang();
+			
+			if(detector.wallDistance(wallDirection.opposite()) < 30) {
+				Driver.drift(wallDirection);
+			}
+			
+			pause(20);
 		}
 		
 		Driver.stop();
