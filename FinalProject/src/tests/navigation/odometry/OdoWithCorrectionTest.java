@@ -14,6 +14,7 @@ import navigation.odometry.correction.CorrectionLightSensorSS;
 import tests.TestCase;
 import util.Measurements;
 import util.OdometryDisplay;
+import util.Paths;
 import static util.Utilities.pause;
 
 /**
@@ -42,29 +43,59 @@ public class OdoWithCorrectionTest extends TestCase {
 	@Override
 	public void runTest() {
 		
-		(new Thread(odo)).start();
-		(new Thread(correct)).start();
-		(new Thread(display)).start();
-		
-		(new Thread() {
-			public void run() {
-				while(true) {
-					System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
-					pause(500);
-				}
-			}
-		}).start();
+//		(new Thread(odo)).start();
+//		(new Thread(correct)).start();
+//		(new Thread(display)).start();
+//		
+//		(new Thread() {
+//			public void run() {
+//				while(true) {
+//					System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
+//					pause(500);
+//				}
+//			}
+//		}).start();
 
-		raysPath();
+		Paths.square(Measurements.TILE*2);
 		
 		new util.songs.Tetris().play();
 	}
 	
 	
-	private void raysPath() {
+	private void raysSimplePath() {
 		nav.travelTo(Measurements.TILE, 2*Measurements.TILE);
+		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 		nav.travelTo(-Measurements.TILE, 2*Measurements.TILE);
+		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 		nav.travelTo(-3*Measurements.TILE, 0);
+		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 		nav.travelTo(0, 0, 0);
+		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
+	}
+	
+	private void raysComplexPath() {
+																			printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*4, 2*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*6, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*5, 1*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*3, 1*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
+	}
+	
+	private void printcoordinates(){
+		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 	}
 }

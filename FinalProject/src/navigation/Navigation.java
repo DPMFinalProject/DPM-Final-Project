@@ -115,6 +115,7 @@ public class Navigation {
 			
 			firstRun = false;
 			
+			System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 			Sound.beep();
 		}
 	}
