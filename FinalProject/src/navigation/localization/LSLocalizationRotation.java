@@ -61,7 +61,7 @@ public class LSLocalizationRotation extends Localization {
 		}
 		updateOdometer(lineAngle,pos);
 		
-		nav.travelTo(0, 0,0);
+		nav.travelTo(0, 0, 0, false);
 		
 	}
 	

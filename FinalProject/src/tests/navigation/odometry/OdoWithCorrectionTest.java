@@ -63,36 +63,36 @@ public class OdoWithCorrectionTest extends TestCase {
 	
 	
 	private void raysSimplePath() {
-		nav.travelTo(Measurements.TILE, 2*Measurements.TILE);
+		nav.travelTo(Measurements.TILE, 2*Measurements.TILE, false);
 		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
-		nav.travelTo(-Measurements.TILE, 2*Measurements.TILE);
+		nav.travelTo(-Measurements.TILE, 2*Measurements.TILE, false);
 		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
-		nav.travelTo(-3*Measurements.TILE, 0);
+		nav.travelTo(-3*Measurements.TILE, 0, false);
 		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
-		nav.travelTo(0, 0, 0);
+		nav.travelTo(0, 0, 0, false);
 		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 	}
 	
 	private void raysComplexPath() {
 																			printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*4, 2*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*6, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*5, 1*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*3, 1*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*4, 2*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*6, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*5, 1*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*3, 1*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE, false);				printcoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
 	}
 	
 	private void printcoordinates(){

@@ -24,10 +24,10 @@ import static util.Utilities.pause;
 
 public class USLocalization extends Localization {
 	
-	private ObstacleDetection obstacleDetection;
+	protected ObstacleDetection obstacleDetection;
 	
-	private final double SENSOR_VIEW_ANGLE = 30;
-	private final double SENSOR_OFFSET = 10;//9.3; 
+	protected final double SENSOR_VIEW_ANGLE = 30;
+	protected final double SENSOR_OFFSET = 10;//9.3; 
 	
 	public USLocalization(Odometer odo, Navigation nav) {
 		super(odo, nav);
@@ -44,8 +44,8 @@ public class USLocalization extends Localization {
 		 * correctly.
 		 */
 		for (int i = 0; i < 2; i++) {
-			adjustYPosition(true);
-			adjustXPosition(true);
+			obtainYPosition(true);
+			obtainXPosition(true);
 		}
 		
 		/*
@@ -55,9 +55,9 @@ public class USLocalization extends Localization {
 		Driver.turn(Direction.RIGHT, 60);
 		
 		Driver.move(-7);
-		odo.setX(0);
-		odo.setY(0);
-		odo.setTheta(0);
+		odo.setX(x);
+		odo.setY(y);
+		odo.setTheta(theta);
 	}
 	/**
 	 * @see navigation.localization.Localization#doLocalization()
@@ -67,7 +67,7 @@ public class USLocalization extends Localization {
 		doLocalization(0, 0, 0);
 	}
 	
-	private void adjustXPosition(boolean move) {
+	protected double obtainXPosition(boolean move) {
 		double xPosition;
 		
 		obstacleDetection.setRunning(true);
@@ -80,9 +80,11 @@ public class USLocalization extends Localization {
 		
 		if (move)
 			Driver.move(xPosition);
+		
+		return xPosition;
 	}
 	
-	private void adjustYPosition(boolean move) {
+	protected double obtainYPosition(boolean move) {
 		double yPosition;
 		
 		faceAwayFromWall(Direction.LEFT);
@@ -94,6 +96,8 @@ public class USLocalization extends Localization {
 		
 		if (move)
 			Driver.move(yPosition);
+		
+		return yPosition;
 	}
 	
 	// turn until facing away from wall;
@@ -102,7 +106,7 @@ public class USLocalization extends Localization {
 		DifferentialFilter dFilter = new DifferentialFilter(2);
 		
 		Driver.turn(sensorDirection);
-		pause(1000);
+		pause(500);
 		do{
 			// Use edge triggering by applying the differential filter.
 			if (sensorDirection == Direction.RIGHT) { 
@@ -117,11 +121,11 @@ public class USLocalization extends Localization {
 		Driver.stop();
 	}
 	
-	private void faceWall() {
+	protected void faceWall() {
 		// Turn until facing a wall
 		obstacleDetection.setRunning(true);
 		Driver.turn(Direction.RIGHT);
-		while(!obstacleDetection.isFrontObstacle()) {
+		while(!obstacleDetection.isFrontObstacle(50)) {
 			pause(20);
 		}
 		Driver.stop();

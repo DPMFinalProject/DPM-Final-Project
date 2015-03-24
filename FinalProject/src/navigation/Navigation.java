@@ -11,6 +11,7 @@ package navigation;
 import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
+import util.Measurements;
 import navigation.avoidance.BangBangAvoider;
 import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
@@ -37,10 +38,10 @@ public class Navigation {
 	 * @param y
 	 * @param theta
 	 */
-	public void travelTo(double x, double y, double theta) {
+	public void travelTo(double x, double y, double theta, boolean avoiding) {
 		//System.out.println("Current: " + odo.getX() + "," + odo.getY() + "," + odo.getTheta());
 		//System.out.println("Target: " + x + "," + y + "," + theta);
-		travelTo(x, y);
+		travelTo(x, y, avoiding);
 		turnTo(theta);
 	}
 	
@@ -48,11 +49,11 @@ public class Navigation {
 	 * Moves the robot to a specific coordinate facing a desired direction (if provided).
 	 * @param coordinates an array of 2 or 3 elements representing the (x, y, theta) coordinates. The theta value is optional
 	 */
-	public void travelTo(double[] coordinates) {
+	public void travelTo(double[] coordinates, boolean avoiding) {
 		if (coordinates.length == 2) {
-			travelTo(coordinates[0], coordinates[1]);
+			travelTo(coordinates[0], coordinates[1], avoiding);
 		} else {
-			travelTo(coordinates[0],coordinates[1],coordinates[2]);
+			travelTo(coordinates[0],coordinates[1],coordinates[2], avoiding);
 		}
 	}
 	
@@ -62,7 +63,7 @@ public class Navigation {
 	 * @param x
 	 * @param y
 	 */
-	public void travelTo(double x, double y) {
+	public void travelTo(double x, double y, boolean avoiding) {
 		double xPos, xErr;
 		double yPos, yErr;
 		double targetAngle, distance;
@@ -92,31 +93,43 @@ public class Navigation {
 				}
 				
 				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(-distance, false);
+				Driver.move(-distance, true);
 			}
 			else {
 				turnTo(targetAngle);
 				
 				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(distance, false);
+				Driver.move(distance, true);
 			}
 			
-//			ObstacleAvoidance avoidance;
-//			ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
-//			while(Driver.isMoving()) {
-//				if (detection.leftDistance() < 30) {
-//					avoidance = new BangBangAvoider(Direction.LEFT, odo);
-//					avoidance.avoid();
-//				} else if (detection.rightDistance() < 30) {
-//					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
-//					avoidance.avoid();
-//				}
-//			}
+			if (avoiding) {
+				doAvoidance();
+			}
 			
 			firstRun = false;
 			
-			System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 			Sound.beep();
+		}
+	}
+	
+	/**
+	 * runs avoidance loop while robot is moving
+	 */
+	private void doAvoidance() {
+		ObstacleAvoidance avoidance;
+		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
+		
+		while(Driver.isMoving()) {
+			detection.setRunning(true);
+			if (detection.isLeftObstacle()) {
+				avoidance = new BangBangAvoider(Direction.LEFT, odo);
+				avoidance.avoid();
+			} else if (detection.isRightObstacle()) {
+				avoidance = new BangBangAvoider(Direction.RIGHT, odo);
+				avoidance.avoid();
+			}
+			avoidance = null;
+			pause(20);
 		}
 	}
 	

@@ -38,10 +38,10 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	@Override
 	public void avoid() {
 		
-		if (!checkForFront()) {
+		/*if (!checkForFront()) {
 			Driver.move(Measurements.TILE / 2);
 			return;
-		}
+		}*/
 		
 		initialOrientation = odo.getTheta();
 		
