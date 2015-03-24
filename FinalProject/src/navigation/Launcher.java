@@ -28,9 +28,8 @@ public class Launcher {
 	
 	private final int LAUNCH_SPEED = 100;
 	
-	
 	private final double[] range = {60,60};
-	private final double[] shootingArea = {Measurements.TILE*9,Measurements.TILE*12};
+	private final double[] shootingArea = {Measurements.TILE*0,Measurements.TILE*3};
 	
 	private final static NXTRegulatedMotor shooter = Motor.C;
 	

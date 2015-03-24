@@ -11,6 +11,7 @@ package navigation;
 import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
+import util.Measurements;
 import navigation.avoidance.BangBangAvoider;
 import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
@@ -92,30 +93,32 @@ public class Navigation {
 				}
 				
 				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(-distance, false);
+				Driver.move(-distance, true);
 			}
 			else {
 				turnTo(targetAngle);
 				
 				distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
-				Driver.move(distance, false);
+				Driver.move(distance, true);
 			}
 			
-//			ObstacleAvoidance avoidance;
-//			ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
-//			while(Driver.isMoving()) {
-//				if (detection.leftDistance() < 30) {
-//					avoidance = new BangBangAvoider(Direction.LEFT, odo);
-//					avoidance.avoid();
-//				} else if (detection.rightDistance() < 30) {
-//					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
-//					avoidance.avoid();
-//				}
-//			}
+			ObstacleAvoidance avoidance;
+			ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
+			while(Driver.isMoving()) {
+				detection.setRunning(true);
+				if (detection.isLeftObstacle()) {
+					avoidance = new BangBangAvoider(Direction.LEFT, odo);
+					avoidance.avoid();
+				} else if (detection.isRightObstacle()) {
+					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
+					avoidance.avoid();
+				}
+				avoidance = null;
+				pause(20);
+			}
 			
 			firstRun = false;
 			
-			System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 			Sound.beep();
 		}
 	}
