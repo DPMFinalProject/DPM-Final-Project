@@ -9,13 +9,14 @@
  */
 package tests;
 
-import tests.navigation.avoidance.BangBangAvoidanceTest;
-import tests.navigation.localization.LSLocalizationInterceptTest;
-import tests.navigation.localization.OneLSLocalizationTest;
-import tests.navigation.odometry.OdoCalibration;
-import tests.navigation.odometry.OdoTest;
-import tests.navigation.odometry.OdoWithCorrectionTest;
-import tests.sensors.GridManagerTest;
+import tests.navigation.*;
+import tests.navigation.avoidance.*;
+import tests.navigation.calibration.*;
+import tests.navigation.localization.*;
+import tests.navigation.odometry.*;
+import tests.sensors.*;
+import tests.sensors.filters.*;
+import tests.sensors.ultrasonic.*;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -25,6 +26,7 @@ import lejos.nxt.comm.RConsole;
  *	Class is abstract to prevent instantiation.
  * @author Oleg
  */
+@SuppressWarnings("unused")
 public class TestMain {
 
 	private static void execute(String[] args) {

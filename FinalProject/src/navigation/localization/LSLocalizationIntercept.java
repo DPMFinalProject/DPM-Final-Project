@@ -8,7 +8,6 @@ a *	DPM Final Project
  */
 package navigation.localization;
 
-import lejos.nxt.Sound;
 import sensors.managers.GridManager;
 import util.Direction;
 import util.SensorID;

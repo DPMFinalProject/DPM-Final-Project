@@ -29,9 +29,9 @@ public class NavTest extends TestCase {
 		(new Thread(odo)).start(); 
 		Navigation nav = new Navigation(odo);
 		
-		nav.travelTo(30, 30, 135);
-		nav.travelTo(60, 30, 180);
-		nav.travelTo(0, 0, 0);
+		nav.travelTo(30, 30, 135, false);
+		nav.travelTo(60, 30, 180, false);
+		nav.travelTo(0, 0, 0, false);
 	}
 
 }

@@ -22,10 +22,10 @@ import static util.Utilities.pause;
 public class ObstacleDetection extends SensorManager {
 	private FilteredUltrasonicSensor leftSensor, rightSensor;
 	private final int US_SENSOR_OUTLIER = 255;
-	private final int OBSTACLE_THRESHOLD = 50;
+	private final int OBSTACLE_THRESHOLD = 30;
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
-	private double leftDistance = 0, rightDistance = 0; 
+	private double leftDistance = 100, rightDistance = 100; 
 	
 	private ObstacleDetection() {
 		leftSensor = new FilteredUltrasonicSensor(SensorPort.S3, new OutlierFilter(10, US_SENSOR_OUTLIER));
@@ -37,7 +37,6 @@ public class ObstacleDetection extends SensorManager {
 			obstDetector = new ObstacleDetection();
 			obstDetector.start();
 		}
-		
 		return obstDetector;
 	}
 
@@ -47,12 +46,24 @@ public class ObstacleDetection extends SensorManager {
 		leftDistance = leftSensor.getFilteredData();
 		rightDistance = rightSensor.getFilteredData();
 		
+		System.out.println("" + leftDistance + "," + rightDistance);
+		
 		leftObstacle = leftDistance < OBSTACLE_THRESHOLD;
 		rightObstacle = rightDistance < OBSTACLE_THRESHOLD;
 		
 		frontObstacle = leftObstacle && rightObstacle;
 		
 		pause(20);		
+	}
+	
+	public boolean isFrontObstacle(double obstThresh) {
+		leftDistance = leftSensor.getFilteredData();
+		rightDistance = rightSensor.getFilteredData();
+		
+		leftObstacle = leftDistance < obstThresh;
+		rightObstacle = rightDistance < obstThresh;
+		
+		return leftObstacle && rightObstacle;
 	}
 	
 	/**

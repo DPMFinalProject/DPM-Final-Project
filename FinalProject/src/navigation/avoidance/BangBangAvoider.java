@@ -12,6 +12,7 @@ import navigation.Driver;
 import navigation.odometry.Odometer;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
+import util.Measurements;
 import static util.Utilities.isNear;
 import static util.Utilities.pause;
 
@@ -37,6 +38,11 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	@Override
 	public void avoid() {
 		
+		/*if (!checkForFront()) {
+			Driver.move(Measurements.TILE / 2);
+			return;
+		}*/
+		
 		initialOrientation = odo.getTheta();
 		
 		Driver.stop();
@@ -51,7 +57,8 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			bangBang();
 			
 			if(detector.wallDistance(wallDirection.opposite()) < 30) {
-				Driver.drift(wallDirection);
+				//Driver.drift(wallDirection);
+				Driver.turn(wallDirection, 90);
 			}
 			
 			pause(20);
@@ -83,5 +90,15 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean checkForFront() {
+		Driver.turn(Direction.RIGHT, 45);
+		
+		boolean frontObstacle = detector.isLeftObstacle();
+		
+		Driver.turn(Direction.LEFT, 45);
+		
+		return frontObstacle;
 	}
 }

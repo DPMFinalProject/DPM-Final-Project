@@ -15,6 +15,7 @@ import lejos.nxt.comm.RConsole;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.Localization;
 import navigation.localization.USLocalization;
+import navigation.localization.USLocalizationDiagonal;
 import navigation.odometry.Odometer;
 import util.Measurements;
 import util.ResourceManager;
@@ -26,10 +27,10 @@ import util.Utilities;
  */
 public class Commander {
 	
-	private static double[] target1 = {13, 9};
+	private static double[] target1 = {0, 4};
 	private static double[] target2 = {};
 	
-	private static double[] destination = {0.5 * Measurements.TILE, 6 * Measurements.TILE};
+	private static double[] destination = {2 * Measurements.TILE, 6 * Measurements.TILE};
 	
 	private static void execute() {
 		// Initialize main classes
@@ -37,44 +38,44 @@ public class Commander {
 		(new Thread(odo)).start();
 		Navigation nav = new Navigation(odo);
 		
-		/*// Perform localization
+		// Perform localization
 		USLocalization usl = new USLocalization(odo, nav);
 		usl.doLocalization();
 		usl = null;
+		
+		completed();
 		
 		Localization lsl = new LSLocalizationIntercept(odo, nav); // Has to be implemented first.
 		lsl.doLocalization();
 		lsl = null;
 		
+		odo.setX(0);
+		odo.setY(0);
+		odo.setTheta(0);
+		
 		completed();
 		
-		nav.travelTo(destination[0], destination[1]);
+		nav.travelTo(destination[0], destination[1], false);
 		
 		completed();
-		*/
+		
 		// Possibly relocalize at the destination
-		/*usl.doLocalization(destination[0], destination[1], 90);
-		
-		*/
+		//usl.doLocalization(destination[0], destination[1], 90);
 		
 		 //	Use launcher class to shoot balls into target
 		
-		odo.setX(Measurements.TILE*9);
-		odo.setY(Measurements.TILE*9);
-		odo.setTheta(0);
-		
-		//Sound.twoBeeps();		
+		/*		
 		Launcher launcher = new Launcher(odo, nav);
 		launcher.shootTo(target1[0]  * Measurements.TILE, 
 				target1[1] * Measurements.TILE);
 		//launcher.shootTo(target1[0], target2[1]);
 		
-		completed();
-		/*
-		// Go back to the beginning
-		nav.travelTo(0, 0, 0);
-		usl.doLocalization();*/
+		completed();*/
 		
+		// Go back to the beginning
+		nav.travelTo(0, 0, 0, false);
+		usl = new USLocalization(odo, nav);
+		usl.doLocalization();
 	}
 	
 	private static void completed() {

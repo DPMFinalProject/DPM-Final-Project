@@ -25,6 +25,7 @@ public abstract class ObstacleAvoidance {
 		this.wallDirection = wallDirection;
 		this.odo = odo;
 	}
+	
 	/**
 	 *	Executes an obstacle avoidance maneuver.
 	 */
@@ -39,10 +40,6 @@ public abstract class ObstacleAvoidance {
 	}
 	
 	public Direction awayFromWall() {
-		if (wallDirection == Direction.LEFT) {
-			return Direction.RIGHT;
-		} else {
-			return Direction.LEFT;
-		}
+		return wallDirection.opposite();
 	}
 }

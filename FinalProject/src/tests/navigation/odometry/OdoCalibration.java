@@ -44,10 +44,12 @@ public class OdoCalibration extends TestCase {
 		rotateTest(1);
 	}
 	
+	@SuppressWarnings("all")
 	private void distanceTest(int tiles){
-		Driver.move(Measurements.TILE*tiles);
+		Driver.move(Measurements.TILE * tiles);
 	}
 	
+	@SuppressWarnings("all")
 	private void rotateTest(int turns){
 		Driver.turn(Direction.RIGHT, turns*360);
 	}

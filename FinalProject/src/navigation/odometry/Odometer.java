@@ -24,9 +24,9 @@ public class Odometer implements Runnable {
 	private double x, y, theta;	
 	
 	//keeps track of position change
-	int[] delTacho= {0, 0};								
-	int[] tachoTotal= {0, 0};
-	double[] posChange= {0, 0};
+	int[] delTacho = {0, 0};								
+	int[] tachoTotal = {0, 0};
+	double[] posChange = {0, 0};
 	
 	private static final long ODOMETER_PERIOD = 15;// odometer update period, in ms			
 	private Object lock;									
@@ -49,13 +49,10 @@ public class Odometer implements Runnable {
 	 */
 	@Override
 	public void run() {
-		long updateStart,updateEnd;
+		long updateStart, updateEnd;
 		
 		while (true) {
 			updateStart = System.currentTimeMillis();
-			
-			//System.out.println("" + x + "," + y + "," + theta);
-			
 			
 			Driver.getDelTachoCount(tachoTotal,delTacho);
 			
@@ -74,11 +71,11 @@ public class Odometer implements Runnable {
 		}
 	}
 
-	//Utilities methods
+//--------------------------------------- UTILITY METHODS ---------------------------------------
 	
 	private void getTotalTachoCount(){
-		tachoTotal[0]+=delTacho[0];
-		tachoTotal[1]+=delTacho[1];
+		tachoTotal[0] += delTacho[0];
+		tachoTotal[1] += delTacho[1];
 	}
 	
 	private void delPos(){
@@ -89,39 +86,44 @@ public class Odometer implements Runnable {
 	
 	private void odometerUpdate(double delArc,double delTheta){
 		//update position of the center of rotation of the robot
-		x += delArc * (Math.sin(Math.toRadians(theta+delTheta/2)));
-		y += delArc * (Math.cos(Math.toRadians(theta+delTheta/2)));
+		x += delArc * Math.sin(Math.toRadians(theta + (delTheta/2)));
+		y += delArc * Math.cos(Math.toRadians(theta + (delTheta/2)));
 		
 		//make sure the reported angle goes from 0 to 360 degrees
-		if((theta+delTheta) % 360 < 0)
-			theta = ((theta+delTheta) % 360) + 360;
-		else
-			theta=(theta+delTheta)%360;
+		double newTheta = (theta + delTheta) % 360;
+		theta = (newTheta < 0) ? (newTheta + 360) : newTheta;
 	}
 	
-	// Getters and Setters
+//--------------------------------------- ACCESSORS & MUTATORS ---------------------------------------
+	
 	public double getX() {
 		return x;
-	}
-	
-	public void setX(double x) {
-		this.x = x;
 	}
 
 	public double getY() {
 		return y;
-	}
-	
-	public void setY(double y) {
-		this.y = y;
 	}
 
 	public double getTheta() {
 		return theta;
 	}
 	
+	public void setX(double x) {
+		synchronized (lock) {
+			this.x = x;
+		}
+	}
+
+	public void setY(double y) {
+		synchronized (lock) {
+			this.y = y;
+		}
+	}
+
 	public void setTheta(double theta) {
-		this.theta = theta;
+		synchronized (lock) {
+			this.theta = theta;
+		}
 	}
 	
 	public void getPosition(double [] pos) {
@@ -139,6 +141,7 @@ public class Odometer implements Runnable {
 			if (update[2]) pos[2]=theta;
 		}
 	}
+	
 	public void setPosition(double [] pos, boolean [] update) {
 		synchronized (lock) {
 			if (update[0]) x = pos[0];

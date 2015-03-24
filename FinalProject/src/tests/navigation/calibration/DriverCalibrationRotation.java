@@ -11,8 +11,7 @@ package tests.navigation.calibration;
 import navigation.Driver;
 import tests.TestCase;
 import util.Direction;
-import util.Paths;
-import util.Measurements;
+
 /**
  * 	To calibrate the width between the wheels 
  * 
