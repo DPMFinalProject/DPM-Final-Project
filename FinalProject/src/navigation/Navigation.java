@@ -86,10 +86,10 @@ public class Navigation {
 			if ((distance < BACKWARDS_THRESHOLD) && targetBehindRobot(targetAngle)) {
 				//move backwards towards target
 				if (targetAngle<0) {
-					turnTo(targetAngle+180);
+					turnTo(targetAngle + 180);
 				}
 				else {
-					turnTo(targetAngle-180);
+					turnTo(targetAngle - 180);
 				}
 				
 				Driver.move(-distance, avoiding);

@@ -21,6 +21,7 @@ import static util.Utilities.pause;
  * Odometry Correction test
  * @author Auguste
  */
+@SuppressWarnings("unused")
 public class OdoWithCorrectionTest extends TestCase {
 
 	/**
@@ -50,15 +51,15 @@ public class OdoWithCorrectionTest extends TestCase {
 //		(new Thread() {
 //			public void run() {
 //				while(true) {
-//					System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
+//					printCoordinates();
 //					pause(500);
 //				}
 //			}
 //		}).start();
 
-		Paths.square(Measurements.TILE*2);
+//		Paths.square(Measurements.TILE*2);
 		
-		new util.songs.Tetris().play();
+		new util.songs.Victory().play();
 	}
 	
 	
@@ -74,28 +75,28 @@ public class OdoWithCorrectionTest extends TestCase {
 	}
 	
 	private void raysComplexPath() {
-																					printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*4, 2*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*6, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*5, 1*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*3, 1*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE, false);				printcoordinates();
-		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printcoordinates();
+																					printCoordinates();
+		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*0, 1*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*1, 2*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*2, 1*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*0, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*4, 2*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*6, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*5, 1*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*3, 1*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*4, 0*Measurements.TILE, false);				printCoordinates();
+		nav.travelTo(Measurements.TILE*2, 0*Measurements.TILE, false);				printCoordinates();
 	}
 	
-	private void printcoordinates(){
+	private void printCoordinates(){
 		System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
 	}
 }

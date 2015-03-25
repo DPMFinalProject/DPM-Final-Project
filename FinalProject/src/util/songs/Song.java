@@ -42,10 +42,23 @@ public abstract class Song {
 		return result;
 	}
 	
+	protected int[][] toSheetMusic(String[] tones, int[][] timing) {
+		
+		int[][] result = new int[tones.length][3];
+		
+		for (int i=0; i < tones.length; i++) {
+			result[i][0] = toneToFrequency(tones[i]);
+			result[i][1] = timing[i][0];
+			result[i][2] = timing[i][1];
+		}
+		
+		return result;
+	}
+	
 	protected int toneToFrequency(String tone) {
 		switch(tone.substring(0, 1)){
 		case "A":
-			if(tone.substring(1,2) == "#") {
+			if(tone.length() == 3) {
 				return Asharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
@@ -54,14 +67,14 @@ public abstract class Song {
 		case "B":
 			return B[Integer.parseInt(tone.substring(1,2))];
 		case "C":
-			if(tone.substring(1,2) == "#") {
+			if(tone.length() == 3) {
 				return Csharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
 				return C[Integer.parseInt(tone.substring(1,2))];
 			}	
 		case "D":
-			if(tone.substring(1,2) == "#") {
+			if(tone.length() == 3) {
 				return Dsharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
@@ -70,14 +83,14 @@ public abstract class Song {
 		case "E":
 			return E[Integer.parseInt(tone.substring(1,2))];
 		case "F":
-			if(tone.substring(1,2) == "#") {
+			if(tone.length() == 3) {
 				return Fsharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
 				return F[Integer.parseInt(tone.substring(1,2))];
 			}
 		case "G":
-			if(tone.substring(1,2) == "#") {
+			if(tone.length() == 3) {
 				return Gsharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {

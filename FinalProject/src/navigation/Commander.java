@@ -37,6 +37,7 @@ public class Commander {
 		// Initialize main classes
 		Odometer odo = new Odometer();
 		(new Thread(odo)).start();
+		
 		Navigation nav = new Navigation(odo);
 		
 		// Perform localization
@@ -79,6 +80,7 @@ public class Commander {
 		// Go back to the beginning
 		
 		nav.travelTo(0, 0, 0, true);
+		
 		usl = new USLocalization(odo, nav);
 		usl.doLocalization();
 	}
