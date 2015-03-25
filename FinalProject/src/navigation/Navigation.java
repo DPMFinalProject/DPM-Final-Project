@@ -11,6 +11,7 @@ package navigation;
 import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
+import util.Measurements;
 import navigation.avoidance.BangBangAvoider;
 import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
@@ -38,9 +39,42 @@ public class Navigation {
 	 * @param y
 	 * @param theta
 	 */
+	public void travelToInTiles(double x, double y, boolean avoiding) {
+		travelTo(x * Measurements.TILE, y * Measurements.TILE, avoiding);
+	}
+	
+	/**
+	 * Moves the robot to a specific coordinate facing the supplied direction.
+	 * @param x
+	 * @param y
+	 * @param theta in degrees
+	 */
+	public void travelToInTiles(double x, double y, double theta, boolean avoiding) {
+		travelTo(x * Measurements.TILE, y * Measurements.TILE, avoiding);
+		turnTo(theta);
+	}
+	
+	/**
+	 * Moves the robot to a specific coordinate facing a desired direction (if provided).
+	 * @param coordinates an array of 2 or 3 elements representing the (x, y, theta) coordinates. The theta value is optional
+	 */
+	public void travelToInTiles(double[] coordinates, boolean avoiding) {
+		if (coordinates.length == 2) {
+			travelTo(coordinates[0] * Measurements.TILE, coordinates[1] * Measurements.TILE, avoiding);
+		} else {
+			travelTo(coordinates[0] * Measurements.TILE,coordinates[1] * Measurements.TILE,coordinates[2], avoiding);
+		}
+	}
+	
+	/**
+	 * Moves the robot to a specific coordinate facing the supplied direction.
+	 * @param x in cm
+	 * @param y in cm
+	 * @param theta in degrees
+	 */
 	public void travelTo(double x, double y, double theta, boolean avoiding) {
-		//System.out.println("Current: " + odo.getX() + "," + odo.getY() + "," + odo.getTheta());
-		//System.out.println("Target: " + x + "," + y + "," + theta);
+		
+		System.out.println("" + x + "," + y);
 		travelTo(x, y, avoiding);
 		turnTo(theta);
 	}

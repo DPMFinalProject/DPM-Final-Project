@@ -55,7 +55,11 @@ public class Launcher {
 	 * @param targetY
 	 * @param projectiles
 	 */
-	public void shootTo(double targetX, double targetY, int projectiles) {
+	public void shootToInTiles(double targetX, double targetY, int projectiles) {
+		shootTo(targetX * Measurements.TILE, targetY * Measurements.TILE, projectiles);
+	}
+	
+	private void shootTo(double targetX, double targetY, int projectiles) {
 		nav.travelTo(findLaunchingCoordinates(targetX,targetY), false);	
 		Sound.twoBeeps();
 		shoot(projectiles);
