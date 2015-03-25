@@ -10,6 +10,7 @@ package tests.navigation.avoidance;
 
 import tests.TestCase;
 import util.Direction;
+import navigation.Navigation;
 import navigation.avoidance.BangBangAvoider;
 import navigation.odometry.Odometer;
 
@@ -25,8 +26,7 @@ public class BangBangAvoidanceTest extends TestCase {
 	public BangBangAvoidanceTest() {
 		odo = new Odometer();
 		new Thread(odo).start();
-		
-		avoider = new BangBangAvoider(Direction.RIGHT, odo);
+		//avoider = new BangBangAvoider(Direction.RIGHT, odo);
 	}
 	
 	/**
@@ -35,7 +35,10 @@ public class BangBangAvoidanceTest extends TestCase {
 	@Override
 	public void runTest() {
 		
-		avoider.avoid();
+		Navigation nav = new Navigation(odo);
+		nav.travelToInTiles(0, 3, true);
+		
+		//avoider.avoid();
 		
 	}
 }

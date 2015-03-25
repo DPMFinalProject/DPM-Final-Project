@@ -9,6 +9,7 @@
  */
 package tests;
 
+import tests.launcher.LauncherTest;
 import tests.navigation.*;
 import tests.navigation.avoidance.*;
 import tests.navigation.calibration.*;
@@ -30,7 +31,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new OdoWithCorrectionTest();
+		TestCase test = new LauncherTest();
 		test.runTest();
 	}
 

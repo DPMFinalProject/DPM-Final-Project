@@ -23,7 +23,7 @@ public class Driver {
 	private final static int FWD_SPEED = 300;
 	private final static int TURN_SPEED = 200;
 	private final static int ACCEL = 3000;
-	private final static int DRIFT_FACTOR = 95;
+	private final static int DRIFT_FACTOR = 110;
 	
 	private final static double WHL_RADIUS = 2.09;			//smaller radius = go further
 	private final static double WHL_SEPARATION = 16.09;//16.1;//16.175;		//smaller width = turn less

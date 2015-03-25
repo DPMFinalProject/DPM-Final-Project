@@ -28,6 +28,8 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	private double initialOrientation;
 	private ObstacleDetection detector;
 	
+	private int chargeCount;
+	
 	public BangBangAvoider(Direction wallDirection, Odometer odo) {
 		super(wallDirection, odo);
 		BAND_WIDTH = 8;
@@ -48,45 +50,56 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		Driver.stop();
 		
 		if(wallDirection == Direction.FWD) {
-			wallDirection = Direction.LEFT;
+			wallDirection = Direction.RIGHT;
 		}
 		
 		Driver.turn(wallDirection.opposite(), 90);
 		
+		chargeCount = 0;
 		while(!hasAvoided()) {
-			bangBang();
+			bangBang(wallDirection);
+			pause(500);
 			
-//			if(detector.wallDistance(wallDirection.opposite()) < 30) {
-//				//Driver.drift(wallDirection);
+			if (detector.wallDistance(wallDirection.opposite()) < BAND_WIDTH) {
+				bangBang(wallDirection.opposite());
+				pause(500);
+			}
+			
+//			if(detector.wallDistance(wallDirection) > 100) {
+//				Driver.move(23);
 //				Driver.turn(wallDirection, 90);
+//				chargeCount++;
 //			}
-			
-			pause(20);
+		
 		}
 		
 		Driver.stop();
 	}
 	
-	private void bangBang() {
-		double error = BAND_CENTER - detector.wallDistance(wallDirection);
+	private void bangBang(Direction direction) {
+		double error = BAND_CENTER - detector.wallDistance(direction);
 		
 		if (Math.abs(error)<BAND_WIDTH)	{
 			Driver.move(Direction.FWD);
 		}
 		else if (error < 0) {
-			Driver.drift(wallDirection);
+			Driver.drift(direction);
+			//Driver.move(Direction.FWD);
+			//pause(1000);
+			//Driver.turn(direction, 10);
 		}
 		else {
-			Driver.drift(wallDirection.opposite());
+			//Driver.drift(direction.opposite());
+			Driver.turn(direction.opposite(), 10);
+			//Driver.move(Direction.FWD);
 		}
 	}
 	
 	private boolean hasAvoided() {
-		
 		double endAngle = initialOrientation + wallDirection.getAngle();
 		endAngle = (endAngle < 0) ? (endAngle % 360) + 360 : endAngle % 360;
 		
-		if (isNear(endAngle , odo.getTheta(), 30)) {
+		if (isNear(endAngle , odo.getTheta(), 50)) {
 			return true;
 		}
 		return false;
