@@ -27,8 +27,8 @@ public class Launcher {
 	private Navigation nav;
 	
 	private final int LAUNCH_SPEED = 100;
-	
-	private final double[] range = {60, 60};
+	private final double[] range = {50, 30};
+	private double[] flexibleRange;
 	private final double[] shootingArea = {Measurements.TILE*9, Measurements.TILE*12};
 	
 	private final static NXTRegulatedMotor shooter = Motor.C;
@@ -61,37 +61,45 @@ public class Launcher {
 
 	private double[] findLaunchingCoordinates(double targetX, double targetY) {
 		double[] coordinates = new double [3];
-		findXY(targetX, targetY, coordinates);
+		flexibleRange=range;
+		while(! findXY(targetX, targetY, coordinates)) ;
 		findTheta(targetX, targetY, coordinates);
 		return coordinates;
 	}
 
-	private void findXY(double targetX, double targetY, double[] coordinates) {
-		double x = shootingArea[0]-1,  yUpperCircle, yLowerCircle, temp;
+	private boolean findXY(double targetX, double targetY, double[] coordinates) {
+		int minCoord = 0, maxCoord = 1;
+		double x = shootingArea[minCoord]-1,  yUpperCircle, yLowerCircle, temp;
 		do{
-			yLowerCircle = yUpperCircle = shootingArea[1];  //set to max of shooting area
-			x++;
+			yLowerCircle = yUpperCircle = shootingArea[maxCoord];  //set to max of shooting area
+			x+=5;
 			temp = Math.pow(rangeNormal(), 2) - Math.pow((targetX - x), 2);
 			if (temp > 0) {
 				yUpperCircle = targetY + Math.sqrt(temp);
 				yLowerCircle = targetY - Math.sqrt(temp);
 			}
+			
+			if(x >= shootingArea[maxCoord]){	// If correct position outside of field
+				flexibleRange[minCoord] += 5*Math.cos(Math.toRadians(getRangeTheta()));
+				flexibleRange[maxCoord] += 5*Math.sin(Math.toRadians(getRangeTheta()));
+				return false;
+			}
+			
 		} while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))));
 		
 		coordinates[0] = x;
 		
 		if (isInShootingArea(yUpperCircle)) {
 			coordinates[1] = yUpperCircle;
-			System.out.println("Using Upper Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
 		}
 		else {
 			coordinates[1] = yLowerCircle;
-			System.out.println("Using Lower Circle: value is:" + coordinates[0] + "   "+ coordinates[1]);
 		}
+		return true;
 	}
 	
 	private boolean isInShootingArea(double val) {
-		if(val > shootingArea[0] && val < shootingArea[1]){
+		if(val > shootingArea[0] && val < shootingArea[1]-20){
 			return true;
 		}
 		return false;
@@ -106,6 +114,6 @@ public class Launcher {
 	}
 
 	private double rangeNormal() {
-		return Math.sqrt(Math.pow(range[0], 2) + Math.pow(range[1], 2));
+		return Math.sqrt(Math.pow(flexibleRange[0], 2) + Math.pow(flexibleRange[1], 2));
 	}
 }
