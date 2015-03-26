@@ -28,7 +28,6 @@ public class LSLocalizationIntercept extends Localization {
 	
 	public LSLocalizationIntercept(Odometer odo, Navigation nav) {
 		super(odo, nav);
-		(new Thread(grid)).start();
 	}
 
 	/**

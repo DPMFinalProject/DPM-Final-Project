@@ -38,7 +38,6 @@ public class LSLocalizationRotation extends Localization {
 	
 	public LSLocalizationRotation(Odometer odo, Navigation nav) {
 		super(odo, nav);
-		(new Thread(grid)).start();
 		double[] temp = new double[2];
 		temp=grid.getSensorCoor(SensorID.RIGHT);
 		CS_DIST= ( Math.pow(temp[0], 2)+Math.pow(temp[1], 2) )/2;

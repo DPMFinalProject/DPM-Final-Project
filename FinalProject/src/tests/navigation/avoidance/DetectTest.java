@@ -26,10 +26,6 @@ public class DetectTest extends TestCase {
 	public void runTest() {
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
-		(new Thread(detection)).start();
-		
-		detection.setRunning(true);
-		
 		/*while(true) {
 			System.out.println(detection.isLeftObstacle() + "," + detection.isRightObstacle() + "," + detection.isFrontObstacle() +
 					detection.leftDistance() + "," + detection.rightDistance() + "," + detection.frontDistance());

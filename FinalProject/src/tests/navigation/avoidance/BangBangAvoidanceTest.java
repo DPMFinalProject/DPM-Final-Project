@@ -9,9 +9,7 @@
 package tests.navigation.avoidance;
 
 import tests.TestCase;
-import util.Direction;
 import navigation.Navigation;
-import navigation.avoidance.BangBangAvoider;
 import navigation.odometry.Odometer;
 
 /**
@@ -21,7 +19,6 @@ import navigation.odometry.Odometer;
 public class BangBangAvoidanceTest extends TestCase {
 	
 	private Odometer odo;
-	private BangBangAvoider avoider;
 	
 	public BangBangAvoidanceTest() {
 		odo = new Odometer();
@@ -37,8 +34,6 @@ public class BangBangAvoidanceTest extends TestCase {
 		
 		Navigation nav = new Navigation(odo);
 		nav.travelToInTiles(0, 3, true);
-		
-		//avoider.avoid();
 		
 	}
 }

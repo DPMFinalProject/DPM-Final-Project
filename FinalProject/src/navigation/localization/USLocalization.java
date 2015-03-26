@@ -70,7 +70,6 @@ public class USLocalization extends Localization {
 	protected double obtainXPosition(boolean move) {
 		double xPosition;
 		
-		obstacleDetection.setRunning(true);
 		faceAwayFromWall(Direction.RIGHT);
 		Driver.turn(Direction.RIGHT, SENSOR_VIEW_ANGLE);
 		xPosition = obstacleDetection.leftDistance() + SENSOR_OFFSET - Measurements.TILE;
@@ -123,7 +122,7 @@ public class USLocalization extends Localization {
 	
 	protected void faceWall() {
 		// Turn until facing a wall
-		obstacleDetection.setRunning(true);
+
 		Driver.turn(Direction.RIGHT);
 		while(!obstacleDetection.isFrontObstacle(50)) {
 			pause(20);
