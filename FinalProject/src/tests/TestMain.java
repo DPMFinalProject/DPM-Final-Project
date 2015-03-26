@@ -1,4 +1,4 @@
-/**
+/*
  *	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
@@ -9,6 +9,7 @@
  */
 package tests;
 
+import tests.TestCase;
 import tests.launcher.LauncherTest;
 import tests.navigation.*;
 import tests.navigation.avoidance.*;

@@ -76,14 +76,11 @@ public class BasicAvoider extends ObstacleAvoidance{
 	
 	private boolean hasAvoided(){
 		
-		return (isNear(Direction.LEFT) || isNear(Direction.RIGHT)) ? false : true;
+		return !(isNear(Direction.LEFT) || isNear(Direction.RIGHT));
 	}
 	
 	private boolean isNear(Direction direction){
 		
-		if(detector.wallDistance(direction) < MIN_DISTANCE_FROM_WALL){
-			return true;
-		}
-		else{return false;}
+		return (detector.wallDistance(direction) < MIN_DISTANCE_FROM_WALL);
 	}
 }
