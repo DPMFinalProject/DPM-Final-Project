@@ -76,7 +76,7 @@ public class Navigation {
 	 */
 	public void travelTo(double x, double y, double theta, boolean avoiding) {
 		
-//		System.out.println("" + x + "," + y);
+		System.out.println("" + x + "," + y);
 		travelTo(x, y, avoiding);
 		turnTo(theta);
 	}
@@ -166,7 +166,6 @@ public class Navigation {
 					avoidance.setWallDirection(Direction.RIGHT);
 					avoidance.avoid();
 				}
-				
 			}
 			pause(20);
 		}
@@ -190,7 +189,7 @@ public class Navigation {
 				//System.out.println("RIGHT");
 				Driver.turn(Direction.LEFT, Math.abs(dTheta));
 			} else { // Should never happen
-//				System.out.println("Robot trying to turn by 0 degrees for some reason");
+				System.out.println("Robot trying to turn by 0 degrees for some reason");
 			}
 			
 			pause(15);
