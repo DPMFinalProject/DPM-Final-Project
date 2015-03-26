@@ -158,7 +158,7 @@ public class Driver {
 		}
 		
 		if (angle < 0) {
-			System.out.println("Cannot turn by a negative angle");
+//			System.out.println("Cannot turn by a negative angle");
 			return;
 		}
 		
@@ -203,7 +203,7 @@ public class Driver {
 				rightMotor.backward();
 			}
 		}else{
-			System.out.println("MoveOneMotor direction input UNDEFINED");
+//			System.out.println("MoveOneMotor direction input UNDEFINED");
 		}
 	}
 	
@@ -266,8 +266,8 @@ public class Driver {
 	private static boolean validMoveDirection(Direction direction) {
 		
 		if (direction == Direction.LEFT || direction == Direction.RIGHT) {
-			System.out.println("Cannot move " + direction + "\n");
-			System.out.println("Must move forward or backward");
+//			System.out.println("Cannot move " + direction + "\n");
+//			System.out.println("Must move forward or backward");
 			return false;
 		}
 		return true;
@@ -275,8 +275,8 @@ public class Driver {
 	
 	private static boolean validTurnDirection(Direction direction) {
 		if (direction == Direction.FWD || direction == Direction.BACK) {
-			System.out.println("Cannot turn " + direction + "\n");
-			System.out.println("Must turn left or right");
+//			System.out.println("Cannot turn " + direction + "\n");
+//			System.out.println("Must turn left or right");
 			return false;
 		}
 		return true;

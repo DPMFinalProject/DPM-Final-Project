@@ -12,7 +12,6 @@ import navigation.Launcher;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
 import tests.TestCase;
-import util.Measurements;
 
 /**
  * 
@@ -26,12 +25,10 @@ public class LauncherTest extends TestCase {
 		(new Thread(odo)).start();
 		Navigation nav = new Navigation(odo);
 		
-		odo.setX(Measurements.TILE *9);
-		odo.setY(Measurements.TILE *9);
-		odo.setTheta(0);
 		
-		Launcher launcher = new Launcher(odo, nav);
-		launcher.shootTo(15 * Measurements.TILE, 15 * Measurements.TILE);
+		Launcher launcher = new Launcher(odo, nav,0,3 );
+
+		launcher.shootToInTiles(0, 5, 1);
 	}
 
 }
