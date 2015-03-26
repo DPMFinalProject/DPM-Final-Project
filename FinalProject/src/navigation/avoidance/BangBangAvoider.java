@@ -103,10 +103,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		double endAngle = initialOrientation + wallDirection.getAngle();
 		endAngle = (endAngle < 0) ? (endAngle % 360) + 360 : endAngle % 360;
 		
-		if (isNear(endAngle , odo.getTheta(), 50)) {
-			return true;
-		}
-		return false;
+		return isNear(endAngle , odo.getTheta(), 50);
 	}
 	
 	private boolean checkForFront() {
