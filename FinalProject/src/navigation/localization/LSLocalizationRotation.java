@@ -1,5 +1,5 @@
 /**
-a *	DPM Final Project
+ *	DPM Final Project
  *	Team 10
  *	ECSE 211: Design Principles and Methods
  *
@@ -38,8 +38,7 @@ public class LSLocalizationRotation extends Localization {
 	
 	public LSLocalizationRotation(Odometer odo, Navigation nav) {
 		super(odo, nav);
-		double[] temp = new double[2];
-		temp=grid.getSensorCoor(SensorID.RIGHT);
+		double[] temp = grid.getSensorCoor(SensorID.RIGHT);
 		CS_DIST= ( Math.pow(temp[0], 2)+Math.pow(temp[1], 2) )/2;
 	}
 
@@ -75,19 +74,17 @@ public class LSLocalizationRotation extends Localization {
 			lineAngle[i] = -1;
 		}
 		for(int i=0 ; i<4 ; i++){
-			System.out.println(i+ "      " +lineAngle[i]);
+			//System.out.println(i+ "      " +lineAngle[i]);
 			while(lineAngle[i]==-1){
-				
 				while(!grid.lineDetectedRS()){
 					pause(10);
 				}
 				odo.getPosition(pos);
-				System.out.println(pos[2]);
+				//System.out.println(pos[2]);
 				lineAngle[i]=pos[2];
-			}
-				
-			Sound.twoBeeps();
-			System.out.println("The angle retrived is:" + lineAngle[i]);
+			}	
+			//Sound.twoBeeps();
+			//System.out.println("The angle retrived is:" + lineAngle[i]);
 			}
 		Driver.stop();
 	}
@@ -103,10 +100,10 @@ public class LSLocalizationRotation extends Localization {
 		return 270-((lineAng[0]+lineAng[2])/2);
 	}
 	private double correctX(double[] lineAng){
-		return -CS_DIST*Math.cos(Math.toRadians( (lineAng[0]-lineAng[2])/2 ) );
+		return (-CS_DIST)*Math.cos(Math.toRadians( ((lineAng[1]-lineAng[3])/2 +360) % 360) );
 	}
 	private double correctY(double[] lineAng){
-		return CS_DIST*Math.cos(Math.toRadians( ( lineAng[1]+360-lineAng[3])/2) );
+		return (-CS_DIST)*Math.cos(Math.toRadians( ((lineAng[0]-lineAng[2])/2 +360) % 360) );
 	}
 	
 	
