@@ -77,7 +77,6 @@ public class Navigation {
 	 */
 	public void travelTo(double x, double y, double theta, boolean avoiding) {
 		
-		System.out.println("" + x + "," + y);
 		travelTo(x, y, avoiding);
 		turnTo(theta);
 	}
@@ -140,7 +139,7 @@ public class Navigation {
 				doAvoidance(x, y);
 			}
 		
-			
+			pause(100);
 		}
 	}
 	
@@ -164,7 +163,7 @@ public class Navigation {
 					avoider.avoid();
 				}
 			}
-			pause(20);
+			pause(100);
 		}
 		//avoidance = null;
 	}
