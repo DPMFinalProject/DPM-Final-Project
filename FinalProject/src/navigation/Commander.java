@@ -46,6 +46,12 @@ public class Commander {
 		Odometer odo = new Odometer();
 		(new Thread(odo)).start();
 		
+		(new Thread(){
+			public void run() {
+				
+			}
+		}).start();
+		
 		Navigation nav = new Navigation(odo);
 		
 		// Perform localization
@@ -92,6 +98,11 @@ public class Commander {
 		
 		usl = new USLocalization(odo, nav);
 		usl.doLocalization();
+		usl = null;
+		
+		lsl = new LSLocalizationIntercept(odo, nav);
+		lsl.doLocalization();
+		lsl = null;
 	}
 	
 	private static void completed() {
@@ -104,19 +115,20 @@ public class Commander {
 	 * 	These should be standard across all tests so try to avoid changing them 
 	 */
 	protected static void init() {
-		
-		LCD.drawString("LEFT FOR NORMAL", 0, 2);
-		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
-		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
-			LCD.clear();
-			
-			RConsole.open();
-			
-			LCD.drawString("Press a button", 0, 3);
-			LCD.drawString("to start", 0, 4);
-			Button.waitForAnyPress();
-			System.setOut(RConsole.getPrintStream());
-		}
+//		
+//		LCD.drawString("LEFT FOR NORMAL", 0, 2);
+//		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
+//		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
+//			LCD.clear();
+//			
+//			RConsole.open();
+//			
+//			LCD.drawString("Press a button", 0, 3);
+//			LCD.drawString("to start", 0, 4);
+//			Button.waitForAnyPress();
+//			System.setOut(RConsole.getPrintStream());
+//		}
+		Button.waitForAnyPress();
 	}
 	
 	protected static void done() {		

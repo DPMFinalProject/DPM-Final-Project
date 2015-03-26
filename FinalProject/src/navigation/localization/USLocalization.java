@@ -54,7 +54,7 @@ public class USLocalization extends Localization {
 		 */
 		Driver.turn(Direction.RIGHT, 60);
 		
-		Driver.move(-7);
+		Driver.move(-10);
 		odo.setX(x);
 		odo.setY(y);
 		odo.setTheta(theta);

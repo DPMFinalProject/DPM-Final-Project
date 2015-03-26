@@ -170,6 +170,7 @@ public class Navigation {
 			}
 			pause(20);
 		}
+		avoidance = null;
 	}
 	
 	/**
