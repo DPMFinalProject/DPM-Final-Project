@@ -46,26 +46,21 @@ public class Commander {
 		Odometer odo = new Odometer();
 		(new Thread(odo)).start();
 		
-		(new Thread(){
-			public void run() {
-				
-			}
-		}).start();
 		
 		Navigation nav = new Navigation(odo);
 		
 		// Perform localization
-//		USLocalization usl = new USLocalization(odo, nav);
-//		usl.doLocalization();
-//		usl = null;
+		USLocalization usl = new USLocalization(odo, nav);
+		usl.doLocalization();
+		usl = null;
 //		
-//		Localization lsl = new LSLocalizationIntercept(odo, nav);
-//		lsl.doLocalization();
-//		lsl = null;
-//		
-//		odo.setX(0);
-//		odo.setY(0);
-//		odo.setTheta(0);
+		Localization lsl = new LSLocalizationIntercept(odo, nav);
+		lsl.doLocalization();
+		lsl = null;
+		
+		odo.setX(0);
+		odo.setY(0);
+		odo.setTheta(0);
 		
 		//completed();
 		
@@ -74,28 +69,26 @@ public class Commander {
 		
 		for (int i = 1; i < destinations.length; i++)
 			nav.travelToInTiles(destinations[i][0], destinations[i][1], true); // [0] = x, [1] = y
+		System.out.println("done.");
 		
-//		completed();
-//		
-//		// Possibly relocalize at the destination
-//		//usl.doLocalization(destination[0], destination[1], 90);
-//		
-//		 //	Use launcher class to shoot balls into target
-//		
-//		Launcher launcher = new Launcher(odo, nav, 5, 8);
-//		launcher.shootToInTiles(target1[0], target1[1], 3);
-//		launcher = null;
-//		//launcher.shootTo(target1[0], target2[1]);
-//		
-//		completed();
-//		
-//		// Go back to the beginning
-//		nav.travelTo(0, 0, 0, true);
-//		
-//		// Travel to all the points in reverse order
-//		for (int i = destinations.length - 1; i > 0; i--)
-//			nav.travelToInTiles(destinations[i][0], destinations[i][1], true); // [0] = x, [1] = y
-//		
+		completed();
+		System.out.println("done2.");
+		// Possibly relocalize at the destination
+		//usl.doLocalization(destination[0], destination[1], 90);
+		
+		 //	Use launcher class to shoot balls into target
+		
+		Launcher launcher = new Launcher(odo, nav, 5, 8);
+		launcher.shootToInTiles(target1[0], target1[1], 3);
+		launcher = null;
+		//launcher.shootTo(target1[0], target2[1]);
+		
+		completed();
+		System.out.println("done3.");
+		// Go back to the beginning
+		nav.travelTo(0, 0, 0, true);
+		System.out.println("done4.");
+		// Travel to all the points in reverse order
 //		usl = new USLocalization(odo, nav);
 //		usl.doLocalization();
 //		usl = null;

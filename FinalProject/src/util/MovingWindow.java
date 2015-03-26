@@ -30,7 +30,7 @@ public class MovingWindow {
 	 * @param entry
 	 */
 	public void add(double entry) {
-		if (window.size() == maxWindowSize) {
+		if (window.size() >= maxWindowSize) {
 			window.remove(0);
 			window.add(entry);
 		} else {
