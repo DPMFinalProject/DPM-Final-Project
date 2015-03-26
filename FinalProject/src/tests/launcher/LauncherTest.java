@@ -27,7 +27,8 @@ public class LauncherTest extends TestCase {
 		
 		
 		Launcher launcher = new Launcher(odo, nav,0,3 );
-		launcher.shootToInTiles(0,  5, 1);
+
+		launcher.shootToInTiles(0, 5, 1);
 	}
 
 }
