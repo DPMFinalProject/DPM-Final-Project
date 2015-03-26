@@ -26,6 +26,10 @@ public abstract class ObstacleAvoidance {
 		this.odo = odo;
 	}
 	
+	public ObstacleAvoidance(Odometer odo) {
+		this.odo = odo;
+	}
+	
 	/**
 	 *	Executes an obstacle avoidance maneuver.
 	 */
