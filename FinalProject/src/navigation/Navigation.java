@@ -13,7 +13,6 @@ import sensors.managers.ObstacleDetection;
 import util.Direction;
 import util.Measurements;
 import navigation.avoidance.BangBangAvoider;
-import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
 import static util.Utilities.pause;
 
@@ -24,6 +23,7 @@ import static util.Utilities.pause;
 
 public class Navigation {
 	private Odometer odo;
+	private BangBangAvoider avoider;
 	
 	private final double ANGLE_ERROR = 10.0;
 	private final double POS_ERROR= 1.0;
@@ -33,6 +33,7 @@ public class Navigation {
 	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
+		avoider = new BangBangAvoider(odo);
 	}
 	
 	/**
@@ -149,7 +150,7 @@ public class Navigation {
 	 * @param y The y coordinate the robot is heading to
 	 */
 	private void doAvoidance(double x, double y) {
-		BangBangAvoider avoidance = new BangBangAvoider(odo);
+		//BangBangAvoider avoidance = new BangBangAvoider(odo);
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
 		while(Driver.isMoving()) {
@@ -160,16 +161,16 @@ public class Navigation {
 				Sound.beep();
 				detection.setRunning(true);
 				if (detection.isLeftObstacle()) {
-					avoidance.setWallDirection(Direction.LEFT);
-					avoidance.avoid();
+					avoider.setWallDirection(Direction.LEFT);
+					avoider.avoid();
 				} else if (detection.isRightObstacle()) {
-					avoidance.setWallDirection(Direction.RIGHT);
-					avoidance.avoid();
+					avoider.setWallDirection(Direction.RIGHT);
+					avoider.avoid();
 				}
 			}
 			pause(20);
 		}
-		avoidance = null;
+		//avoidance = null;
 	}
 	
 	/**
