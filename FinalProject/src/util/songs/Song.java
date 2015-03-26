@@ -56,40 +56,40 @@ public abstract class Song {
 	}
 	
 	protected int toneToFrequency(String tone) {
-		switch(tone.substring(0, 1)){
-		case "A":
+		switch((int)tone.charAt(0)) {
+		case (int)'A':
 			if(tone.length() == 3) {
 				return Asharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
 				return A[Integer.parseInt(tone.substring(1,2))];
 			}
-		case "B":
+		case (int)'B':
 			return B[Integer.parseInt(tone.substring(1,2))];
-		case "C":
+		case (int)'C':
 			if(tone.length() == 3) {
 				return Csharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
 				return C[Integer.parseInt(tone.substring(1,2))];
 			}	
-		case "D":
+		case (int)'D':
 			if(tone.length() == 3) {
 				return Dsharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
 				return D[Integer.parseInt(tone.substring(1,2))];
 			}
-		case "E":
+		case (int)'E':
 			return E[Integer.parseInt(tone.substring(1,2))];
-		case "F":
+		case (int)'F':
 			if(tone.length() == 3) {
 				return Fsharp[Integer.parseInt(tone.substring(2,3))];
 			}
 			else {
 				return F[Integer.parseInt(tone.substring(1,2))];
 			}
-		case "G":
+		case (int)'G':
 			if(tone.length() == 3) {
 				return Gsharp[Integer.parseInt(tone.substring(2,3))];
 			}
