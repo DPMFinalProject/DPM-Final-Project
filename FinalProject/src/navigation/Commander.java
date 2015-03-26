@@ -55,54 +55,54 @@ public class Commander {
 		Navigation nav = new Navigation(odo);
 		
 		// Perform localization
-		USLocalization usl = new USLocalization(odo, nav);
-		usl.doLocalization();
-		usl = null;
-		
-		Localization lsl = new LSLocalizationIntercept(odo, nav);
-		lsl.doLocalization();
-		lsl = null;
-		
-		odo.setX(0);
-		odo.setY(0);
-		odo.setTheta(0);
+//		USLocalization usl = new USLocalization(odo, nav);
+//		usl.doLocalization();
+//		usl = null;
+//		
+//		Localization lsl = new LSLocalizationIntercept(odo, nav);
+//		lsl.doLocalization();
+//		lsl = null;
+//		
+//		odo.setX(0);
+//		odo.setY(0);
+//		odo.setTheta(0);
 		
 		//completed();
 		
-		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
-		(new Thread(correction)).start();
+//		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
+//		(new Thread(correction)).start();
 		
 		for (int i = 1; i < destinations.length; i++)
 			nav.travelToInTiles(destinations[i][0], destinations[i][1], true); // [0] = x, [1] = y
 		
-		completed();
-		
-		// Possibly relocalize at the destination
-		//usl.doLocalization(destination[0], destination[1], 90);
-		
-		 //	Use launcher class to shoot balls into target
-		
-		Launcher launcher = new Launcher(odo, nav, 5, 8);
-		launcher.shootToInTiles(target1[0], target1[1], 3);
-		launcher = null;
-		//launcher.shootTo(target1[0], target2[1]);
-		
-		completed();
-		
-		// Go back to the beginning
-		nav.travelTo(0, 0, 0, true);
-		
-		// Travel to all the points in reverse order
-		for (int i = destinations.length - 1; i > 0; i--)
-			nav.travelToInTiles(destinations[i][0], destinations[i][1], true); // [0] = x, [1] = y
-		
-		usl = new USLocalization(odo, nav);
-		usl.doLocalization();
-		usl = null;
-		
-		lsl = new LSLocalizationIntercept(odo, nav);
-		lsl.doLocalization();
-		lsl = null;
+//		completed();
+//		
+//		// Possibly relocalize at the destination
+//		//usl.doLocalization(destination[0], destination[1], 90);
+//		
+//		 //	Use launcher class to shoot balls into target
+//		
+//		Launcher launcher = new Launcher(odo, nav, 5, 8);
+//		launcher.shootToInTiles(target1[0], target1[1], 3);
+//		launcher = null;
+//		//launcher.shootTo(target1[0], target2[1]);
+//		
+//		completed();
+//		
+//		// Go back to the beginning
+//		nav.travelTo(0, 0, 0, true);
+//		
+//		// Travel to all the points in reverse order
+//		for (int i = destinations.length - 1; i > 0; i--)
+//			nav.travelToInTiles(destinations[i][0], destinations[i][1], true); // [0] = x, [1] = y
+//		
+//		usl = new USLocalization(odo, nav);
+//		usl.doLocalization();
+//		usl = null;
+//		
+//		lsl = new LSLocalizationIntercept(odo, nav);
+//		lsl.doLocalization();
+//		lsl = null;
 	}
 	
 	private static void completed() {

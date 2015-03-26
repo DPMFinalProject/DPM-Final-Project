@@ -45,7 +45,7 @@ public class OdometryDisplay implements Runnable {
 			
 			// display odometry information
 			for (int i = 0; i < 3; i++) {
-				LCD.drawString(formattedDoubleToString(position[i], 2), 3, i);
+				//LCD.drawString(formattedDoubleToString(position[i], 2), 3, i);
 			}
 
 			// throttle the OdometryDisplay
