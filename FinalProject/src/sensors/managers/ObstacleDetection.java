@@ -32,7 +32,7 @@ public class ObstacleDetection extends SensorManager {
 		rightSensor = new FilteredUltrasonicSensor(SensorPort.S2, new OutlierFilter(10, US_SENSOR_OUTLIER));
 	}
 	
-	public static ObstacleDetection getObstacleDetection() {
+	public static synchronized ObstacleDetection getObstacleDetection() {
 		if (obstDetector == null) {
 			obstDetector = new ObstacleDetection();
 			obstDetector.start();
