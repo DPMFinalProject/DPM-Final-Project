@@ -76,7 +76,7 @@ public class USLocalization extends Localization {
 		xPosition = obstacleDetection.leftDistance() + SENSOR_OFFSET - Measurements.TILE;
 		Driver.turn(Direction.LEFT, SENSOR_VIEW_ANGLE + 10);
 		
-		System.out.println("XPos: " + xPosition);
+//		System.out.println("XPos: " + xPosition);
 		
 		if (move)
 			Driver.move(xPosition);
@@ -92,7 +92,7 @@ public class USLocalization extends Localization {
 		yPosition = obstacleDetection.rightDistance() + SENSOR_OFFSET - Measurements.TILE;
 		Driver.turn(Direction.RIGHT, SENSOR_VIEW_ANGLE + 10);
 		
-		System.out.println("YPos: " + yPosition);
+//		System.out.println("YPos: " + yPosition);
 		
 		if (move)
 			Driver.move(yPosition);

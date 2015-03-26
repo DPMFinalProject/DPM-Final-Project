@@ -108,7 +108,7 @@ public class ObstacleDetection extends SensorManager {
 		case FWD:
 			return frontDistance();
 		default:
-			System.out.println("ERROR: no distance for Direction.BACK");
+//			System.out.println("ERROR: no distance for Direction.BACK");
 			return 0.0;
 		}
 	}
