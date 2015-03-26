@@ -26,7 +26,7 @@ import util.Utilities;
  */
 public class Commander {
 	
-	private static double[] target1 = {0, 8};
+	private static double[] target1 = {5, 9};
 	private static double[] target2 = {};
 	
 //	private static double[][] destinations = {
@@ -39,7 +39,7 @@ public class Commander {
 //		{6, 6}
 //		};
 	
-	private static double[][] destinations = {{0,0}, {2,6}};
+	private static double[][] destinations = {{0,0}, {1,5}, {6, 6}};
 	
 	private static void execute() {
 		// Initialize main classes
@@ -76,9 +76,10 @@ public class Commander {
 		
 		 //	Use launcher class to shoot balls into target
 		
-//		Launcher launcher = new Launcher(odo, nav);
-//		launcher.shootToInTiles(target1[0], target1[1], 3);
-//		//launcher.shootTo(target1[0], target2[1]);
+		Launcher launcher = new Launcher(odo, nav, 5, 8);
+		launcher.shootToInTiles(target1[0], target1[1], 3);
+		launcher = null;
+		//launcher.shootTo(target1[0], target2[1]);
 		
 		completed();
 		
@@ -86,7 +87,7 @@ public class Commander {
 		nav.travelTo(0, 0, 0, true);
 		
 		// Travel to all the points in reverse order
-		for (int i = destinations.length - 1; i >= 0; i--)
+		for (int i = destinations.length - 1; i > 0; i--)
 			nav.travelToInTiles(destinations[i][0], destinations[i][1], true); // [0] = x, [1] = y
 		
 		usl = new USLocalization(odo, nav);

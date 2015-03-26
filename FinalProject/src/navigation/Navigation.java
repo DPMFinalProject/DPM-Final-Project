@@ -29,6 +29,8 @@ public class Navigation {
 	private final double POS_ERROR= 1.0;
 	private final double BACKWARDS_THRESHOLD = 15.0;
 	
+	private final double FLOOR_SIZE = 6;
+	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
 	}
@@ -130,35 +132,42 @@ public class Navigation {
 			}
 			else {
 				turnTo(targetAngle);
-				
 				Driver.move(distance, avoiding);
 			}
 			
 			if (avoiding) {
-				doAvoidance();
+				doAvoidance(x, y);
 			}
 		
-			Sound.beep();
+			
 		}
 	}
 	
 	/**
-	 * runs avoidance loop while robot is moving
+	 * Runs avoidance loop while robot is moving
+	 * @param x The x coordinate the robot is heading to
+	 * @param y The y coordinate the robot is heading to
 	 */
-	private void doAvoidance() {
+	private void doAvoidance(double x, double y) {
 		ObstacleAvoidance avoidance;
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
 		while(Driver.isMoving()) {
-			detection.setRunning(true);
-			if (detection.isLeftObstacle()) {
-				avoidance = new BangBangAvoider(Direction.LEFT, odo);
-				avoidance.avoid();
-			} else if (detection.isRightObstacle()) {
-				avoidance = new BangBangAvoider(Direction.RIGHT, odo);
-				avoidance.avoid();
+			if (nearWall()) {
+				Sound.beep();
 			}
-			avoidance = null;
+			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 20 && !nearWall()) {
+				Sound.beep();
+				detection.setRunning(true);
+				if (detection.isLeftObstacle()) {
+					avoidance = new BangBangAvoider(Direction.LEFT, odo);
+					avoidance.avoid();
+				} else if (detection.isRightObstacle()) {
+					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
+					avoidance.avoid();
+				}
+				avoidance = null;
+			}
 			pause(20);
 		}
 	}
@@ -237,5 +246,12 @@ public class Navigation {
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean nearWall() {
+		double xPos = odo.getX();
+		double yPos = odo.getY();
+		
+		return xPos < 0 || yPos < 0 || xPos > FLOOR_SIZE * Measurements.TILE || yPos > FLOOR_SIZE * Measurements.TILE;
 	}
 }
