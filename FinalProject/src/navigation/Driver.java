@@ -227,6 +227,22 @@ public class Driver {
 		}
 	}
 	
+	public static void drift(Direction direction, int radius) {
+		int leftSpeed;
+		int rightSpeed;
+		
+		if(direction == Direction.RIGHT) {
+			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
+			rightSpeed = FWD_SPEED;
+		}
+		else {
+			leftSpeed = FWD_SPEED;
+			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
+		}
+		
+		move(Direction.FWD, leftSpeed, rightSpeed);
+	}
+	
 	/**
 	 * 	Stops any movement.
 	 */

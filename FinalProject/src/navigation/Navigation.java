@@ -139,7 +139,7 @@ public class Navigation {
 				doAvoidance(x, y);
 			}
 		
-			pause(100);
+			
 		}
 	}
 	
@@ -153,6 +153,9 @@ public class Navigation {
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
 		while(Driver.isMoving()) {
+			if (nearWall()) {
+				Sound.beep();
+			}
 			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > Measurements.TILE && !nearWall()) {
 				detection.setRunning(true);
 				if (detection.isLeftObstacle()) {
@@ -163,7 +166,7 @@ public class Navigation {
 					avoider.avoid();
 				}
 			}
-			pause(100);
+			pause(20);
 		}
 		//avoidance = null;
 	}
