@@ -24,7 +24,8 @@ import static util.Utilities.pause;
 public class Launcher {
 	//###############################################
 	//   YOU WANT TO CHANGE THOSE VALUES:
-	private final double[] range = {50, 30};
+	//range: (offset, range)
+	private final double[] range = {6,101};
 	
 	
 	private Odometer odo;
@@ -39,8 +40,8 @@ public class Launcher {
 	public Launcher(Odometer odo, Navigation nav, double minShootingArea, double maxShootingArea){
 		this.odo = odo;
 		this.nav = nav;
-		this.minShootingArea = minShootingArea;
-		this.maxShootingArea = maxShootingArea;
+		this.minShootingArea = minShootingArea *Measurements.TILE;
+		this.maxShootingArea = maxShootingArea*Measurements.TILE;
 	}
 	
 	public Launcher(Odometer odo, Navigation nav) {
