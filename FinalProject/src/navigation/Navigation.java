@@ -153,11 +153,7 @@ public class Navigation {
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
 		while(Driver.isMoving()) {
-			if (nearWall()) {
-				Sound.beep();
-			}
 			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > Measurements.TILE && !nearWall()) {
-				Sound.beep();
 				detection.setRunning(true);
 				if (detection.isLeftObstacle()) {
 					avoidance.setWallDirection(Direction.LEFT);

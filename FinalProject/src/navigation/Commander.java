@@ -109,46 +109,9 @@ public class Commander {
 		Sound.beep();
 		Utilities.pause(2000);
 	}
-
-	/*
-	 * 	Configurations that have to be run before the test can occur
-	 * 	These should be standard across all tests so try to avoid changing them 
-	 */
-	protected static void init() {
-//		
-//		LCD.drawString("LEFT FOR NORMAL", 0, 2);
-//		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
-//		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
-//			LCD.clear();
-//			
-//			RConsole.open();
-//			
-//			LCD.drawString("Press a button", 0, 3);
-//			LCD.drawString("to start", 0, 4);
-//			Button.waitForAnyPress();
-//			System.setOut(RConsole.getPrintStream());
-//		}
-		Button.waitForAnyPress();
-	}
-	
-	protected static void done() {		
-		RConsole.close();
-		System.exit(0);
-	}
 	
 	public static void main(String[] args) {
-		try {
-			init();
-
-			(new Thread() {
-				public void run() {
-					execute();
-				}
-			}).start();
-			Button.waitForAnyPress();
-		} finally {
-			done();
-		}
+		execute();
 	}
 }
 
