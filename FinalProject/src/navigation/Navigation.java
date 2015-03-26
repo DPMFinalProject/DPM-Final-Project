@@ -29,7 +29,7 @@ public class Navigation {
 	private final double POS_ERROR= 1.0;
 	private final double BACKWARDS_THRESHOLD = 15.0;
 	
-	private final double FLOOR_SIZE = 6;
+	private final double FLOOR_SIZE = 6 * Measurements.TILE;
 	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
@@ -149,24 +149,24 @@ public class Navigation {
 	 * @param y The y coordinate the robot is heading to
 	 */
 	private void doAvoidance(double x, double y) {
-		ObstacleAvoidance avoidance;
+		BangBangAvoider avoidance = new BangBangAvoider(odo);
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
 		while(Driver.isMoving()) {
 			if (nearWall()) {
 				Sound.beep();
 			}
-			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 20 && !nearWall()) {
+			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > Measurements.TILE && !nearWall()) {
 				Sound.beep();
 				detection.setRunning(true);
 				if (detection.isLeftObstacle()) {
-					avoidance = new BangBangAvoider(Direction.LEFT, odo);
+					avoidance.setWallDirection(Direction.LEFT);
 					avoidance.avoid();
 				} else if (detection.isRightObstacle()) {
-					avoidance = new BangBangAvoider(Direction.RIGHT, odo);
+					avoidance.setWallDirection(Direction.RIGHT);
 					avoidance.avoid();
 				}
-				avoidance = null;
+				
 			}
 			pause(20);
 		}
@@ -252,6 +252,6 @@ public class Navigation {
 		double xPos = odo.getX();
 		double yPos = odo.getY();
 		
-		return xPos < 0 || yPos < 0 || xPos > FLOOR_SIZE * Measurements.TILE || yPos > FLOOR_SIZE * Measurements.TILE;
+		return xPos < 0 || yPos < 0 || xPos > FLOOR_SIZE || yPos > FLOOR_SIZE;
 	}
 }
