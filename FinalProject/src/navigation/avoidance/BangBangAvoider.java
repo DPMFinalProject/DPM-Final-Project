@@ -87,7 +87,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			Driver.move(Direction.FWD);
 		}
 		else if (error < 0) {
-			Driver.drift(direction, 15);
+			Driver.drift(direction);
 			//Driver.move(Direction.FWD);
 			//pause(1000);
 			//Driver.turn(direction, 10);

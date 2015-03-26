@@ -42,7 +42,7 @@ public class LSLocalizationIntercept extends Localization {
 		/*
 		 * Execute the line intercept 3 times for a better position
 		 */
-		perpendicularToLine(3);
+		perpendicularToLine(2);
 		grid.setRunning(false);
 		odo.setX(0);
 		odo.setY(0);

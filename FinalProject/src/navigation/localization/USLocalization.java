@@ -117,7 +117,7 @@ public class USLocalization extends Localization {
 			
 			wallDistance = dFilter.filter(wallDistance);
 			pause(20);
-		} while(wallDistance < 50 || wallDistance > 245);
+		} while(wallDistance < 40 || wallDistance > 245);
 		Driver.stop();
 	}
 	

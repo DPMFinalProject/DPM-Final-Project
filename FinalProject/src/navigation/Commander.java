@@ -17,6 +17,8 @@ import navigation.localization.Localization;
 import navigation.localization.USLocalization;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
+import sensors.managers.GridManager;
+import util.Direction;
 import util.Measurements;
 import util.Utilities;
 
@@ -27,19 +29,19 @@ import util.Utilities;
 public class Commander {
 	
 	private static double[] target1 = {5, 9};
-	private static double[] target2 = {};
+	private static double[] target2 = {9, 9};
 	
-//	private static double[][] destinations = {
-//		{0, 0},
-//		{-0.5, 2.5},
-//		{-0.5, 5.5},
-//		{1.5, 5.5},
-//		{1.5, 6.5},
-//		{4.5, 6.5},
-//		{6, 6}
-//		};
+	private static double[][] destinations = {
+		{0, 0},
+		{-0.5, 2.5},
+		{-0.5, 5.5},
+		{1.5, 5.5},
+		{1.5, 6.5},
+		{4.5, 6.5},
+		{6, 6}
+		};
 	
-	private static double[][] destinations = {{0,0}, {1,5}, {6, 6}};
+//	private static double[][] destinations = {{0,0}, {2.5,-0.5}, {6, 6}};
 	
 	private static void execute() {
 		// Initialize main classes
@@ -56,23 +58,18 @@ public class Commander {
 //		
 		Localization lsl = new LSLocalizationIntercept(odo, nav);
 		lsl.doLocalization();
-		lsl = null;
 		
-		odo.setX(0);
-		odo.setY(0);
-		odo.setTheta(0);
+		completed();
 		
-		//completed();
-		
-//		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
-//		(new Thread(correction)).start();
+		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
+		(new Thread(correction)).start();
 		
 		for (int i = 1; i < destinations.length; i++)
-			nav.travelToInTiles(destinations[i][0], destinations[i][1], true); // [0] = x, [1] = y
+			nav.travelToInTiles(destinations[i][0] - 2.5/Measurements.TILE, 
+					destinations[i][1] + 2.5/Measurements.TILE, false); // [0] = x, [1] = y
 		System.out.println("done.");
 		
 		completed();
-		System.out.println("done2.");
 		// Possibly relocalize at the destination
 		//usl.doLocalization(destination[0], destination[1], 90);
 		
@@ -80,22 +77,23 @@ public class Commander {
 		
 		Launcher launcher = new Launcher(odo, nav, 5, 8);
 		launcher.shootToInTiles(target1[0], target1[1], 3);
+		//launcher.shootToInTiles(target2[0], target2[1], 3);
 		launcher = null;
-		//launcher.shootTo(target1[0], target2[1]);
 		
 		completed();
-		System.out.println("done3.");
+		System.out.println("done2.");
 		// Go back to the beginning
 		nav.travelTo(0, 0, 0, true);
-		System.out.println("done4.");
+		System.out.println("done3.");
+		
 		// Travel to all the points in reverse order
-//		usl = new USLocalization(odo, nav);
-//		usl.doLocalization();
-//		usl = null;
-//		
-//		lsl = new LSLocalizationIntercept(odo, nav);
-//		lsl.doLocalization();
-//		lsl = null;
+		usl = new USLocalization(odo, nav);
+		usl.doLocalization();
+		usl = null;
+		
+		lsl = new LSLocalizationIntercept(odo, nav);
+		lsl.doLocalization();
+		lsl = null;
 	}
 	
 	private static void completed() {
@@ -104,7 +102,16 @@ public class Commander {
 	}
 	
 	public static void main(String[] args) {
-		execute();
+		Button.waitForAnyPress();
+		
+		(new Thread() {
+			public void run() {
+				execute();
+			}
+		}).start();
+		
+		Button.waitForAnyPress();
+		System.exit(0);
 	}
 }
 

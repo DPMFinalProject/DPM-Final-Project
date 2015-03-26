@@ -251,6 +251,6 @@ public class Navigation {
 		double xPos = odo.getX();
 		double yPos = odo.getY();
 		
-		return xPos < 0 || yPos < 0 || xPos > FLOOR_SIZE || yPos > FLOOR_SIZE;
+		return xPos < 10 || yPos < 10 || xPos > FLOOR_SIZE || yPos > FLOOR_SIZE;
 	}
 }
