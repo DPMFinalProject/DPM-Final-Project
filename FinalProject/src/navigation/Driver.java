@@ -106,6 +106,22 @@ public class Driver {
 		
 		movingBackwards = false;
 	}
+	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is moving.
+	 */
+	public static boolean isMoving(){
+		return rightMotor.isMoving() || leftMotor.isMoving();
+	}
+	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is moving backwards.
+	 */
+	public static boolean isMovingBackwards() {
+		return movingBackwards;
+	}
 
 //--------------------------------------- TURN ---------------------------------------	
 	
@@ -181,7 +197,81 @@ public class Driver {
 		
 		isTurning = false;
 	}
+	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is turning.
+	 */
+	public static boolean isTurning() {
+		return isTurning;
+	}
 
+//--------------------------------------- DRIFT ---------------------------------------
+	
+	/**
+	 * 	Turns left or right, but not on itself. 
+	 * 	the robot will follow a curved path in the direction specified
+	 * 	based on the DRIFT_FACTOR specified in this class
+	 * 
+	 * 	because this method returns immediatly, the isDrifting status variable
+	 * 	should be set externally
+	 * 
+	 * @param direction	The direction in which to turn: LEFT or RIGHT
+	 */
+	public static void drift(Direction direction) {
+		if (!validTurnDirection(direction)) {
+			return;
+		}
+		
+		if(direction == Direction.LEFT) {
+			move(Direction.FWD, FWD_SPEED - DRIFT_FACTOR, FWD_SPEED + DRIFT_FACTOR);
+		}
+		else {
+			move(Direction.FWD, FWD_SPEED + DRIFT_FACTOR, FWD_SPEED - DRIFT_FACTOR);
+		}
+	}
+	
+	/**
+	 * 	Turns left or right, but not on itself. 
+	 * 	the robot will follow a curved path with specified radius
+	 * 
+	 * 	because this method returns immediatly, the isDrifting status variable
+	 * 	should be set externally
+	 * 
+	 * @param direction	The direction in which to turn: LEFT or RIGHT
+	 * @param radius of the curved path to follow
+	 */
+	public static void drift(Direction direction, int radius) {
+		int leftSpeed;
+		int rightSpeed;
+		
+		if(direction == Direction.RIGHT) {
+			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/radius)*FWD_SPEED);
+			rightSpeed = (int)(((radius-(WHL_SEPARATION/2))/radius)*FWD_SPEED);
+		}
+		else {
+			leftSpeed = (int)(((radius-(WHL_SEPARATION/2))/radius)*FWD_SPEED);
+			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/radius)*FWD_SPEED);
+		}
+		
+		move(Direction.FWD, leftSpeed, rightSpeed);
+	}
+	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is drifting.
+	 */
+	public static boolean isDrifting() {
+		return isDrifting;
+	}
+	
+	/**
+	 * set drifting status flag.
+	 */
+	public static void setDrifting(boolean status) {
+		isDrifting = status;
+	}
+	
 //--------------------------------------- MISCELLANEOUS ---------------------------------------
 
 	/**
@@ -203,46 +293,9 @@ public class Driver {
 			}else{
 				rightMotor.backward();
 			}
-		}else{
-//			System.out.println("MoveOneMotor direction input UNDEFINED");
 		}
 	}
 	
-	/**
-	 * 	Turns left or right, but not on itself. 
-	 * 	the robot will follow a curved path in the direction specified
-	 * 	based on the DRIFT_FACTOR specified in this class
-	 * 
-	 * @param direction	The direction in which to turn: LEFT or RIGHT
-	 */
-	public static void drift(Direction direction) {
-		if (!validTurnDirection(direction)) {
-			return;
-		}
-		
-		if(direction == Direction.LEFT) {
-			move(Direction.FWD, FWD_SPEED - DRIFT_FACTOR, FWD_SPEED + DRIFT_FACTOR);
-		}
-		else {
-			move(Direction.FWD, FWD_SPEED + DRIFT_FACTOR, FWD_SPEED - DRIFT_FACTOR);
-		}
-	}
-	
-	public static void drift(Direction direction, int radius) {
-		int leftSpeed;
-		int rightSpeed;
-		
-		if(direction == Direction.RIGHT) {
-			leftSpeed = FWD_SPEED;
-			rightSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
-		}
-		else {
-			leftSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
-			rightSpeed = FWD_SPEED;
-		}
-		
-		move(Direction.FWD, leftSpeed, rightSpeed);
-	}
 	
 	/**
 	 * 	Stops any movement.
@@ -254,45 +307,6 @@ public class Driver {
 		rightMotor.stop();
 		
 		setAcceleration(ACCEL);
-	}
-	
-	/**
-	 * Returns the state of the robot.
-	 * @return	Returns true if the robot is moving.
-	 */
-	public static boolean isMoving(){
-		return rightMotor.isMoving() || leftMotor.isMoving();
-	}
-	
-	/**
-	 * Returns the state of the robot.
-	 * @return	Returns true if the robot is turning.
-	 */
-	public static boolean isTurning() {
-		return isTurning;
-	}
-	
-	/**
-	 * Returns the state of the robot.
-	 * @return	Returns true if the robot is drifting.
-	 */
-	public static boolean isDrifting() {
-		return isDrifting;
-	}
-	
-	/**
-	 * set drifting status flag.
-	 */
-	public static void setDrifting(boolean status) {
-		isDrifting = status;
-	}
-	
-	/**
-	 * Returns the state of the robot.
-	 * @return	Returns true if the robot is moving backwards.
-	 */
-	public static boolean isMovingBackwards() {
-		return movingBackwards;
 	}
 	
 	private static boolean validMoveDirection(Direction direction) {
@@ -344,12 +358,12 @@ public class Driver {
 		
 		if(direction == Direction.RIGHT) {
 			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
-			rightSpeed = FWD_SPEED;//(int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
+			rightSpeed = FWD_SPEED;
 			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));
 			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
 		}
 		else {
-			leftSpeed = FWD_SPEED;//(int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
+			leftSpeed = FWD_SPEED;
 			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
 			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
 			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));;
@@ -361,7 +375,7 @@ public class Driver {
 		
 	}
 	
-//--------------------------------------- Methods to complement the odometer class ---------------------------------------
+//--------------------------------------- COMPLEMENTARY ODOMETRY METHODS ---------------------------------------
 	
 	/**
 	 * Update the change in the tachometer reading since the last time this metod was called
@@ -391,7 +405,7 @@ public class Driver {
 		return ((delTacho[1]-delTacho[0])*WHL_RADIUS)/WHL_SEPARATION;
 	}
 	
-//--------------------------------------- Utility methods provided in lab 2 ---------------------------------------
+//--------------------------------------- UTILITY METHODS ---------------------------------------
 	 
 	/**
 	  * determine necessary wheel rotation for robot to turn angle on itself

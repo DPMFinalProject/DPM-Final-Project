@@ -12,7 +12,6 @@ import navigation.Driver;
 import navigation.odometry.Odometer;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
-import util.Measurements;
 import static util.Utilities.isNear;
 import static util.Utilities.pause;
 
@@ -30,13 +29,6 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	
 	private int LIVE_LOCK_COUNT = 0;
 	
-	public BangBangAvoider(Direction wallDirection, Odometer odo) {
-		super(wallDirection, odo);
-		BAND_WIDTH = 6;
-		BAND_CENTER = 22;
-		detector = ObstacleDetection.getObstacleDetection();
-	}
-	
 	public BangBangAvoider(Odometer odo) {
 		super(Direction.LEFT, odo);
 		BAND_WIDTH = 6;
@@ -47,10 +39,10 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	@Override
 	public void avoid() {
 		
-		/*if (!checkForFront()) {
-			Driver.move(Measurements.TILE / 2);
-			return;
-		}*/
+//		if (!checkForFront()) {
+//			Driver.move(Measurements.TILE / 2);
+//			return;
+//		}
 		
 		initialOrientation = odo.getTheta();
 		
@@ -91,7 +83,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		else if (error < 0) {
 			LIVE_LOCK_COUNT = 0;
 			Driver.setDrifting(true);
-			Driver.drift(direction);
+			Driver.drift(direction, 30);
 		}
 		else {
 			Driver.turn(direction.opposite(), 10);
@@ -108,15 +100,15 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		return isNear(endAngle , odo.getTheta(), 50);
 	}
 	
-	private boolean checkForFront() {
-		Driver.turn(Direction.RIGHT, 45);
-		
-		boolean frontObstacle = detector.isLeftObstacle();
-		
-		Driver.turn(Direction.LEFT, 45);
-		
-		return frontObstacle;
-	}
+//	private boolean checkForFront() {
+//		Driver.turn(Direction.RIGHT, 45);
+//		
+//		boolean frontObstacle = detector.isLeftObstacle();
+//		
+//		Driver.turn(Direction.LEFT, 45);
+//		
+//		return frontObstacle;
+//	}
 	
 	public void setDirection(Direction direction) {
 		this.wallDirection = direction;
