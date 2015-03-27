@@ -27,7 +27,8 @@ public class USLocalization extends Localization {
 	protected ObstacleDetection obstacleDetection;
 	
 	protected final double SENSOR_VIEW_ANGLE = 30;
-	protected final double SENSOR_OFFSET = 10;//9.3; 
+	protected final double SENSOR_OFFSET = 10;//9.3;
+	protected final double FRONT_OBSTACLE_THRESHOLD = 46;
 	
 	public USLocalization(Odometer odo, Navigation nav) {
 		super(odo, nav);
@@ -124,7 +125,7 @@ public class USLocalization extends Localization {
 		// Turn until facing a wall
 
 		Driver.turn(Direction.RIGHT);
-		while(!obstacleDetection.isFrontObstacle(50)) {
+		while(!obstacleDetection.isFrontObstacle(FRONT_OBSTACLE_THRESHOLD)) {
 			pause(20);
 		}
 		Driver.stop();

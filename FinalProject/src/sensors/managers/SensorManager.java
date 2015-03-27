@@ -30,7 +30,6 @@ public abstract class SensorManager extends Thread {
 	}
 	
 	public abstract void execute();
-	//public abstract SensorManager getSensorManager();
 
 	public void setRunning(boolean run) {
 		running = run;

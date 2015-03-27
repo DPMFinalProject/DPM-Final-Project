@@ -22,7 +22,7 @@ import static util.Utilities.pause;
  */
 
 public class LSLocalizationIntercept extends Localization {
-	final GridManager grid = GridManager.getGridManager();
+	private final GridManager grid = GridManager.getGridManager();
 	private SensorID triggeredSensor , untriggeredSensor;
 	private double[] sensorCoor = new double[2];
 	
@@ -42,7 +42,6 @@ public class LSLocalizationIntercept extends Localization {
 		 * Execute the line intercept 3 times for a better position
 		 */
 		perpendicularToLine(2);
-		grid.setRunning(false);
 		odo.setX(0);
 		odo.setY(0);
 		odo.setTheta(0);

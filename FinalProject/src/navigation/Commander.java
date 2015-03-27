@@ -15,6 +15,7 @@ import navigation.localization.Localization;
 import navigation.localization.USLocalization;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
+import util.Direction;
 import util.Measurements;
 import util.Utilities;
 
@@ -37,7 +38,7 @@ public class Commander {
 //		{6, 6}
 //		};
 	
-	private static double[][] destinations = {{0,0}, {2.5,-0.5}, {6, 6}};
+	private static double[][] destinations = {{2.5,-0.5}, {6, 6}};
 	
 	private static void execute() {
 		
@@ -54,10 +55,20 @@ public class Commander {
 		usl.doLocalization();
 		usl = null;
 	
+		Driver.move(-2);
 		Localization lsl = new LSLocalizationIntercept(odo, nav);
 		lsl.doLocalization();
+//		Driver.turn(Direction.LEFT, 90);
+//		Driver.move(-10);
+//		lsl.doLocalization();
+		lsl = null;
+		
+		odo.setX(0);
+		odo.setY(-6);
+		odo.setTheta(0);
 		
 		completed();
+		System.out.println("DONE: First Localization");
 		
 //--------------------------------------- START ODOMETRY CORRECTION ---------------------------------------
 		
@@ -66,12 +77,19 @@ public class Commander {
 
 //--------------------------------------- GO TO SHOOTING AREA ---------------------------------------
 		
-		for (int i = 1; i < destinations.length; i++)
-			nav.travelToInTiles(destinations[i][0] - 2.5/Measurements.TILE, 
-					destinations[i][1] + 2.5/Measurements.TILE, false); // [0] = x, [1] = y
-		System.out.println("done.");
+		//unmapped area
+		for (double[] destination : destinations) {
+			nav.travelToInTiles(destination[0], destination[1], true);
+		}
+		
+		//through mapped area
+//		for (double[] destination : destinations) {
+//			nav.travelToInTiles(destination[0] - 2.5/Measurements.TILE, 
+//					destination[1] + 2.5/Measurements.TILE, false); // [0] = x, [1] = y
+//		}
 		
 		completed();
+		System.out.println("DONE: Travel to Destination");
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
 
@@ -85,12 +103,12 @@ public class Commander {
 		launcher = null;
 		
 		completed();
-		System.out.println("done2.");
+		System.out.println("DONE: Launching");
 		
 //--------------------------------------- GO BACK TO START ---------------------------------------
 		
 		nav.travelTo(0, 0, 0, true);
-		System.out.println("done3.");
+		System.out.println("DONE: Travel Back to Origin");
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
 		
@@ -98,10 +116,21 @@ public class Commander {
 		usl.doLocalization();
 		usl = null;
 		
+		Driver.move(-2);
 		lsl = new LSLocalizationIntercept(odo, nav);
+		lsl.doLocalization();
+		Driver.turn(Direction.LEFT, 90);
+		Driver.move(-10);
 		lsl.doLocalization();
 		lsl = null;
 		
+		odo.setX(6);
+		odo.setY(-6);
+		odo.setTheta(270);
+		
+		nav.travelTo(0, 0, 0, false);
+		
+		System.out.println("DONE: Final Localization");
 	}
 	
 	private static void completed() {

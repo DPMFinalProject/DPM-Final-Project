@@ -23,7 +23,7 @@ public class Driver {
 	private final static int FWD_SPEED = 300;
 	private final static int TURN_SPEED = 200;
 	private final static int ACCEL = 3000;
-	private final static int DRIFT_FACTOR = 110;
+	private final static int DRIFT_FACTOR = 95;
 	
 	private final static double WHL_RADIUS = 2.09;			//smaller radius = go further
 	private final static double WHL_SEPARATION = 16.09;//16.1;//16.175;		//smaller width = turn less
@@ -32,6 +32,7 @@ public class Driver {
 	
 	private static boolean isTurning = false;
 	private static boolean movingBackwards = false;
+	private static boolean isDrifting = false;
 
 //--------------------------------------- MOVE ---------------------------------------	
 	
@@ -232,12 +233,12 @@ public class Driver {
 		int rightSpeed;
 		
 		if(direction == Direction.RIGHT) {
-			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
-			rightSpeed = FWD_SPEED;
+			leftSpeed = FWD_SPEED;
+			rightSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
 		}
 		else {
-			leftSpeed = FWD_SPEED;
-			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
+			leftSpeed = (int)(((radius-(WHL_SEPARATION/2))/(radius+(WHL_SEPARATION/2)))*FWD_SPEED);
+			rightSpeed = FWD_SPEED;
 		}
 		
 		move(Direction.FWD, leftSpeed, rightSpeed);
@@ -269,6 +270,21 @@ public class Driver {
 	 */
 	public static boolean isTurning() {
 		return isTurning;
+	}
+	
+	/**
+	 * Returns the state of the robot.
+	 * @return	Returns true if the robot is drifting.
+	 */
+	public static boolean isDrifting() {
+		return isDrifting;
+	}
+	
+	/**
+	 * set drifting status flag.
+	 */
+	public static void setDrifting(boolean status) {
+		isDrifting = status;
 	}
 	
 	/**

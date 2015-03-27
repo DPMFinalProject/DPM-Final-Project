@@ -149,15 +149,10 @@ public class Navigation {
 	 * @param y The y coordinate the robot is heading to
 	 */
 	private void doAvoidance(double x, double y) {
-		//BangBangAvoider avoidance = new BangBangAvoider(odo);
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		
 		while(Driver.isMoving()) {
-			if (nearWall()) {
-				Sound.beep();
-			}
 			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > Measurements.TILE && !nearWall()) {
-				detection.setRunning(true);
 				if (detection.isLeftObstacle()) {
 					avoider.setWallDirection(Direction.LEFT);
 					avoider.avoid();
@@ -166,9 +161,8 @@ public class Navigation {
 					avoider.avoid();
 				}
 			}
-			pause(20);
+			pause(100);
 		}
-		//avoidance = null;
 	}
 	
 	/**

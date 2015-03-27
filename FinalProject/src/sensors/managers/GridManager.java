@@ -41,8 +41,9 @@ public class GridManager extends SensorManager {
 		if (gridManager == null) {
 			gridManager = new GridManager();
 			gridManager.start();
-			gridManager.setRunning(true);
 		}
+		
+		gridManager.setRunning(true);
 		
 		return gridManager;
 	}

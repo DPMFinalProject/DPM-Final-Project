@@ -22,7 +22,7 @@ import static util.Utilities.pause;
 public class ObstacleDetection extends SensorManager {
 	private FilteredUltrasonicSensor leftSensor, rightSensor;
 	private final int US_SENSOR_OUTLIER = 255;
-	private final int OBSTACLE_THRESHOLD = 30;
+	private final int OBSTACLE_THRESHOLD = 20;
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
 	private double leftDistance = 100, rightDistance = 100; 
@@ -37,6 +37,9 @@ public class ObstacleDetection extends SensorManager {
 			obstDetector = new ObstacleDetection();
 			obstDetector.start();
 		}
+		
+		obstDetector.setRunning(true);
+		
 		return obstDetector;
 	}
 

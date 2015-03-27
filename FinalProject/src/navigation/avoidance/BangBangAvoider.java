@@ -28,17 +28,19 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	private double initialOrientation;
 	private ObstacleDetection detector;
 	
+	private int LIVE_LOCK_COUNT = 0;
+	
 	public BangBangAvoider(Direction wallDirection, Odometer odo) {
 		super(wallDirection, odo);
-		BAND_WIDTH = 8;
-		BAND_CENTER = 18;
+		BAND_WIDTH = 6;
+		BAND_CENTER = 22;
 		detector = ObstacleDetection.getObstacleDetection();
 	}
 	
 	public BangBangAvoider(Odometer odo) {
 		super(Direction.LEFT, odo);
-		BAND_WIDTH = 8;
-		BAND_CENTER = 18;
+		BAND_WIDTH = 6;
+		BAND_CENTER = 22;
 		detector = ObstacleDetection.getObstacleDetection();
 	}
 	
@@ -58,7 +60,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			wallDirection = Direction.RIGHT;
 		}
 		
-		Driver.turn(wallDirection.opposite(), 90);
+		Driver.turn(wallDirection.opposite(), 70);
 		
 		while(!hasAvoided()) {
 			bangBang(wallDirection);
@@ -69,12 +71,9 @@ public class BangBangAvoider extends ObstacleAvoidance {
 				pause(500);
 			}
 			
-//			if(detector.wallDistance(wallDirection) > 100) {
-//				Driver.move(23);
-//				Driver.turn(wallDirection, 90);
-//				chargeCount++;
-//			}
-		
+			if(LIVE_LOCK_COUNT >= 5) {
+				Driver.move(-20);
+			}
 		}
 		
 		Driver.stop();
@@ -84,19 +83,21 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		double error = BAND_CENTER - detector.wallDistance(direction);
 		
 		if (Math.abs(error)<BAND_WIDTH)	{
+			LIVE_LOCK_COUNT = 0;
+			Driver.setDrifting(false);
 			Driver.move(Direction.FWD);
 		}
 		else if (error < 0) {
+			LIVE_LOCK_COUNT = 0;
+			Driver.setDrifting(true);
 			Driver.drift(direction);
-			//Driver.move(Direction.FWD);
-			//pause(1000);
-			//Driver.turn(direction, 10);
 		}
 		else {
-			//Driver.drift(direction.opposite());
 			Driver.turn(direction.opposite(), 10);
-			//Driver.move(Direction.FWD);
+			LIVE_LOCK_COUNT++;
 		}
+		
+		Driver.setDrifting(false);
 	}
 	
 	private boolean hasAvoided() {

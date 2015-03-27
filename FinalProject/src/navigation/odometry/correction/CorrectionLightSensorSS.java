@@ -46,7 +46,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			while(!grid.lineDetected()) {
 				pause(10);
 				
-				while(Driver.isTurning() || Driver.isMovingBackwards()) {
+				while(Driver.isTurning() || Driver.isMovingBackwards() || Driver.isDrifting()) {
 					pause(100);
 					setFlags(false);
 				}
