@@ -35,11 +35,12 @@ public class LSLocalizationRotation extends Localization {
 	private final double CS_DIST;
 	private double[] pos = new double[3];
 	private double[]lineAngle = new double [4];
+	double artificialbacksensor=-128.66;
 	
 	public LSLocalizationRotation(Odometer odo, Navigation nav) {
 		super(odo, nav);
 		double[] temp = grid.getSensorCoor(SensorID.RIGHT);
-		CS_DIST= ( Math.pow(temp[0], 2)+Math.pow(temp[1], 2) )/2;
+		CS_DIST= Math.sqrt(( Math.pow(temp[0], 2)+Math.pow(temp[1], 2)) );
 	}
 
 	/**
@@ -80,9 +81,11 @@ public class LSLocalizationRotation extends Localization {
 					pause(10);
 				}
 				odo.getPosition(pos);
-				//System.out.println(pos[2]);
+				System.out.println(pos[2]);
 				lineAngle[i]=pos[2];
 			}	
+			
+			pause(500);
 			//Sound.twoBeeps();
 			//System.out.println("The angle retrived is:" + lineAngle[i]);
 			}
@@ -97,13 +100,16 @@ public class LSLocalizationRotation extends Localization {
 				delTheta(lineAng)+pos[2]}, new boolean [] {true, true, true});
 	}
 	private double delTheta(double[] lineAng){
-		return 270-((lineAng[0]+lineAng[2])/2);
+//		return 270-((lineAng[1]+lineAng[3])/2);
+		return 270-((lineAng[2]+artificialbacksensor+lineAng[0]+artificialbacksensor)/2);
 	}
 	private double correctX(double[] lineAng){
-		return (-CS_DIST)*Math.cos(Math.toRadians( ((lineAng[1]-lineAng[3])/2 +360) % 360) );
+//		return (-CS_DIST)*Math.cos(Math.toRadians( ((lineAng[1]-lineAng[3]+360)/2) % 360) );
+		return -CS_DIST*Math.cos(Math.toRadians( ( lineAng[2]+artificialbacksensor-lineAng[0]+artificialbacksensor)/2 ) );
 	}
 	private double correctY(double[] lineAng){
-		return (-CS_DIST)*Math.cos(Math.toRadians( ((lineAng[0]-lineAng[2])/2 +360) % 360) );
+//		return (-CS_DIST)*Math.cos(Math.toRadians( ((lineAng[0]-lineAng[2]+360)/2) % 360) );
+		return CS_DIST*Math.cos(Math.toRadians( ( lineAng[3]+artificialbacksensor+360-lineAng[1]+artificialbacksensor)/2) );
 	}
 	
 	

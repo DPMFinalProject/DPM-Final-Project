@@ -41,7 +41,7 @@ public class LSLocalizationIntercept extends Localization {
 		/*
 		 * Execute the line intercept 3 times for a better position
 		 */
-		perpendicularToLine(2);
+		perpendicularToLine(1);
 		odo.setX(0);
 		odo.setY(0);
 		odo.setTheta(0);

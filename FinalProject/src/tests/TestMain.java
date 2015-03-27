@@ -32,7 +32,7 @@ import lejos.nxt.comm.RConsole;
 public class TestMain {
 
 	private static void execute(String[] args) {
-		TestCase test = new LauncherTest();
+		TestCase test = new DriverCalibrationForward();
 		test.runTest();
 	}
 

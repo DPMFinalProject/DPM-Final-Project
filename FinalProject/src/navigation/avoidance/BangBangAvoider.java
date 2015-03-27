@@ -73,6 +73,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			
 			if(LIVE_LOCK_COUNT >= 5) {
 				Driver.move(-20);
+				break;
 			}
 		}
 		

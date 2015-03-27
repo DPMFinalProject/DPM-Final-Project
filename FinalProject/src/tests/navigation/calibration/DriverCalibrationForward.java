@@ -10,7 +10,9 @@ package tests.navigation.calibration;
 
 import navigation.Driver;
 import tests.TestCase;
+import util.Direction;
 import util.Measurements;
+import static util.Utilities.pause;
 /**
  * To calibrate the wheel radius 
  * 
@@ -23,6 +25,8 @@ public class DriverCalibrationForward extends TestCase {
 		
 		// 2 tiles aka 60.96
 		Driver.move(2*Measurements.TILE);
+		pause(2000);
+		Driver.turn(Direction.RIGHT, 360);
 		
 
 	}

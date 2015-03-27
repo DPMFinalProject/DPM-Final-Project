@@ -10,6 +10,7 @@ package tests.navigation.localization;
 
 import navigation.Navigation;
 import navigation.localization.LSLocalizationRotation;
+import navigation.localization.Localization;
 import navigation.odometry.Odometer;
 import tests.TestCase;
 
@@ -26,13 +27,11 @@ public class OneLSLocalizationTest extends TestCase {
 	public void runTest() {
 		
 		Odometer odo = new Odometer();
-		
 		(new Thread(odo)).start();
+		
 		Navigation nav = new Navigation(odo);
-		
-		
-		LSLocalizationRotation lsl=new LSLocalizationRotation(odo, nav);
-		
+
+		Localization lsl = new LSLocalizationRotation(odo, nav);
 		lsl.doLocalization();
 		
 		System.out.println("X: " + odo.getX());

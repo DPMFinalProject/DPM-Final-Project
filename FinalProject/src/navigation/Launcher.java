@@ -25,12 +25,12 @@ public class Launcher {
 	//###############################################
 	//   YOU WANT TO CHANGE THOSE VALUES:
 	//range: (offset, range)
-	private final double[] range = {6,101};
+	private final double[] range = {0,150};
 	
 	
 	private Odometer odo;
 	private Navigation nav;
-	private final int LAUNCH_SPEED = 100;
+	private final int LAUNCH_SPEED = 300;
 	private double[] flexibleRange;
 	private double minShootingArea = Measurements.TILE*9;
 	private double maxShootingArea = Measurements.TILE*12;

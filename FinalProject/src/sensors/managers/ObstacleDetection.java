@@ -25,7 +25,9 @@ public class ObstacleDetection extends SensorManager {
 	private final int OBSTACLE_THRESHOLD = 20;
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
-	private double leftDistance = 100, rightDistance = 100; 
+	private double leftDistance = 100, rightDistance = 100;
+	
+	private Object lock = new Object();
 	
 	private ObstacleDetection() {
 		leftSensor = new FilteredUltrasonicSensor(SensorPort.S3, new OutlierFilter(10, US_SENSOR_OUTLIER));
@@ -46,8 +48,10 @@ public class ObstacleDetection extends SensorManager {
 	@Override
 	public void execute() {
 		// Distance values under OBSTACLE_THRESHOLD are considered to be obstacles
-		leftDistance = leftSensor.getFilteredData();
-		rightDistance = rightSensor.getFilteredData();
+		synchronized(lock) {
+			leftDistance = leftSensor.getFilteredData();
+			rightDistance = rightSensor.getFilteredData();
+		}
 		
 		leftObstacle = leftDistance < OBSTACLE_THRESHOLD;
 		rightObstacle = rightDistance < OBSTACLE_THRESHOLD;
@@ -58,8 +62,10 @@ public class ObstacleDetection extends SensorManager {
 	}
 	
 	public boolean isFrontObstacle(double obstThresh) {
-		leftDistance = leftSensor.getFilteredData();
-		rightDistance = rightSensor.getFilteredData();
+		synchronized(lock) {
+			leftDistance = leftSensor.getFilteredData();
+			rightDistance = rightSensor.getFilteredData();
+		}
 		
 		leftObstacle = leftDistance < obstThresh;
 		rightObstacle = rightDistance < obstThresh;

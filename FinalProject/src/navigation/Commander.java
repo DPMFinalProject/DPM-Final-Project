@@ -9,6 +9,7 @@
 package navigation;
 
 import lejos.nxt.Button;
+import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.Localization;
@@ -25,8 +26,8 @@ import util.Utilities;
  */
 public class Commander {
 	
-	private static double[] target1 = {5, 9};
-	private static double[] target2 = {9, 9};
+	private static double[] target1 = {9, 9};
+	//private static double[] target2 = {9, 9};
 	
 //	private static double[][] destinations = {
 //		{0, 0},
@@ -38,7 +39,7 @@ public class Commander {
 //		{6, 6}
 //		};
 	
-	private static double[][] destinations = {{2.5,-0.5}, {6, 6}};
+	private static double[][] destinations = {{2,-0.5}, {6, 6}};
 	
 	private static void execute() {
 		
@@ -139,6 +140,10 @@ public class Commander {
 	}
 	
 	public static void main(String[] args) {
+		
+		LCD.drawString("    PUSH TO", 0, 3);
+		LCD.drawString("     START", 0, 4);
+		
 		Button.waitForAnyPress();
 		
 		(new Thread() {
