@@ -25,7 +25,7 @@ public class Launcher {
 	//###############################################
 	//   YOU WANT TO CHANGE THOSE VALUES:
 	//range: (offset, range)
-	private final double[] range = {0,150};
+	private final double[] range = {0,160};
 	
 	
 	private Odometer odo;
