@@ -28,4 +28,12 @@ public abstract class Localization {
 	 * 	Localizes the robot and updates the vales of the odometer correctly. 
 	 */
 	public abstract void doLocalization();
+	
+	/**
+	 * 	Localizes the robot and updates the vales of the odometer correctly.
+	 * 	@param x The x position at which the robot should end up after localizing
+	 * 	@param y The y position at which the robot should end up after localizing
+	 *  @param theta The orientation of the robot after localizing
+	 */
+	public abstract void doLocalization(double x, double y, double theta);
 }

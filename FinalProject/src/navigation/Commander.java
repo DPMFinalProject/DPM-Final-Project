@@ -52,21 +52,17 @@ public class Commander {
 //--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
 		
 		USLocalization usl = new USLocalization(odo, nav);
-		usl.doLocalization();
+		usl.doLocalization(0, 0, 0);
 		usl = null;
 	
 		Driver.move(-2);
 		Localization lsl = new LSLocalizationIntercept(odo, nav);
-		lsl.doLocalization();
+		lsl.doLocalization(0, -6, 0);	
 //		Driver.turn(Direction.LEFT, 90);
 //		Driver.move(-10);
 //		lsl.doLocalization();
 		lsl = null;
-		
-		odo.setX(0);
-		odo.setY(-6);
-		odo.setTheta(0);
-		
+				
 		completed();
 		System.out.println("DONE: First Localization");
 		

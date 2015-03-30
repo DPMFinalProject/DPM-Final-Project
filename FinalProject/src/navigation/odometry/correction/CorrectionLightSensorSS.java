@@ -16,7 +16,7 @@ import util.SensorID;
 import static util.Utilities.*;
 
 /**
- * Odometry correction assuming <<TWO>> light sensors both placed at the <<FRONT>> of the robot
+ * Odometry correction assuming two light sensors both placed at the front of the robot
  * this class corrects both odometry position and orientation.
  * @author Auguste
  */
@@ -24,9 +24,9 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	private enum Line {xAxis, yAxis, unsure};
 	
-	final GridManager grid;
+	private final GridManager grid;
 	
-	//Orientation correction flags and position variables
+	// Orientation correction flags and position variables
 	private boolean rightCrossed = false, leftCrossed = false;
 	private boolean waitingForSecondCross = false;
 	private Line axisCrossed;
@@ -41,8 +41,9 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	
 	@Override
 	public void run() {
-		while(true)
-		{			
+		while(true) {
+			 
+			// Wait for a line
 			while(!grid.lineDetected()) {
 				pause(10);
 				
@@ -57,9 +58,9 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			correctOrientation(sensor);
 			
 			if (rightCrossed && leftCrossed) {
-				//position correction is only called once both sensors have been
-				//detected by orientation correction so as to not affect the distance
-				//traveled used in theta calculations
+				// Position correction is only called once both sensors have been
+				// detected by orientation correction so as to not affect the distance
+				// traveled used in theta calculations
 				
 				correctPosition(sensor);
 				
@@ -94,7 +95,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			Line rightLineCrossed = whichLineCrossed(SensorID.RIGHT);
 			Line leftLineCrossed = whichLineCrossed(SensorID.LEFT);
 
-			if((rightLineCrossed != leftLineCrossed) || rightLineCrossed == Line.unsure) {
+			if (rightLineCrossed != leftLineCrossed || rightLineCrossed == Line.unsure) {
 				break;
 			}
 
@@ -154,15 +155,13 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 
 			break;
 
-		case NONE:
-			//no line detected
-
+		case NONE: 	//no line detected
 			break;
 		}
 	}
 	
 	/**
-	 * calculates theta offset from 0 degrees, based on distance traveled between two line detections
+	 * Calculates theta offset from 0 degrees, based on distance traveled between two line detections
 	 * 
 	 * @return theta offset from 0 degree heading
 	 */
@@ -176,7 +175,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	/**
-	 * checks if the sensor has already crossed a line
+	 * Checks if the sensor has already crossed a line
 	 * and returns a sensor which has not crossed if possible
 	 * 
 	 * @param sensor which has just detected a line
@@ -203,7 +202,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	/**
-	 * corrects robot position based on which sensor has just crossed a line
+	 * Corrects robot position based on which sensor has just crossed a line
 	 * 
 	 * @param sensor which has just crossed a line
 	 */
@@ -234,7 +233,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	/**
-	 * calculates position error of the robot based on one sensor global coordinate (i.e x or y)
+	 * Calculates position error of the robot based on one sensor global coordinate (i.e x or y)
 	 * assumed to be called when sensor has just crossed a line
 	 * 
 	 * @param sensorPos	sensor global coordinate corresponding to one dimension
@@ -254,7 +253,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	/**
-	 * same as below, but will calculate sensor global coordinates based on SensorID
+	 * Same as below, but will calculate sensor global coordinates based on SensorID
 	 * 
 	 * @param sensor SensorID representing the sensor which has in theory just crossed a line
 	 * @return
@@ -291,7 +290,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	/**
-	 * return sensor position on the global coordinate system
+	 * Return sensor position on the global coordinate system
 	 * 
 	 * @param sensorCoor  sensor coordinates relative to the robot origin
 	 * @return array representing global sensor coordinate {x, y}
@@ -327,28 +326,30 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	 * @return true if robot is within 10 degrees of being parallel to the yAxis. false otherwise 
 	 */
 	private boolean isParallelToY() {
-		if (isNear(0, odo.getTheta() % 180, 10) || isNear(180, odo.getTheta() % 180, 10)) {
-			return true;
-		}
-		return false;
+		return isNear(0, odo.getTheta() % 180, 10) || isNear(180, odo.getTheta() % 180, 10);
+//		if (isNear(0, odo.getTheta() % 180, 10) || isNear(180, odo.getTheta() % 180, 10)) {
+//			return true;
+//		}
+//		return false;
 	}
 	
 	/**
 	 * @return true if robot is within 10 degrees of being parallel to the xAxis. false otherwise 
 	 */
 	private boolean isParallelToX() {
-		if (isNear(90, odo.getTheta() % 180, 10) || isNear(270, odo.getTheta() % 180, 10)) {
-			return true;
-		}
-		return false;
+		return isNear(90, odo.getTheta() % 180, 10) || isNear(270, odo.getTheta() % 180, 10);
+//		if (isNear(90, odo.getTheta() % 180, 10) || isNear(270, odo.getTheta() % 180, 10)) {
+//			return true;
+//		}
+//		return false;
 	}
 	
 	/**
-	 * calculate euclidean distance between two points
+	 * Calculate the Euclidean distance between two points.
 	 * 
-	 * @param pointA cartesian coordinates of first point {x, y, ...}
-	 * @param pointB cartesian coordinates of second point {x, y, ...}
-	 * @return distance between two points
+	 * @param pointA Cartesian coordinates of first point {x, y, ...}
+	 * @param pointB Cartesian coordinates of second point {x, y, ...}
+	 * @return distance The distance between the two points, in cm.
 	 */
 	private double euclideanDistance(double[] pointA, double[] pointB) {
 		return Math.sqrt(Math.pow(pointA[0]-pointB[0], 2) + Math.pow(pointA[1]-pointB[1], 2));
@@ -377,9 +378,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	}
 	
 	/**
-	 * set all orientation correction flags to value bool
-	 * 
-	 * @param bool value to set flags to
+	 * Set all orientation correction flags to value bool 
 	 */
 	private void setFlags(boolean bool)
 	{

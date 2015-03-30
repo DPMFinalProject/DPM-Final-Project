@@ -24,7 +24,15 @@ import static util.Utilities.pause;
 public class LSLocalizationIntercept extends Localization {
 	private final GridManager grid = GridManager.getGridManager();
 	private SensorID triggeredSensor , untriggeredSensor;
-	private double[] sensorCoor = new double[2];
+	
+	/*
+	 * Distance by which the robot has to move back in order to ensure that the
+	 * light sensor does not see a line that was initially directly under it. 
+	 */
+	private final double LS_WIDTH = 2.0;
+	
+	private final int ITERATIONS = 1;
+	private final int LINE_CHECK_PERIOD = 10;
 	
 	public LSLocalizationIntercept(Odometer odo, Navigation nav) {
 		super(odo, nav);
@@ -36,26 +44,31 @@ public class LSLocalizationIntercept extends Localization {
 	 * @see navigation.localization.Localization#doLocalization()
 	 */
 	@Override
-	public void doLocalization() {	
-		
-		/*
-		 * Execute the line intercept 3 times for a better position
-		 */
-		perpendicularToLine(1);
-		odo.setX(0);
-		odo.setY(0);
-		odo.setTheta(0);
+	public void doLocalization() {
+		doLocalization(0, 0, 0);
 	}
-		
-	//runs the algorithm a set number of times.
-	private void perpendicularToLine(int efficiency){
-		for(int i=0; i<efficiency; i++){
+	
+	/**
+	 * Find out the position by intercepting a line and rotating 
+	 * until both sensor and ON the line. 
+	 * @see navigation.localization.Localization#doLocalization()
+	 */
+	@Override
+	public void doLocalization(double x, double y, double theta) {
+		/*
+		 * Increasing the iterations makes the localization more accurate but takes additional time.
+		 */
+		for(int i = 0; i < ITERATIONS; i++) {
 			//Set up for the next interception
-			Driver.move(-2);
+			Driver.move(-LS_WIDTH);
 			triggeredSensor = SensorID.NONE;
 			Driver.move(Direction.FWD);
 			perpendicularToLine();
 		}
+		
+		odo.setX(x);
+		odo.setY(y);
+		odo.setTheta(theta);
 	}
 	
 	private void perpendicularToLine(){
@@ -74,10 +87,10 @@ public class LSLocalizationIntercept extends Localization {
 		 */
 		rotateToLine();
 		
-		 
 		while(!grid.isOnLine(untriggeredSensor)) {
-			pause(10);
+			pause(LINE_CHECK_PERIOD);
 		}
+		
 		Driver.stop();
 		pause(200);
 	}

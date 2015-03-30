@@ -111,6 +111,12 @@ public class LSLocalizationRotation extends Localization {
 //		return (-CS_DIST)*Math.cos(Math.toRadians( ((lineAng[0]-lineAng[2]+360)/2) % 360) );
 		return CS_DIST*Math.cos(Math.toRadians( ( lineAng[3]+artificialbacksensor+360-lineAng[1]+artificialbacksensor)/2) );
 	}
+
+	@Override
+	public void doLocalization(double x, double y, double theta) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 /*/		private void Useless(){
