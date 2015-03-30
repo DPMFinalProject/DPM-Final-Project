@@ -25,7 +25,7 @@ public abstract class Localization {
 	}
 	
 	/**
-	 * 	Localizes the robot and updates the vales of the odometer correctly. 
+	 * 	Localizes the robot at (0,0,0) and updates the vales of the odometer correctly. 
 	 */
 	public abstract void doLocalization();
 	
