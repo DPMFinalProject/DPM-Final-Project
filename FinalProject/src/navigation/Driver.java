@@ -13,8 +13,11 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Motor;
 
 /**
- * 	This class provides abstraction from the robot's driving functionality.
- *
+ * 	This class provides all methods that involve giving a movement-related order
+ * 	to the robot. None of these methods provide any form of correction or avoidance.
+ * 	This class is mainly a utility class that should be used by the localization, 
+ * 	navigation and avoidance algorithms.
+ * 
  * @author Oleg 
  */
 
@@ -22,16 +25,19 @@ public class Driver {
 
 	private final static int FWD_SPEED = 300;
 	private final static int TURN_SPEED = 200;
-	private final static int ACCEL = 3000;		
-	private final static int DRIFT_FACTOR = 95;				//Bigger = drift tighter , Smaller = larger
 	
-	private final static double WHL_RADIUS = 2.09;			//smaller radius = go further
-	private final static double WHL_SEPARATION = 16.6;		//smaller width = turn less
+	private final static int MOVE_ACCEL = 3000;
+	private final static int STOP_ACCEL = 9000;				// Stopping uses a larger acceleration to avoid overshooting
+	
+	private final static int DRIFT_FACTOR = 95;				// Bigger = drift tighter , Smaller = larger
+	
+	private final static double WHL_RADIUS = 2.09;			// smaller radius = go further
+	private final static double WHL_SEPARATION = 16.6;		// smaller width = turn less
 
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
 	
 	private static boolean isTurning = false;
-	private static boolean movingBackwards = false;
+	private static boolean isMovingBackwards = false;
 	private static boolean isDrifting = false;
 
 //--------------------------------------- MOVE ---------------------------------------	
@@ -41,23 +47,22 @@ public class Driver {
 	 * @param direction	The direction in which to move: FWD or BACK
 	 */
 	public static void move(Direction direction) {
-
 		move(direction, FWD_SPEED, FWD_SPEED);
 	}
 	
 	/**
-	 * 	Moves the robot with different wheel spins. This method should stay hidden.
+	 * 	General method interacting with the leJOS API to move the robot's wheels at given speeds.
 	 * 
-	 * @param direction
-	 * @param leftSpeed
-	 * @param rightSpeed
+	 * @param direction		The direction in which to move, in cm: FWD or BACK.
+	 * @param leftSpeed		The speed at which to turn the left wheel, in degrees per second.
+	 * @param rightSpeed	The speed at which to turn the right wheel, in degrees per second.
 	 */
 	private static void move(Direction direction, int leftSpeed, int rightSpeed) {
-		if (!validMoveDirection(direction)) {
+		if (!validMoveDirection(direction)) {	// Return if LEFT or RIGHT.
 			return;
 		}
 		
-		setAcceleration(ACCEL);
+		setAcceleration(MOVE_ACCEL);
 		setSpeed(leftSpeed, rightSpeed);
 		
 		if (direction == Direction.FWD) {
@@ -65,46 +70,46 @@ public class Driver {
 			rightMotor.forward();
 		}
 		else {
-			movingBackwards = true;
+			isMovingBackwards = true;
 			
 			leftMotor.backward();
 			rightMotor.backward();
 			
-			movingBackwards = false;
+			isMovingBackwards = false;	// ??
 		}
 	}
 	
 	/**
-	 * 	Naively moves forward a given distance, no error checking with odometer.
-	 *  returns only once the robot has finished moving
+	 * 	Moves forward a given distance, no error checking with odometer.
+	 *  No immediate return, so control is handed over once the method has finished execution.
 	 * 
 	 * @param distance	The distance by which to move, in cm
 	 */
 	public static void move(double distance) {
-			
 		move(distance, false);
-
 	}
 	
 	/**
-	 * 	same as above but can be made to return immediately
+	 * 	Moves forward a given distance, no error checking with odometer.
+	 * 	.
 	 * 
 	 * @param distance	The distance by which to move, in cm
-	 * @param immediateReturn return immediately if true
+	 * @param immediateReturn With immediate return, the method finishes running 
+	 * before the robot is done moving the provided distance
 	 */
 	public static void move(double distance, boolean immediateReturn) {
 		
-		setAcceleration(ACCEL);
+		setAcceleration(MOVE_ACCEL);
 		setSpeed(FWD_SPEED);
 		
-		movingBackwards = (distance < 0) ? true : false;
+		isMovingBackwards = distance < 0;
 		
-		int rotations = convertDistance(WHL_RADIUS, distance);
+		int rotations = convertDistance(distance);
 		
 		leftMotor.rotate(rotations, true);
 		rightMotor.rotate(rotations, immediateReturn);
 		
-		movingBackwards = false;
+		isMovingBackwards = false;	// ?
 	}
 	
 	/**
@@ -120,7 +125,7 @@ public class Driver {
 	 * @return	Returns true if the robot is moving backwards.
 	 */
 	public static boolean isMovingBackwards() {
-		return movingBackwards;
+		return isMovingBackwards;
 	}
 
 //--------------------------------------- TURN ---------------------------------------	
@@ -136,7 +141,7 @@ public class Driver {
 		
 		isTurning = true;
 		
-		setAcceleration(ACCEL);
+		setAcceleration(MOVE_ACCEL);
 		setSpeed(TURN_SPEED);
 		
 		if (direction == Direction.LEFT) {
@@ -153,21 +158,22 @@ public class Driver {
 	
 	/**
 	 * Naively turns in the provided direction, no error checking with odometer.
-	 * returns only once the robot has finished turning
+	 * Only returns once the robot has finished turning.
 	 * 
 	 * @param direction	The direction in which to turn. RIGHT or LEFT.
-	 * @param angle The angle by which to turn, in degrees. 
+	 * @param angle	The angle by which to turn, in degrees. 
 	 */
 	public static void turn(Direction direction, double angle) {
 		turn(direction, angle, false);
 	}
 	
 	/**
-	 * same as above, but can be made to return immediately
+	 * sNaively turns in the provided direction, no error checking with odometer.
 	 * 
-	 * @param direction
-	 * @param angle
-	 * @param immediateReturn
+	 * @param direction	The direction in which to turn. RIGHT or LEFT.
+	 * @param angle	The angle by which to turn, in degrees. 
+	 * @param immediateReturn With immediate return, the method finishes running 
+	 * before the robot is done moving the provided distance
 	 */
 	public static void turn(Direction direction, double angle, boolean immediateReturn) {
 		if (!validTurnDirection(direction)) {
@@ -181,16 +187,17 @@ public class Driver {
 		
 		isTurning = true;
 		
-		setAcceleration(ACCEL);
+		setAcceleration(MOVE_ACCEL);
 		setSpeed(TURN_SPEED);
 		
-		int rotations = convertAngle(WHL_RADIUS, WHL_SEPARATION, angle);
+		// Compute the required amount of wheel rotations to execute the command
+		int rotations = convertAngle(angle);	
 		
 		if (direction == Direction.LEFT) {
 			leftMotor.rotate(-rotations, true);
 			rightMotor.rotate(rotations, immediateReturn);
 		} 
-		else if (direction == Direction.RIGHT) {
+		else {
 			leftMotor.rotate(rotations, true);
 			rightMotor.rotate(-rotations, immediateReturn);
 		}
@@ -210,11 +217,12 @@ public class Driver {
 	
 	/**
 	 * 	Turns left or right, but not on itself. 
-	 * 	the robot will follow a curved path in the direction specified
+	 * 	
+	 * 	The robot will follow a curved path in the direction specified
 	 * 	based on the DRIFT_FACTOR specified in this class
 	 * 
-	 * 	because this method returns immediatly, the isDrifting status variable
-	 * 	should be set externally
+	 * 	Because this method returns immediately, the isDrifting status variable
+	 * 	should be set externally.
 	 * 
 	 * @param direction	The direction in which to turn: LEFT or RIGHT
 	 */
@@ -235,23 +243,23 @@ public class Driver {
 	 * 	Turns left or right, but not on itself. 
 	 * 	the robot will follow a curved path with specified radius
 	 * 
-	 * 	because this method returns immediatly, the isDrifting status variable
+	 * 	because this method returns immediately, the isDrifting status variable
 	 * 	should be set externally
 	 * 
 	 * @param direction	The direction in which to turn: LEFT or RIGHT
-	 * @param radius of the curved path to follow
+	 * @param turnRadius The radius of the path to follow
 	 */
-	public static void drift(Direction direction, int radius) {
+	public static void drift(Direction direction, int turnRadius) {
 		int leftSpeed;
 		int rightSpeed;
 		
 		if(direction == Direction.RIGHT) {
-			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/radius)*FWD_SPEED);
-			rightSpeed = (int)(((radius-(WHL_SEPARATION/2))/radius)*FWD_SPEED);
+			leftSpeed = (int)(((turnRadius+(WHL_SEPARATION/2))/turnRadius)*FWD_SPEED);
+			rightSpeed = (int)(((turnRadius-(WHL_SEPARATION/2))/turnRadius)*FWD_SPEED);
 		}
 		else {
-			leftSpeed = (int)(((radius-(WHL_SEPARATION/2))/radius)*FWD_SPEED);
-			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/radius)*FWD_SPEED);
+			leftSpeed = (int)(((turnRadius-(WHL_SEPARATION/2))/turnRadius)*FWD_SPEED);
+			rightSpeed = (int)(((turnRadius+(WHL_SEPARATION/2))/turnRadius)*FWD_SPEED);
 		}
 		
 		move(Direction.FWD, leftSpeed, rightSpeed);
@@ -275,42 +283,79 @@ public class Driver {
 //--------------------------------------- MISCELLANEOUS ---------------------------------------
 
 	/**
-	 * move one motor in specified direction
+	 * Move one motor in specified direction
 	 * 
-	 * @param motor to move
-	 * @param direction to move motor in
+	 * @param motor The motor that should turn (LEFT or RIGHT one)
+	 * @param fwdOrBack The direction in which the robot will move during the turn, FWD or BACK.
 	 */
-	public static void moveOneMotor(Direction motor, Direction direction){
-		if(motor == Direction.LEFT){
-			if(direction == Direction.FWD){
+	public static void moveOneMotor(Direction motor, Direction fwdOrBack){
+		// Check that the method was called correctly, return if not.
+		if (motor == Direction.FWD || motor == Direction.BACK || 
+				fwdOrBack == Direction.LEFT || fwdOrBack == Direction.RIGHT) {
+			return;
+		}
+		
+		if (motor == Direction.LEFT) {
+			if (fwdOrBack == Direction.FWD) {
 				leftMotor.forward();
-			}else{
+			} else {
 				leftMotor.backward();
 			}
-		}else if(motor == Direction.RIGHT){
-			if(direction == Direction.FWD){
+		} else if (motor == Direction.RIGHT) {
+			if (fwdOrBack == Direction.FWD) {
 				rightMotor.forward();
-			}else{
+			} else {
 				rightMotor.backward();
 			}
 		}
 	}
 	
-	
 	/**
 	 * 	Stops any movement.
 	 */
 	public static void stop() {
-		setAcceleration(9000);
+		setAcceleration(STOP_ACCEL);
 		
-		leftMotor.stop(true);
+		leftMotor.stop(true);	// immediate return to stop both wheels
 		rightMotor.stop();
 		
-		setAcceleration(ACCEL);
+		setAcceleration(MOVE_ACCEL);
+	}
+	
+	/**
+	 *  Make robot drive in a circle
+	 *  Only used for testing purposes in the util.Paths class
+	 * 
+	 * @param direction
+	 * @param radius
+	 */
+	public static void driveCircle(Direction direction, double radius) {
+		
+		int leftSpeed;
+		int rightSpeed;
+		int leftDistance;
+		int rightDistance;
+		
+		if(direction == Direction.RIGHT) {
+			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
+			rightSpeed = FWD_SPEED;
+			leftDistance = convertDistance(2*Math.PI*(radius+(WHL_SEPARATION/2)));
+			rightDistance = convertDistance(2*Math.PI*(radius-(WHL_SEPARATION/2)));;
+		}
+		else {
+			leftSpeed = FWD_SPEED;
+			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
+			leftDistance = convertDistance(2*Math.PI*(radius-(WHL_SEPARATION/2)));;
+			rightDistance = convertDistance(2*Math.PI*(radius+(WHL_SEPARATION/2)));;
+		}
+		
+		setSpeed(leftSpeed, rightSpeed);
+		leftMotor.rotate(leftDistance, true);
+		rightMotor.rotate(rightDistance);
+		
 	}
 	
 	private static boolean validMoveDirection(Direction direction) {
-		
 		if (direction == Direction.LEFT || direction == Direction.RIGHT) {
 //			System.out.println("Cannot move " + direction + "\n");
 //			System.out.println("Must move forward or backward");
@@ -342,38 +387,6 @@ public class Driver {
 		rightMotor.setAcceleration(acceleration);
 	}
 	
-	/**
-	 *  make robot drive circle path
-	 *  only used for testing purposes in the util.Paths class
-	 * 
-	 * @param direction
-	 * @param radius
-	 */
-	public static void driveCircle(Direction direction, double radius) {
-		
-		int leftSpeed;
-		int rightSpeed;
-		int leftDistance;
-		int rightDistance;
-		
-		if(direction == Direction.RIGHT) {
-			leftSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
-			rightSpeed = FWD_SPEED;
-			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));
-			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
-		}
-		else {
-			leftSpeed = FWD_SPEED;
-			rightSpeed = (int)(((radius+(WHL_SEPARATION/2))/(radius-(WHL_SEPARATION/2)))*FWD_SPEED);
-			leftDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius-(WHL_SEPARATION/2)));;
-			rightDistance = convertDistance(WHL_RADIUS, 2*Math.PI*(radius+(WHL_SEPARATION/2)));;
-		}
-		
-		setSpeed(leftSpeed, rightSpeed);
-		leftMotor.rotate(leftDistance, true);
-		rightMotor.rotate(rightDistance);
-		
-	}
 	
 //--------------------------------------- COMPLEMENTARY ODOMETRY METHODS ---------------------------------------
 	
@@ -383,8 +396,8 @@ public class Driver {
 	 * @param delTacho
 	 */
 	public static void getDelTachoCount(int[] tachoTotal, int[] delTacho){
-		delTacho[0]=rightMotor.getTachoCount() - tachoTotal[0];
-		delTacho[1]=leftMotor.getTachoCount() - tachoTotal[1];
+		delTacho[0] = rightMotor.getTachoCount() - tachoTotal[0];
+		delTacho[1] = leftMotor.getTachoCount() - tachoTotal[1];
 	}
 	
 	/**
@@ -407,26 +420,12 @@ public class Driver {
 	
 //--------------------------------------- UTILITY METHODS ---------------------------------------
 	 
-	/**
-	  * determine necessary wheel rotation for robot to turn angle on itself
-	  * 
-	  * @param radius
-	  * @param width
-	  * @param angle
-	  * @return wheel rotation in degrees to rotate by angle
-	  */
-	private static int convertAngle(double radius, double width, double angle) {
-		return convertDistance(radius, Math.PI * width * angle / 360.0);
+
+	private static int convertAngle(double angle) {
+		return convertDistance(Math.PI * WHL_SEPARATION * angle / 360.0);
 	}
 	
-	/**
-	 *  determine necessary wheel rotation to travel distance based on wheel radius
-	 * 
-	 * @param radius
-	 * @param distance
-	 * @return wheel rotation in degrees to travel distance 
-	 */
-	private static int convertDistance(double radius, double distance) {
-		return (int) ((180.0 * distance) / (Math.PI * radius));
+	private static int convertDistance(double distance) {
+		return (int) ((180.0 * distance) / (Math.PI * WHL_RADIUS));
 	}
 }

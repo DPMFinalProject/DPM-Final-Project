@@ -24,23 +24,22 @@ public class Odometer implements Runnable {
 	private double x, y, theta;	
 	
 	//keeps track of position change
-	int[] delTacho = {0, 0};								
-	int[] tachoTotal = {0, 0};
-	double[] posChange = {0, 0};
+	private int[] delTacho = {0, 0};								
+	private int[] tachoTotal = {0, 0};
+	private double[] posChange = {0, 0};
 	
-	private static final long ODOMETER_PERIOD = 15;// odometer update period, in ms			
-	private Object lock;									
+	private static final long ODOMETER_PERIOD = 15;// odometer update period, in ms	
+	
+	private final Object lock = new Object();									
 
 	public Odometer() {
-		this(0.0, 0.0, 0.0);
+		this(0,0,0);
 	}
 	
-	private Odometer(double xpos, double ypos, double Theta) {
-		
-		x = xpos;
-		y = ypos;
-		theta = Theta;
-		lock = new Object();	
+	private Odometer(double xPos, double yPos, double theta) {
+		x = xPos;
+		y = yPos;
+		this.theta = theta;
 	}
 
 
@@ -49,10 +48,10 @@ public class Odometer implements Runnable {
 	 */
 	@Override
 	public void run() {
-		long updateStart, updateEnd;
+		long updateStartTime, updateEndTime;
 		
 		while (true) {
-			updateStart = System.currentTimeMillis();
+			updateStartTime = System.currentTimeMillis();
 			
 			Driver.getDelTachoCount(tachoTotal,delTacho);
 			
@@ -64,9 +63,9 @@ public class Odometer implements Runnable {
 			}
 			
 			// this ensures that the odometer only runs once every period
-			updateEnd = System.currentTimeMillis();
-			if (updateEnd - updateStart < ODOMETER_PERIOD) {
-				pause((int)(ODOMETER_PERIOD - (updateEnd - updateStart)));
+			updateEndTime = System.currentTimeMillis();
+			if (updateEndTime - updateStartTime < ODOMETER_PERIOD) {
+				pause((int)(ODOMETER_PERIOD - (updateEndTime - updateStartTime)));
 			}
 		}
 	}

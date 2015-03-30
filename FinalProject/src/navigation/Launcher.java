@@ -61,7 +61,8 @@ public class Launcher {
 	}
 	
 	private void shootTo(double targetX, double targetY, int projectiles) {
-		nav.travelTo(findLaunchingCoordinates(targetX,targetY), false);	
+		double[] launchingCoordinates = findLaunchingCoordinates(targetX,targetY);
+		nav.travelTo(launchingCoordinates[0], launchingCoordinates[1], false);	
 		Sound.twoBeeps();
 		shoot(projectiles);
 	}
