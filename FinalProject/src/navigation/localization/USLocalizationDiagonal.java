@@ -15,6 +15,7 @@ import navigation.odometry.Odometer;
 
 /**
  * 	Less accurate but faster localization that just moves the robot into the first square.
+ * 	Not yet completed
  * @author Oleg
  */
 public class USLocalizationDiagonal extends USLocalization {
@@ -24,7 +25,7 @@ public class USLocalizationDiagonal extends USLocalization {
 	}
 
 	@Override
-	public void doLocalization() {
+	public void doLocalization(double x, double y, double theta) {
 		if(!obstacleDetection.isFrontObstacle())
 			faceWall();
 		/* 

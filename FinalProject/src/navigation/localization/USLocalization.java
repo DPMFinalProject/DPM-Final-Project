@@ -60,13 +60,6 @@ public class USLocalization extends Localization {
 		odo.setY(y);
 		odo.setTheta(theta);
 	}
-	/**
-	 * @see navigation.localization.Localization#doLocalization()
-	 */
-	@Override
-	public void doLocalization() {
-		doLocalization(0, 0, 0);
-	}
 	
 	protected double obtainXPosition(boolean move) {
 		double xPosition;

@@ -37,16 +37,6 @@ public class LSLocalizationIntercept extends Localization {
 	public LSLocalizationIntercept(Odometer odo, Navigation nav) {
 		super(odo, nav);
 	}
-
-	/**
-	 * Find out the position by intercepting a line and rotating 
-	 * until both sensor and ON the line. 
-	 * @see navigation.localization.Localization#doLocalization()
-	 */
-	@Override
-	public void doLocalization() {
-		doLocalization(0, 0, 0);
-	}
 	
 	/**
 	 * Find out the position by intercepting a line and rotating 
