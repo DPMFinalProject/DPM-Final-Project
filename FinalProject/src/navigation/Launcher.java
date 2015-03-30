@@ -27,13 +27,12 @@ public class Launcher {
 	//range: (offset, range)
 	private final double[] range = {0,160};
 	
-	
 	private Odometer odo;
 	private Navigation nav;
 	private final int LAUNCH_SPEED = 300;
 	private double[] flexibleRange;
-	private double minShootingArea = Measurements.TILE*9;
-	private double maxShootingArea = Measurements.TILE*12;
+	private double minShootingArea = 9 * Measurements.TILE;
+	private double maxShootingArea = 12 * Measurements.TILE;
 	
 	private final static NXTRegulatedMotor shooter = Motor.C;
 	
@@ -52,9 +51,9 @@ public class Launcher {
 	/**
 	 * Position the robot and shoots some projectiles to the coordinates (targetX, targetY).
 	 * 
-	 * @param targetX
-	 * @param targetY
-	 * @param projectiles
+	 * @param targetX The x coordinate of the target, in tiles.
+	 * @param targetY The y coordinate of the target, in tiles.
+	 * @param projectiles The number of balls to shoot at the target.
 	 */
 	public void shootToInTiles(double targetX, double targetY, int projectiles) {
 		shootTo(targetX * Measurements.TILE, targetY * Measurements.TILE, projectiles);
@@ -63,14 +62,16 @@ public class Launcher {
 	private void shootTo(double targetX, double targetY, int projectiles) {
 		double[] launchingCoordinates = findLaunchingCoordinates(targetX,targetY);
 		nav.travelTo(launchingCoordinates[0], launchingCoordinates[1], false);	
+		
 		Sound.twoBeeps();
 		shoot(projectiles);
 	}
 
-	private void shoot(int launchs) {
+	private void shoot(int launches) {
 		Driver.turn(Direction.LEFT, getRangeTheta());		//position himself to compensate for the launch offset
 		shooter.setSpeed(LAUNCH_SPEED);
-		for(int i=0; i < launchs; i++){
+		
+		for(int i=0; i < launches; i++){
 			shooter.rotate(360);
 			pause(1000);
 		}
@@ -78,15 +79,20 @@ public class Launcher {
 
 	private double[] findLaunchingCoordinates(double targetX, double targetY) {
 		double[] coordinates = new double [3];
-		flexibleRange=range;										//will enable the robot to try to shoot at the target even if this one is out of range
+		flexibleRange = range;										//will enable the robot to try to shoot at the target even if this one is out of range
 		while(! findXY(targetX, targetY, coordinates)) ;			//will search for x,y until it finds a suitable value (in our out of range)
 		findTheta(targetX, targetY, coordinates);				
 		return coordinates;
 	}
 /*
- * findXY() will draw a circle of radius range around the target. Then, it'll guess a value of x and look if there is a value of y that can satisfy the circle.
- * If not, it'll increment x until it does. If x reaches the maximum value of the shooting area, it means the robot cannot shoot far enough to hit the target.
- *  If this happens, we will artificially increase the range and restart the procedure. In doing so, we are hoping for an anomaly that will make the launcher shoot longer.
+ * 	findXY() will draw a circle of radius range around the target. Then, it'll guess 
+ * 	a value of x and look if there is a value of y that can satisfy the circle.
+ * 
+ *	If not, it'll increment x until it does. If x reaches the maximum value of the 
+ * 	shooting area, it means the robot cannot shoot far enough to hit the target.
+ * 
+ *  If this happens, we will artificially increase the range and restart the procedure. 
+ *  In doing so, we are hoping for an anomaly that will make the launcher shoot longer.
  */
 	private boolean findXY(double targetX, double targetY, double[] coordinates) {
 		double x = minShootingArea-4,  yUpperCircle, yLowerCircle, temp;   //set x so the code doesnt consider any position before the minimum shootign area

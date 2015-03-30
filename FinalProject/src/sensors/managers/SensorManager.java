@@ -31,8 +31,8 @@ public abstract class SensorManager extends Thread {
 	
 	public abstract void execute();
 
-	public void setRunning(boolean run) {
-		running = run;
+	public void setRunning(boolean running) {
+		this.running = running;
 	}
 	
 	public boolean getRunning() {

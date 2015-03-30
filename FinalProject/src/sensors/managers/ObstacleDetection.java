@@ -24,6 +24,8 @@ public class ObstacleDetection extends SensorManager {
 	private final int US_SENSOR_OUTLIER = 255;
 	private final int OBSTACLE_THRESHOLD = 20;
 	
+	private final int DETECTION_PERIOD = 20;
+	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
 	private double leftDistance = 100, rightDistance = 100;
 	
@@ -58,7 +60,7 @@ public class ObstacleDetection extends SensorManager {
 		
 		frontObstacle = leftObstacle && rightObstacle;
 		
-		pause(20);		
+		pause(DETECTION_PERIOD);		
 	}
 	
 	public boolean isFrontObstacle(double obstThresh) {
