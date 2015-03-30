@@ -7,9 +7,14 @@ sensors
 sensors.filters
 sensors.managers
 tests
+tests.launcher
 tests.navigation
 tests.navigation.avoidance
+tests.navigation.calibration
 tests.navigation.localization
+tests.navigation.odometry
 tests.sensors
 tests.sensors.filters
+tests.sensors.ultrasonic
 util
+util.songs
