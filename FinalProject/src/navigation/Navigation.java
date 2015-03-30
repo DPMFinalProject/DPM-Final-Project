@@ -125,7 +125,7 @@ public class Navigation {
 			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
 			
 			// Check to see if the robot went too far, if so it will back up
-			if ((distance < BACKWARDS_THRESHOLD) && targetBehindRobot(targetAngle)) {
+			if (distance < BACKWARDS_THRESHOLD && targetBehindRobot(targetAngle)) {
 				if (targetAngle < 0) {
 					turnTo(targetAngle + 180);
 				}
