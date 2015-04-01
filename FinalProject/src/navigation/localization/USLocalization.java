@@ -112,7 +112,7 @@ public class USLocalization extends Localization {
 	 * @param sensorDirection
 	 * @see obtainXPosition(), obtainYPosition()
 	 */
-	private void faceAwayFromWall(Direction sensorDirection){
+	protected void faceAwayFromWall(Direction sensorDirection){
 		double wallDistance;
 		DifferentialFilter dFilter = new DifferentialFilter(2);
 		

@@ -110,8 +110,6 @@ public class Navigation {
 		double yPos, yErr;
 		double targetAngle, distance;
 		
-		int i=0;
-		
 		while (euclideanDistance(odo.getX(), odo.getY(), x, y) > POS_ERROR) {
 			// Get the robot's current position
 			xPos = odo.getX();
