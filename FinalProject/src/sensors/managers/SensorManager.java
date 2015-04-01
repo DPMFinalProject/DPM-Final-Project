@@ -16,7 +16,7 @@ import static util.Utilities.pause;
 public abstract class SensorManager extends Thread {
 	protected static GridManager gridManager;
 	protected static ObstacleDetection obstDetector;
-	private static boolean running = true;
+	private boolean running = true;
 	
 	public final void run() {
 		while(true) {

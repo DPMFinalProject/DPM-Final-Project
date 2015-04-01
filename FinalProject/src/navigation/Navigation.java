@@ -110,6 +110,8 @@ public class Navigation {
 		double yPos, yErr;
 		double targetAngle, distance;
 		
+		int i=0;
+		
 		while (euclideanDistance(odo.getX(), odo.getY(), x, y) > POS_ERROR) {
 			// Get the robot's current position
 			xPos = odo.getX();
@@ -192,13 +194,13 @@ public class Navigation {
 	
 	// Returns an angle in the range [-180, 180] negative angle means turn left
 	private double shortestAngle(double currentAngle, double targetAngle) {
-		double rawDeltaAngle = computeError(targetAngle, currentAngle);
+		double rawDeltaAngle = computeError(currentAngle, targetAngle);
 		
 		if (Math.abs(rawDeltaAngle) > 180) {
 			if (rawDeltaAngle > 0) {
-				return rawDeltaAngle-360;
-			} else if (rawDeltaAngle < 0 ) {
-				return 360 + rawDeltaAngle;	
+				return rawDeltaAngle - 360;
+			} else if (rawDeltaAngle < 0) {
+				return rawDeltaAngle + 360;	
 			} else {
 				return 0;
 			}

@@ -215,9 +215,9 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		
 		if(whichLineCrossed(sensorPos) == Line.xAxis) {
 			
-			if (isParallelToX()) {
-				return;
-			}
+//			if (isParallelToX()) {
+//				return;
+//			}
 			
 			double yError = positionError(sensorPos[1]);
 			
@@ -225,9 +225,9 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 		}
 		else if (whichLineCrossed(sensorPos) == Line.yAxis) {
 			
-			if (isParallelToY()) {
-				return;
-			}
+//			if (isParallelToY()) {
+//				return;
+//			}
 			
 			double xError = positionError(sensorPos[0]);
 			
@@ -281,10 +281,11 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 
 		double delta = Math.abs(xError) - Math.abs(yError);
 
-		if(Math.abs(delta) < 1) {
-			return Line.unsure;
-		}
-		else if (delta < 0) {
+//		if(Math.abs(delta) < 1) {
+//			return Line.unsure;
+//		}
+//		else 
+		if (delta < 0) {
 			return Line.yAxis;
 		}
 		else {

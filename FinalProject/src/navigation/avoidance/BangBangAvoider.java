@@ -52,7 +52,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	 */
 	@Override
 	public void avoid() {
-		
+
 		initialOrientation = odo.getTheta();
 		
 		Driver.stop();
@@ -78,6 +78,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			}
 		}
 		
+		Driver.setDrifting(false);
 		Driver.stop();
 	}
 	
@@ -98,13 +99,12 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			Driver.turn(direction.opposite(), TURN_AWAY_ANGLE);
 			LIVE_LOCK_COUNT++;
 		}
-		
-		Driver.setDrifting(false);
 	}
 	
 	private boolean hasAvoided() {
 		double endAngle = initialOrientation + wallDirection.getAngle();
 		endAngle = (endAngle < 0) ? (endAngle % 360) + 360 : endAngle % 360;
+		
 		
 		return isNear(endAngle , odo.getTheta(), AVOIDED_ANGLE_RANGE);
 	}

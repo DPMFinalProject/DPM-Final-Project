@@ -31,7 +31,7 @@ public class Driver {
 	
 	private final static int DRIFT_FACTOR = 95;				// Bigger = drift tighter , Smaller = larger
 	
-	private final static double WHL_RADIUS = 2.09;			// smaller radius = go further
+	private final static double WHL_RADIUS = 2.12;			// smaller radius = go further
 	private final static double WHL_SEPARATION = 16.6;		// smaller width = turn less
 
 	private final static NXTRegulatedMotor leftMotor = Motor.B, rightMotor = Motor.A;
@@ -164,7 +164,7 @@ public class Driver {
 	}
 	
 	/**
-	 * sNaively turns in the provided direction, no error checking with odometer.
+	 * Naively turns in the provided direction, no error checking with odometer.
 	 * 
 	 * @param direction	The direction in which to turn. RIGHT or LEFT.
 	 * @param angle	The angle by which to turn, in degrees. 
@@ -239,7 +239,7 @@ public class Driver {
 	 * 	Turns left or right, but not on itself. 
 	 * 	the robot will follow a curved path with specified radius
 	 * 
-	 * 	because this method returns immediately, the isDrifting status variable
+	 * 	Because this method returns immediately, the isDrifting status variable
 	 * 	should be set externally
 	 * 
 	 * @param direction	The direction in which to turn: LEFT or RIGHT
