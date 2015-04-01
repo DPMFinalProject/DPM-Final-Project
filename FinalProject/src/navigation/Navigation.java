@@ -110,10 +110,14 @@ public class Navigation {
 		double yPos, yErr;
 		double targetAngle, distance;
 		
+		int i=0;
+		
 		while (euclideanDistance(odo.getX(), odo.getY(), x, y) > POS_ERROR) {
 			// Get the robot's current position
 			xPos = odo.getX();
 			yPos = odo.getY();
+			
+			System.out.println("+++ looping +++: "+(i++));
 			
 			// Figure out the x and y displacement required to reach target
 			xErr = computeError(xPos, x);
@@ -121,6 +125,8 @@ public class Navigation {
 			
 			targetAngle = Math.toDegrees(Math.atan2(yErr, xErr));
 			targetAngle = adjustRefFrame(targetAngle);	// Odometer uses a slightly different reference frame
+			
+			System.out.println("target Angle: "+targetAngle);
 			
 			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
 			
@@ -194,13 +200,13 @@ public class Navigation {
 	
 	// Returns an angle in the range [-180, 180] negative angle means turn left
 	private double shortestAngle(double currentAngle, double targetAngle) {
-		double rawDeltaAngle = computeError(targetAngle, currentAngle);
+		double rawDeltaAngle = computeError(currentAngle, targetAngle);
 		
 		if (Math.abs(rawDeltaAngle) > 180) {
 			if (rawDeltaAngle > 0) {
-				return rawDeltaAngle-360;
-			} else if (rawDeltaAngle < 0 ) {
-				return 360 + rawDeltaAngle;	
+				return rawDeltaAngle - 360;
+			} else if (rawDeltaAngle < 0) {
+				return rawDeltaAngle + 360;	
 			} else {
 				return 0;
 			}
