@@ -13,5 +13,12 @@ package sensors.filters;
  * @author Oleg
  */
 public abstract class Filter {
+	
+	/**
+	 * Abstract definition of a filter method that allows the application of
+	 * mathematical operations on a signal received in real time.
+	 * @param value
+	 * @return
+	 */
 	public abstract double filter (double value);
 }

@@ -27,6 +27,11 @@ public abstract class FilteredSensor {
 	 */
 	public abstract double getFilteredData();
 	
+	/**
+	 * Apply all the provided filters to the desired signal.
+	 * @param signal
+	 * @return result
+	 */
 	protected double applyFilters(double signal) {
 		double result = signal;
 		

@@ -61,6 +61,9 @@ public class LSLocalizationIntercept extends Localization {
 		odo.setTheta(theta);
 	}
 	
+	/**
+	 * Private method that checks if the light sensors are perpendicular to a line.
+	 */
 	private void perpendicularToLine(){
 		while(triggeredSensor == SensorID.NONE) {
 			triggeredSensor = grid.whichSensorDetected();
@@ -84,7 +87,10 @@ public class LSLocalizationIntercept extends Localization {
 		Driver.stop();
 		pause(200);
 	}
-	
+	/**
+	 * Calling this method checks which motor is on a line (triggered). 
+	 * Then rotate the opposite motor until it also detects a line.
+	 */
 	private void rotateToLine() {
 		if(triggeredSensor == SensorID.LEFT){
 			Driver.moveOneMotor(Direction.RIGHT,Direction.FWD);

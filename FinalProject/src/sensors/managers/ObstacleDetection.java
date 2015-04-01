@@ -63,6 +63,11 @@ public class ObstacleDetection extends SensorManager {
 		pause(DETECTION_PERIOD);		
 	}
 	
+	/**
+	 * return true if the sensors detect an obstacle in front of the robot. false otherwise.
+	 * @param obstThresh
+	 * @return
+	 */
 	public boolean isFrontObstacle(double obstThresh) {
 		synchronized(lock) {
 			leftDistance = leftSensor.getFilteredData();
@@ -110,6 +115,11 @@ public class ObstacleDetection extends SensorManager {
 		return (leftDistance + rightDistance)/2;
 	}
 	
+	/**
+	 * return the distance measured by the sensors in the desired direction.
+	 * @param direction
+	 * @return
+	 */
 	public double wallDistance(Direction direction) {
 		switch(direction) {
 		case RIGHT:

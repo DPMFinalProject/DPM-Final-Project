@@ -24,6 +24,9 @@ public class OutlierFilter extends Filter {
 		this.outlierValue = outlierValue;
 	}
 	
+	/**
+	 * @see sensors.filters.Filter.java
+	 */
 	@Override
 	public double filter(double value) {
 		if (value < outlierValue) { // If the value is normal

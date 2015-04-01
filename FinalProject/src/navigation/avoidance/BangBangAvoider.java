@@ -32,6 +32,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 
 	private final int TURN_RADIUS = 30;	// drifting radius in cm
 	private final int TURN_AWAY_ANGLE = 10;	// turning angle for going away from wall.
+	private final int INITIAL_FACE_AWAY_TURN_ANGLE = 70;
 	
 	private int BANGBANG_PERIOD = 500;	// minimal delay between two consecutive bang-bang avoidance calls
 
@@ -44,6 +45,11 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		detector = ObstacleDetection.getObstacleDetection();
 	}
 	
+	/**
+	 * Take care of avoiding any obstacle detected by the US Sensors.
+	 * It will move the robot based on where are the obstacles are detected,
+	 * even during avoidance.
+	 */
 	@Override
 	public void avoid() {
 		
@@ -55,7 +61,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			wallDirection = Direction.RIGHT;
 		}
 		
-		Driver.turn(wallDirection.opposite(), 70);	// need a var name
+		Driver.turn(wallDirection.opposite(), INITIAL_FACE_AWAY_TURN_ANGLE);
 		
 		while(!hasAvoided()) {
 			bangBang(wallDirection);
@@ -67,7 +73,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			}
 			
 			if(LIVE_LOCK_COUNT >= LIVE_LOCK_MAX) {
-				Driver.move(-20);
+				Driver.move(-BAND_CENTER);
 				break;
 			}
 		}

@@ -72,6 +72,10 @@ public class GridManager extends SensorManager {
 		pause(SAMPLING_RATE);
 	}
 	
+	/**
+	 * return true if a line is detected. false otherwise.
+	 * @return
+	 */
 	public boolean lineDetected() {
 		if (rightCSOnLine || leftCSOnLine) {
 			return true;
@@ -79,14 +83,26 @@ public class GridManager extends SensorManager {
 		return false;
 	}
 	
+	/**
+	 * is right line detected
+	 * @return rightCSOnLine
+	 */
 	public boolean lineDetectedRS() {
 		return rightCSOnLine;
 	}
 	
+	/**
+	 * is left line detected
+	 * @return leftCSOnLine
+	 */
 	public boolean lineDetectedLS() {
 		return leftCSOnLine;
 	}
 	
+	/**
+	 * return which sensor detected a line
+	 * @return SensorID
+	 */
 	public SensorID whichSensorDetected()
 	{
 		if (rightCSOnLine && leftCSOnLine) {
@@ -103,6 +119,11 @@ public class GridManager extends SensorManager {
 		}
 	}
 	
+	/**
+	 * return true if the sensor is on a line
+	 * @param ID
+	 * @return
+	 */
 	public boolean isOnLine(SensorID ID){
 		switch(ID) {
 		case BOTH:

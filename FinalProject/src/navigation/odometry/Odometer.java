@@ -71,19 +71,19 @@ public class Odometer implements Runnable {
 	}
 
 //--------------------------------------- UTILITY METHODS ---------------------------------------
-	
-	private void getTotalTachoCount(){
+	// How many turns did each motor do since the start of the program
+	private void getTotalTachoCount() {
 		tachoTotal[0] += delTacho[0];
 		tachoTotal[1] += delTacho[1];
 	}
 	
-	private void delPos(){
+	private void delPos() {
 		//get the change in position
 		posChange[0] = Driver.getDelArc(delTacho);
 		posChange[1] = Driver.getDelTheta(delTacho);
 	}
 	
-	private void odometerUpdate(double delArc,double delTheta){
+	private void odometerUpdate(double delArc,double delTheta) {
 		//update position of the center of rotation of the robot
 		x += delArc * Math.sin(Math.toRadians(theta + (delTheta/2)));
 		y += delArc * Math.cos(Math.toRadians(theta + (delTheta/2)));

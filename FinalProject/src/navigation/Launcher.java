@@ -27,8 +27,8 @@ public class Launcher {
 	//range: (offset, range)
 	private final double[] range = {0,160};
 	
-	private Odometer odo;
-	private Navigation nav;
+	private final Odometer odo;
+	private final Navigation nav;
 	private final int LAUNCH_SPEED = 300;
 	private double[] flexibleRange;
 	private double minShootingArea = 9 * Measurements.TILE;
@@ -115,7 +115,7 @@ public class Launcher {
 		} while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))));
 		
 		
-		coordinates[0] = x;												//update coordinates
+		coordinates[0] = x; //update coordinates
 		if (isInShootingArea(yUpperCircle)) {
 			coordinates[1] = yUpperCircle;
 		}
@@ -126,10 +126,11 @@ public class Launcher {
 	}
 
 	private boolean isInShootingArea(double val) {
-		if(val > minShootingArea && val < maxShootingArea-20){
-			return true;
-		}
-		return false;
+		return val > minShootingArea && val < maxShootingArea-20;
+//		if(val > minShootingArea && val < maxShootingArea-20){
+//			return true;
+//		}
+//		return false;
 	}
 
 	private void findTheta(double targetX, double targetY, double[] coordinates) {

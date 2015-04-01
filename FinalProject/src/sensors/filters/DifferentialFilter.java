@@ -21,6 +21,9 @@ public class DifferentialFilter extends Filter {
 		window = new MovingWindow(windowSize);
 	}
 	
+	/**
+	 * @see sensors.filters.Filter.java
+	 */
 	@Override
 	public double filter(double value) {
 		window.add(value);

@@ -24,6 +24,10 @@ public class USLocalizationDiagonal extends USLocalization {
 		super(odo, nav);
 	}
 
+	/**
+	 * 
+	 * @see navigation.localization.Localization.java
+	 */
 	@Override
 	public void doLocalization(double x, double y, double theta) {
 		if(!obstacleDetection.isFrontObstacle())
@@ -35,11 +39,11 @@ public class USLocalizationDiagonal extends USLocalization {
 		 */
 		double yPos = obtainYPosition(false);
 		double xPos = obtainXPosition(false);
-		double centerAngle = Math.toDegrees(Math.atan2(yPos, xPos)) - (SENSOR_VIEW_ANGLE + 10);
+		
+		double centerAngle = Math.toDegrees(Math.atan2(yPos, xPos));
 		
 		Driver.turn(Direction.LEFT, centerAngle);
-		Driver.move(Math.sqrt(yPos*yPos + xPos*xPos) + 10);
-		Driver.turn(Direction.RIGHT, centerAngle + 60);
+		Driver.move(Math.sqrt(yPos*yPos + xPos*xPos));
 		
 	}
 	

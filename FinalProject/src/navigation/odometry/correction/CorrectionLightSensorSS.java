@@ -43,15 +43,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	public void run() {
 		while(true) {
 			 
-			// Wait for a line
-			while(!grid.lineDetected()) {
-				pause(10);
-				
-				while(Driver.isTurning() || Driver.isMovingBackwards() || Driver.isDrifting()) {
-					pause(100);
-					setFlags(false);
-				}
-			}
+			waitForLine();
 			
 			SensorID sensor = grid.whichSensorDetected();
 			
@@ -67,6 +59,17 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				setFlags(false);
 				
 				pause(100);
+			}
+		}
+	}
+	
+	private void waitForLine() {
+		while(!grid.lineDetected()) {
+			pause(10);
+			
+			while(Driver.isTurning() || Driver.isMovingBackwards() || Driver.isDrifting()) {
+				pause(100);
+				setFlags(false);
 			}
 		}
 	}

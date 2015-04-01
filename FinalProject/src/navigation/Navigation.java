@@ -187,8 +187,6 @@ public class Navigation {
 				System.out.println("Robot trying to turn by 0 degrees for some reason");
 			}
 			
-			pause(15); // necessary?
-			
 		} while (shortestAngle(odo.getTheta(), theta) > ANGLE_ERROR);
 	}
 	

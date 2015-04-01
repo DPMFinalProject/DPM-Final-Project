@@ -117,12 +117,8 @@ public class Commander {
 		lsl.doLocalization();
 		Driver.turn(Direction.LEFT, 90);
 		Driver.move(-10);
-		lsl.doLocalization();
+		lsl.doLocalization(6, -6, 270);
 		lsl = null;
-		
-		odo.setX(6);
-		odo.setY(-6);
-		odo.setTheta(270);
 		
 		nav.travelTo(0, 0, 0, false);
 		

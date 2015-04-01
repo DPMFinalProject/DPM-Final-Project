@@ -36,6 +36,10 @@ public class USLocalization extends Localization {
 		obstacleDetection = ObstacleDetection.getObstacleDetection();
 	}
 	
+	/**
+	 * Method that manage the whole Ultrasonic part of the localization.
+	 * @param x, y, theta
+	 */
 	public void doLocalization(double x, double y, double theta) {
 		if(!obstacleDetection.isFrontObstacle())
 			faceWall();
@@ -61,6 +65,11 @@ public class USLocalization extends Localization {
 		odo.setTheta(theta);
 	}
 	
+	/**
+	 * Method used to measure the current x position of the robot
+	 * @param move
+	 * @return xPosition
+	 */
 	protected double obtainXPosition(boolean move) {
 		double xPosition;
 		
@@ -77,13 +86,18 @@ public class USLocalization extends Localization {
 		return xPosition;
 	}
 	
+	/**
+	 * Method used to measure the current y position of the robot when localizing
+	 * @param move
+	 * @return yPosition
+	 */
 	protected double obtainYPosition(boolean move) {
 		double yPosition;
 		
 		faceAwayFromWall(Direction.LEFT);
 		Driver.turn(Direction.LEFT, SENSOR_VIEW_ANGLE);
 		yPosition = obstacleDetection.rightDistance() + SENSOR_OFFSET - Measurements.TILE;
-		Driver.turn(Direction.RIGHT, SENSOR_VIEW_ANGLE + 10);
+		Driver.turn(Direction.RIGHT, SENSOR_VIEW_ANGLE);
 		
 //		System.out.println("YPos: " + yPosition);
 		
@@ -93,7 +107,11 @@ public class USLocalization extends Localization {
 		return yPosition;
 	}
 	
-	// turn until facing away from wall;
+	/**
+	 * Moves the robot so it faces away from the wall
+	 * @param sensorDirection
+	 * @see obtainXPosition(), obtainYPosition()
+	 */
 	private void faceAwayFromWall(Direction sensorDirection){
 		double wallDistance;
 		DifferentialFilter dFilter = new DifferentialFilter(2);
@@ -114,6 +132,10 @@ public class USLocalization extends Localization {
 		Driver.stop();
 	}
 	
+	/**
+	 * Moves the robot so it faces toward the wall.
+	 * @see doLocalization()
+	 */
 	protected void faceWall() {
 		// Turn until facing a wall
 

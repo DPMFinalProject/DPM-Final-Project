@@ -70,12 +70,8 @@ public class Driver {
 			rightMotor.forward();
 		}
 		else {
-			isMovingBackwards = true;
-			
 			leftMotor.backward();
 			rightMotor.backward();
-			
-			isMovingBackwards = false;	// ??
 		}
 	}
 	

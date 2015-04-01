@@ -11,6 +11,7 @@ package tests.navigation.localization;
 import navigation.Navigation;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.USLocalization;
+import navigation.localization.USLocalizationDiagonal;
 import navigation.odometry.Odometer;
 import tests.TestCase;
 
@@ -32,13 +33,12 @@ public class USLocalizationTest extends TestCase {
 		Navigation nav = new Navigation(odo);
 		
 		
-		USLocalization usl= new USLocalization(odo, nav);
+		USLocalization usl= new USLocalizationDiagonal(odo, nav);
 		LSLocalizationIntercept lsl = new LSLocalizationIntercept(odo, nav);
-		//odo.setX(40);
-		//odo.setY(40);
+		
 	
 		usl.doLocalization();
-		lsl.doLocalization();
+		//lsl.doLocalization();
 		
 		//System.out.println("Localization Finished");
 		System.out.println("X: " + odo.getX());
