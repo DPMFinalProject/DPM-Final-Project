@@ -29,6 +29,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	// Orientation correction flags and position variables
 	private boolean rightCrossed = false, leftCrossed = false;
 	private boolean waitingForSecondCross = false;
+	private boolean failedOrientationCorrection = false;
 	private Line axisCrossed;
 	private double[] firstCross = new double[3];
 	private double[] secondCross = new double[3];
@@ -57,6 +58,11 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				correctPosition(sensor);
 				
 				setFlags(false);
+				
+				if (failedOrientationCorrection) {
+					correctOrientation(sensor);
+					failedOrientationCorrection = false;
+				}
 				
 				pause(100);
 			}
@@ -130,6 +136,9 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 
 				odo.setTheta(roundedTheta + thetaOffSet());
 			}
+			else {
+				failedOrientationCorrection = true;
+			}
 
 			break;
 
@@ -154,6 +163,9 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				double roundedTheta = Math.round(odo.getTheta()/90.0)*90;
 
 				odo.setTheta(roundedTheta - thetaOffSet());
+			}
+			else {
+				failedOrientationCorrection = true;
 			}
 
 			break;
@@ -223,7 +235,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			
 			odo.setY(odo.getY() - yError);
 		}
-		else if (whichLineCrossed(sensorPos) == Line.yAxis) {
+		else {
 			
 //			if (isParallelToY()) {
 //				return;

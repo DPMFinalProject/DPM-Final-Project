@@ -8,6 +8,7 @@
  */
 package tests.navigation.localization;
 
+import navigation.Driver;
 import navigation.Navigation;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.USLocalization;
@@ -15,6 +16,7 @@ import navigation.localization.USLocalizationDiagonal;
 import navigation.localization.USLocalizationMin;
 import navigation.odometry.Odometer;
 import tests.TestCase;
+import util.Direction;
 
 /**
  * 
@@ -39,9 +41,10 @@ public class USLocalizationTest extends TestCase {
 		
 	
 		usl.doLocalization();
+
 		//lsl.doLocalization();
 		
-		nav.travelTo(0,0, false);
+		nav.travelTo(0, 0, false);
 		
 		//System.out.println("Localization Finished");
 		System.out.println("X: " + odo.getX());

@@ -8,6 +8,7 @@
  */
 package navigation.localization;
 
+import sensors.filters.AveragingFilter;
 import sensors.filters.DifferentialFilter;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
@@ -26,9 +27,10 @@ public class USLocalization extends Localization {
 	
 	protected ObstacleDetection obstacleDetection;
 	
-	protected final double SENSOR_VIEW_ANGLE = 30;
-	protected final double SENSOR_OFFSET = 10;//9.3;
-	protected final double FRONT_OBSTACLE_THRESHOLD = 46;
+	protected final double SENSOR_OUTSIDE_VIEW_ANGLE = 30;
+	protected final double SENSOR_INSIDE_VIEW_ANGLE = 40;
+	protected final double SENSOR_OFFSET = 10.5;//10;//9.3;
+	protected final double FRONT_OBSTACLE_THRESHOLD = 45;
 	
 	public USLocalization(Odometer odo, Navigation nav) {
 		super(odo, nav);
@@ -74,11 +76,11 @@ public class USLocalization extends Localization {
 		double xPosition;
 		
 		faceAwayFromWall(Direction.RIGHT);
-		Driver.turn(Direction.RIGHT, SENSOR_VIEW_ANGLE);
+		Driver.turn(Direction.RIGHT, SENSOR_OUTSIDE_VIEW_ANGLE);
 		xPosition = obstacleDetection.leftDistance() + SENSOR_OFFSET - Measurements.TILE;
-		Driver.turn(Direction.LEFT, SENSOR_VIEW_ANGLE + 10);
+		Driver.turn(Direction.LEFT, SENSOR_INSIDE_VIEW_ANGLE);
 		
-//		System.out.println("XPos: " + xPosition);
+		System.out.println("XPos: " + xPosition);
 		
 		if (move)
 			Driver.move(xPosition);
@@ -95,11 +97,11 @@ public class USLocalization extends Localization {
 		double yPosition;
 		
 		faceAwayFromWall(Direction.LEFT);
-		Driver.turn(Direction.LEFT, SENSOR_VIEW_ANGLE);
+		Driver.turn(Direction.LEFT, SENSOR_OUTSIDE_VIEW_ANGLE);
 		yPosition = obstacleDetection.rightDistance() + SENSOR_OFFSET - Measurements.TILE;
-		Driver.turn(Direction.RIGHT, SENSOR_VIEW_ANGLE);
+		Driver.turn(Direction.RIGHT, SENSOR_INSIDE_VIEW_ANGLE);
 		
-//		System.out.println("YPos: " + yPosition);
+		System.out.println("YPos: " + yPosition);
 		
 		if (move)
 			Driver.move(yPosition);
@@ -114,6 +116,7 @@ public class USLocalization extends Localization {
 	 */
 	protected void faceAwayFromWall(Direction sensorDirection){
 		double wallDistance;
+		
 		DifferentialFilter dFilter = new DifferentialFilter(2);
 		
 		Driver.turn(sensorDirection);
@@ -128,7 +131,7 @@ public class USLocalization extends Localization {
 			
 			wallDistance = dFilter.filter(wallDistance);
 			pause(20);
-		} while(wallDistance < 40 || wallDistance > 245);
+		} while(obstacleDetection.isFrontObstacle(FRONT_OBSTACLE_THRESHOLD)/*wallDistance < 30 || wallDistance > 245*/);
 		Driver.stop();
 	}
 	
@@ -144,6 +147,6 @@ public class USLocalization extends Localization {
 			pause(20);
 		}
 		Driver.stop();
-		Driver.turn(Direction.RIGHT, 90);
+		//Driver.turn(Direction.RIGHT, 90);
 	}
 }

@@ -18,7 +18,7 @@ public class Victory extends Song {
 	private String[] tones = {"D5", "D5", "D5", "D5", "A#5", "C5", "D5", "C5", "D5"};
 	
 	//{duration, pause}
-	private int[][] timing = {{148, 150}, {148, 150}, {148, 150}, {148, 400}, {444, 400}, 
+	private int[][] timing = {{148, 160}, {148, 160}, {148, 160}, {148, 400}, {444, 400}, 
 			{444, 400}, {148, 300}, {148, 150}, {889, 400}};
 	
 	@Override
