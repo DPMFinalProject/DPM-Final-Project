@@ -168,7 +168,7 @@ public class Driver {
 	}
 	
 	/**
-	 * sNaively turns in the provided direction, no error checking with odometer.
+	 * Naively turns in the provided direction, no error checking with odometer.
 	 * 
 	 * @param direction	The direction in which to turn. RIGHT or LEFT.
 	 * @param angle	The angle by which to turn, in degrees. 
@@ -243,7 +243,7 @@ public class Driver {
 	 * 	Turns left or right, but not on itself. 
 	 * 	the robot will follow a curved path with specified radius
 	 * 
-	 * 	because this method returns immediately, the isDrifting status variable
+	 * 	Because this method returns immediately, the isDrifting status variable
 	 * 	should be set externally
 	 * 
 	 * @param direction	The direction in which to turn: LEFT or RIGHT

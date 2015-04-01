@@ -18,9 +18,9 @@ import lejos.util.Matrix;
  */
 public class SavitzkyGolay extends Filter {
 	private MovingWindow window;
-	public int polynomialOrder;
-	public int windowSize;
-	public double[] convCoefs;
+	private int polynomialOrder;
+	private int windowSize;
+	private double[] convCoefs;
 	
 	public SavitzkyGolay(int windowSize, int polynomialOrder) {
 		window = new MovingWindow(windowSize);
@@ -38,7 +38,7 @@ public class SavitzkyGolay extends Filter {
 		return window.weightedAverage(convCoefs);
 	}
 	
-	public void calculateCoefficients(double[] coefficients)
+	private void calculateCoefficients(double[] coefficients)
 	{
 		Matrix Jacobian = new Matrix(windowSize, polynomialOrder+1);
 		populate(Jacobian);
@@ -51,7 +51,7 @@ public class SavitzkyGolay extends Filter {
 		
 	}
 	
-	public void getRow(double[] row, Matrix m, int rowNumber)
+	private void getRow(double[] row, Matrix m, int rowNumber)
 	{
 		for(int i=0; i<windowSize; i++)
 		{
@@ -59,7 +59,7 @@ public class SavitzkyGolay extends Filter {
 		}
 	}
 	
-	public void populate(Matrix J)
+	private void populate(Matrix J)
 	{
 		for(int i=0; i < windowSize;i++)//row index
 		{
