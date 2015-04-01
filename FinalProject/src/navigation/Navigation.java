@@ -117,16 +117,12 @@ public class Navigation {
 			xPos = odo.getX();
 			yPos = odo.getY();
 			
-			System.out.println("+++ looping +++: "+(i++));
-			
 			// Figure out the x and y displacement required to reach target
 			xErr = computeError(xPos, x);
 			yErr = computeError(yPos, y);
 			
 			targetAngle = Math.toDegrees(Math.atan2(yErr, xErr));
 			targetAngle = adjustRefFrame(targetAngle);	// Odometer uses a slightly different reference frame
-			
-			System.out.println("target Angle: "+targetAngle);
 			
 			distance = Math.sqrt((xErr * xErr) + (yErr * yErr));
 			

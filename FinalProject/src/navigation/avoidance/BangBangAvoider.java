@@ -46,9 +46,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	
 	@Override
 	public void avoid() {
-		
-		System.out.println("+++ trying to avoid +++");
-		
+
 		initialOrientation = odo.getTheta();
 		
 		Driver.stop();
