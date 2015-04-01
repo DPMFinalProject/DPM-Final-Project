@@ -15,6 +15,7 @@ import lejos.nxt.comm.RConsole;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.Localization;
 import navigation.localization.USLocalization;
+import navigation.localization.USLocalizationDiagonal;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
 import util.Direction;
@@ -26,7 +27,7 @@ import util.Utilities;
  */
 public class Commander {
 	
-	private static double[] target1 = {9, 9};
+	private static double[] target1 = {4, 13};
 	//private static double[] target2 = {9, 9};
 	
 //	private static double[][] destinations = {
@@ -39,7 +40,7 @@ public class Commander {
 //		{6, 6}
 //		};
 	
-	private static double[][] destinations = {{0, 5}, {9, 5}};
+	private static double[][] destinations = {{5, 10}};
 	
 	private static void execute() {
 		
@@ -56,12 +57,11 @@ public class Commander {
 		usl.doLocalization(0, 0, 0);
 		usl = null;
 
-		Driver.move(-2);
 		Localization lsl = new LSLocalizationIntercept(odo, nav);
 		lsl.doLocalization(0, -6, 0);	
-//		Driver.turn(Direction.LEFT, 90);
-//		Driver.move(-10);
-//		lsl.doLocalization();
+		Driver.turn(Direction.RIGHT, 90);
+		Driver.move(-5);
+		lsl.doLocalization(-6, -6, 90);
 		lsl = null;
 				
 		completed();
@@ -73,20 +73,10 @@ public class Commander {
 		(new Thread(correction)).start();
 
 //--------------------------------------- GO TO SHOOTING AREA ---------------------------------------
-		
-		(new Thread() {
-			public void run() {
-				while(true) {
-					System.out.println(odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
-					Utilities.pause(500);
-				}
-			}
-		}).start();
-		
+				
 		//through unmapped area
 		for (double[] destination : destinations) {
-			nav.travelToInTiles(destination[0], destination[1], false);
-			System.out.println("Finished x destination");
+			nav.travelToInTiles(destination[0], destination[1], true);
 		}
 		
 		//through mapped area
@@ -104,32 +94,33 @@ public class Commander {
 		
 //--------------------------------------- LAUNCH BALLS ---------------------------------------
 		
-//		Launcher launcher = new Launcher(odo, nav, 5, 8);
-//		launcher.shootToInTiles(target1[0], target1[1], 3);
-//		//launcher.shootToInTiles(target2[0], target2[1], 3);
-//		launcher = null;
+		Launcher launcher = new Launcher(odo, nav, 5, 8);
+		launcher.shootToInTiles(target1[0], target1[1], 3);
+		//launcher.shootToInTiles(target2[0], target2[1], 3);
+		launcher = null;
 //		
 //		completed();
 //		System.out.println("DONE: Launching");
 		
 //--------------------------------------- GO BACK TO START ---------------------------------------
 		
-		nav.travelTo(0, 5, 0, true);
+		nav.travelTo(0, 0, 0, true);
 		System.out.println("DONE: Travel Back to Origin");
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
 		
-		usl = new USLocalization(odo, nav);
-		usl.doLocalization();
+		usl = new USLocalizationDiagonal(odo, nav);
+		usl.doLocalization(0, 0, 0);
 		usl = null;
-		
-		Driver.move(-2);
+
 		lsl = new LSLocalizationIntercept(odo, nav);
-		lsl.doLocalization();
-		Driver.turn(Direction.LEFT, 90);
+		lsl.doLocalization(0, -6, 0);	
+		Driver.turn(Direction.RIGHT, 90);
 		Driver.move(-10);
-		lsl.doLocalization(6, -6, 270);
+		lsl.doLocalization(-6, -6, 90);
 		lsl = null;
+				
+		completed();
 		
 		nav.travelTo(0, 0, 0, false);
 		

@@ -8,12 +8,14 @@
  */
 package tests.navigation.localization;
 
+import navigation.Driver;
 import navigation.Navigation;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.USLocalization;
 import navigation.localization.USLocalizationDiagonal;
 import navigation.odometry.Odometer;
 import tests.TestCase;
+import util.Direction;
 
 /**
  * 
@@ -38,12 +40,10 @@ public class USLocalizationTest extends TestCase {
 		
 	
 		usl.doLocalization();
-		//lsl.doLocalization();
-		
-		//System.out.println("Localization Finished");
-		System.out.println("X: " + odo.getX());
-		System.out.println("Y: " + odo.getY());
-		System.out.println("Theta: " + odo.getTheta());
+		lsl.doLocalization(0, -6, 0);
+		Driver.turn(Direction.RIGHT, 90);
+		lsl.doLocalization(-6, -6, 90);
+		nav.travelTo(0, 0, 0, false);
 	}
 
 }

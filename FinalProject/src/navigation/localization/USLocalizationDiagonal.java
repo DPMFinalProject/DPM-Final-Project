@@ -12,6 +12,7 @@ import util.Direction;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
+import static util.Utilities.pause;
 
 /**
  * 	Less accurate but faster localization that just moves the robot into the first square.
@@ -30,21 +31,18 @@ public class USLocalizationDiagonal extends USLocalization {
 	 */
 	@Override
 	public void doLocalization(double x, double y, double theta) {
+		double xPos, yPos;
+		
 		if(!obstacleDetection.isFrontObstacle())
 			faceWall();
-		/* 
-		 * Do multiple iterations of adjustments of the X and Y positions,
-		 * the robot will converge onto (0, 0) provided SENSOR_OFFSET is calibrated
-		 * correctly.
-		 */
-		double yPos = obtainYPosition(false);
-		double xPos = obtainXPosition(false);
 		
-		double centerAngle = Math.toDegrees(Math.atan2(yPos, xPos));
+		yPos = obtainYPosition(false);
+		xPos = obtainXPosition(false);
 		
-		Driver.turn(Direction.LEFT, centerAngle);
-		Driver.move(Math.sqrt(yPos*yPos + xPos*xPos));
+		odo.setX(xPos);
+		odo.setY(yPos);
+		odo.setTheta(270);
 		
+		nav.travelTo(-10, -10, 0, false);
 	}
-	
 }
