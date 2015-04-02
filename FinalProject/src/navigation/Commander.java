@@ -27,7 +27,7 @@ import util.Utilities;
  */
 public class Commander {
 	
-	private static boolean MAPPED = false;
+	private static boolean MAPPED = true;
 	
 	private static double[][] destinations = {
 		{2, 3},
@@ -106,31 +106,31 @@ public class Commander {
 		
 //--------------------------------------- GO BACK TO START ---------------------------------------
 		
-		nav.travelTo(0, 0, 0, true);
+		nav.travelTo(0, 0, false);
 		System.out.println("DONE: Travel Back to Origin");
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
 		
-		usl = new USLocalizationDiagonal(odo, nav);
-		usl.doLocalization(0, 0, 0);
-		usl = null;
-
-		lsl = new LSLocalizationIntercept(odo, nav);
-		lsl.doLocalization(0, -6, 0);	
-		Driver.turn(Direction.RIGHT, 90);
-		Driver.move(-10);
-		lsl.doLocalization(-6, -6, 90);
-		lsl = null;
-				
-		completed();
-		
-		nav.travelTo(0, 0, 0, false);
-		
-		System.out.println("DONE: Final Localization");
+//		usl = new USLocalizationDiagonal(odo, nav);
+//		usl.doLocalization(0, 0, 0);
+//		usl = null;
+//
+//		lsl = new LSLocalizationIntercept(odo, nav);
+//		lsl.doLocalization(0, -6, 0);	
+//		Driver.turn(Direction.RIGHT, 90);
+//		Driver.move(-5);
+//		lsl.doLocalization(-6, -6, 90);
+//		lsl = null;
+//				
+//		completed();
+//		
+//		nav.travelTo(0, 0, 0, false);
+//		
+//		System.out.println("DONE: Final Localization");
 		
 //--------------------------------------- VICTOIRE ---------------------------------------
 		
-		new util.songs.Victory().play();
+//		new util.songs.Victory().play();
 		
 	}
 	

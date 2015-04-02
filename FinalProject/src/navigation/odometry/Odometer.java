@@ -121,6 +121,8 @@ public class Odometer implements Runnable {
 
 	public void setTheta(double theta) {
 		synchronized (lock) {
+			theta = theta % 360;
+			theta = (theta < 0) ? (theta + 360) : theta;
 			this.theta = theta;
 		}
 	}

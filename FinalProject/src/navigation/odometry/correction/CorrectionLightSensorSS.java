@@ -29,11 +29,11 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	// Orientation correction flags and position variables
 	private boolean rightCrossed = false, leftCrossed = false;
 	private boolean waitingForSecondCross = false;
-	private boolean failedOrientationCorrection = false;
 	private Line axisCrossed;
 	private double[] firstCross = new double[3];
 	private double[] secondCross = new double[3];
 	
+	private final long ERROR_CHECK_PERIOD = 2000;
 	
 	public CorrectionLightSensorSS(Odometer odo) {
 		super(odo);
@@ -48,6 +48,10 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			
 			SensorID sensor = grid.whichSensorDetected();
 			
+			if (!rightCrossed && !leftCrossed) {
+				correctPosition(sensor);
+			}
+			
 			correctOrientation(sensor);
 			
 			if (rightCrossed && leftCrossed) {
@@ -58,11 +62,6 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				correctPosition(sensor);
 				
 				setFlags(false);
-				
-				if (failedOrientationCorrection) {
-					correctOrientation(sensor);
-					failedOrientationCorrection = false;
-				}
 				
 				pause(100);
 			}
@@ -104,13 +103,11 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			Line rightLineCrossed = whichLineCrossed(SensorID.RIGHT);
 			Line leftLineCrossed = whichLineCrossed(SensorID.LEFT);
 
-			if (rightLineCrossed != leftLineCrossed || rightLineCrossed == Line.unsure) {
-				break;
+			if (!(rightLineCrossed != leftLineCrossed || rightLineCrossed == Line.unsure)) {
+
+				double newTheta = Math.round(odo.getTheta()/90)*90;
+				odo.setTheta(newTheta);
 			}
-
-			double newTheta = Math.round(odo.getTheta()/90)*90;
-
-			odo.setTheta(newTheta);
 
 			break;
 
@@ -134,10 +131,17 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 
 				double roundedTheta = Math.round(odo.getTheta()/90.0)*90;
 
-				odo.setTheta(roundedTheta + thetaOffSet());
-			}
-			else {
-				failedOrientationCorrection = true;
+				double newTheta = roundedTheta + thetaOffSet();
+				
+				if(isNear(newTheta, odo.getTheta(), 30)) {
+					odo.setTheta(newTheta);
+				}
+				else {					
+					newTheta = (roundedTheta < odo.getTheta()) ? newTheta + 90 : newTheta - 90;
+					if(isNear(newTheta, odo.getTheta(), 30)) {
+						odo.setTheta(newTheta);
+					}
+				}
 			}
 
 			break;
@@ -161,11 +165,18 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				odo.getPosition(secondCross);
 
 				double roundedTheta = Math.round(odo.getTheta()/90.0)*90;
-
-				odo.setTheta(roundedTheta - thetaOffSet());
-			}
-			else {
-				failedOrientationCorrection = true;
+				
+				double newTheta = roundedTheta - thetaOffSet();
+				
+				if(isNear(newTheta, odo.getTheta(), 30)) {
+					odo.setTheta(newTheta);
+				}
+				else {					
+					newTheta = (roundedTheta < odo.getTheta()) ? newTheta + 90 : newTheta - 90;
+					if(isNear(newTheta, odo.getTheta(), 30)) {
+						odo.setTheta(newTheta);
+					}
+				}
 			}
 
 			break;
@@ -343,10 +354,6 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	 */
 	private boolean isParallelToY() {
 		return isNear(0, odo.getTheta() % 180, 10) || isNear(180, odo.getTheta() % 180, 10);
-//		if (isNear(0, odo.getTheta() % 180, 10) || isNear(180, odo.getTheta() % 180, 10)) {
-//			return true;
-//		}
-//		return false;
 	}
 	
 	/**
@@ -354,10 +361,6 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	 */
 	private boolean isParallelToX() {
 		return isNear(90, odo.getTheta() % 180, 10) || isNear(270, odo.getTheta() % 180, 10);
-//		if (isNear(90, odo.getTheta() % 180, 10) || isNear(270, odo.getTheta() % 180, 10)) {
-//			return true;
-//		}
-//		return false;
 	}
 	
 	/**
@@ -384,11 +387,18 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 				
 				waitingForSecondCross = true;
 				
-				pause(2000);
-				if (leftCrossed || rightCrossed) {
-					//if either is still true. error occurred! reset flags!
-					setFlags(false);
+				long checkStartTime = System.currentTimeMillis();
+				
+				while(System.currentTimeMillis() - checkStartTime < ERROR_CHECK_PERIOD) {
+					if (!leftCrossed && !rightCrossed) {
+						waitingForSecondCross = false;
+						return;
+					}
+					pause(20);
 				}
+				
+				//error occurred! reset flags!
+				setFlags(false);
 			}
 		}).start();
 	}
