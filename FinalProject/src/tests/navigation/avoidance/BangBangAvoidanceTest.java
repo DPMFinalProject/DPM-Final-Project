@@ -9,6 +9,7 @@
 package tests.navigation.avoidance;
 
 import tests.TestCase;
+import util.Measurements;
 import navigation.Navigation;
 import navigation.odometry.Odometer;
 
@@ -23,7 +24,6 @@ public class BangBangAvoidanceTest extends TestCase {
 	public BangBangAvoidanceTest() {
 		odo = new Odometer();
 		new Thread(odo).start();
-		//avoider = new BangBangAvoider(Direction.RIGHT, odo);
 	}
 	
 	/**
@@ -33,7 +33,9 @@ public class BangBangAvoidanceTest extends TestCase {
 	public void runTest() {
 		
 		Navigation nav = new Navigation(odo);
-		nav.travelToInTiles(0, 3, true);
+		odo.setX(5*Measurements.TILE);//this is so that the robot is in the correction range
+		odo.setY(2*Measurements.TILE);
+		nav.travelToInTiles(5, 5, true);
 		
 	}
 }

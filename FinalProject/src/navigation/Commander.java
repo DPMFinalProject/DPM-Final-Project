@@ -27,7 +27,7 @@ import util.Utilities;
  */
 public class Commander {
 	
-	private static boolean MAPPED = true;
+	private static boolean MAPPED = false;
 	
 	private static double[][] destinations = {
 		{2, 3},
@@ -106,7 +106,7 @@ public class Commander {
 		
 //--------------------------------------- GO BACK TO START ---------------------------------------
 		
-		nav.travelTo(0, 0, false);
+		nav.travelTo(0, 0, true);
 		System.out.println("DONE: Travel Back to Origin");
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------

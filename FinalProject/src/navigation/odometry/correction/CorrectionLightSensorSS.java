@@ -342,7 +342,7 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 	 * @return polar coordinates in the form {r, theta}
 	 */
 	private double[] convertToPolar(double[] cartCoor) {
-		double distance = Math.sqrt(Math.pow(cartCoor[0], 2)+Math.pow(cartCoor[1],2));
+		double distance = Math.sqrt(Math.pow(cartCoor[0], 2) + Math.pow(cartCoor[1],2));
 		double angle = Math.atan(cartCoor[0]/cartCoor[1]);
 		
 		double[] result = {distance, angle};

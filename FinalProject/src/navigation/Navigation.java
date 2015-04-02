@@ -24,7 +24,7 @@ import static util.Utilities.pause;
 
 public class Navigation {
 	private final Odometer odo;
-	private final BangBangAvoider avoider;
+	private BangBangAvoider avoider;
 	
 	private final double ANGLE_ERROR = 10.0;
 	private final double POS_ERROR = 1.0;
@@ -36,7 +36,6 @@ public class Navigation {
 	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
-		avoider = new BangBangAvoider(odo);
 	}
 	
 	/**
@@ -153,16 +152,17 @@ public class Navigation {
 	 */
 	private void doAvoidance(double x, double y) {
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
-		
 		while(Driver.isMoving()) {
 			// Obstacle detection is used if the robot is far from its destination and not near a wall.
 			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > Measurements.TILE && !nearWall()) {
 				if (detection.isLeftObstacle()) {
-					avoider.setWallDirection(Direction.LEFT);
+					avoider = new BangBangAvoider(odo, Direction.LEFT);
 					avoider.avoid();
+					avoider = null;
 				} else if (detection.isRightObstacle()) {
-					avoider.setWallDirection(Direction.RIGHT);
+					avoider = new BangBangAvoider(odo, Direction.RIGHT);
 					avoider.avoid();
+					avoider = null;
 				}
 			}
 			pause(100);

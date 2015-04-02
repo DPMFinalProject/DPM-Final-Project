@@ -27,7 +27,6 @@ public class DriverCalibrationForward extends TestCase {
 		Driver.move(2*Measurements.TILE);
 		pause(2000);
 		Driver.turn(Direction.RIGHT, 360);
-		
-
+	
 	}
 }
