@@ -11,9 +11,7 @@ package tests.navigation.localization;
 import navigation.Driver;
 import navigation.Navigation;
 import navigation.localization.LSLocalizationIntercept;
-import navigation.localization.USLocalization;
 import navigation.localization.USLocalizationDiagonal;
-import navigation.localization.USLocalizationMin;
 import navigation.odometry.Odometer;
 import tests.TestCase;
 import util.Direction;
@@ -36,11 +34,11 @@ public class USLocalizationTest extends TestCase {
 		Navigation nav = new Navigation(odo);
 		
 		
-		USLocalization usl= new USLocalizationMin(odo, nav);
+//		USLocalization usl= new USLocalizationMin(odo, nav);
 		LSLocalizationIntercept lsl = new LSLocalizationIntercept(odo, nav);
 		
 	
-		usl.doLocalization();
+//		usl.doLocalization();
 
 		//lsl.doLocalization();
 		

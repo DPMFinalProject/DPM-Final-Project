@@ -23,8 +23,8 @@ import lejos.nxt.Motor;
 
 public class Driver {
 
-	private final static int FWD_SPEED = 300; //300
-	private final static int TURN_SPEED = 200; //200
+	private final static int FWD_SPEED = 400; //300
+	private final static int TURN_SPEED = 300; //200
 	
 	private final static int MOVE_ACCEL = 3000;
 	private final static int STOP_ACCEL = 9000;				// Stopping uses a larger acceleration to avoid overshooting

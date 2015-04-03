@@ -32,7 +32,7 @@ public class Navigation {
 	
 	// The following variables describe the range where the robot is considered to be far from a wall.
 	private final double DETECTION_AREA_MIN = 10;
-	private final double DETECTION_AREA_MAX = 6 * Measurements.TILE;
+	private final double DETECTION_AREA_MAX = 6 * Measurements.TILE - DETECTION_AREA_MIN;
 	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
@@ -154,7 +154,7 @@ public class Navigation {
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		while(Driver.isMoving()) {
 			// Obstacle detection is used if the robot is far from its destination and not near a wall.
-			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > Measurements.TILE && !nearWall()) {
+			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 2*Measurements.TILE && !nearWall()) {
 				if (detection.isLeftObstacle()) {
 					avoider = new BangBangAvoider(odo, Direction.LEFT);
 					avoider.avoid();
@@ -183,8 +183,6 @@ public class Navigation {
 				Driver.turn(Direction.RIGHT, dTheta);
 			} else if (dTheta < 0) {
 				Driver.turn(Direction.LEFT, Math.abs(dTheta));
-			} else { // Should never happen, would lead to an infinite loop
-				System.out.println("Robot trying to turn by 0 degrees for some reason");
 			}
 			
 		} while (shortestAngle(odo.getTheta(), theta) > ANGLE_ERROR);

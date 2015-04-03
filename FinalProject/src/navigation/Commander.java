@@ -14,7 +14,6 @@ import lejos.nxt.Sound;
 import lejos.nxt.comm.RConsole;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.Localization;
-import navigation.localization.USLocalization;
 import navigation.localization.USLocalizationDiagonal;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
@@ -50,22 +49,6 @@ public class Commander {
 		
 		Navigation nav = new Navigation(odo);
 		
-//--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
-		
-		USLocalization usl = new USLocalization(odo, nav);
-		usl.doLocalization(0, 0, 0);
-		usl = null;
-
-		Localization lsl = new LSLocalizationIntercept(odo, nav);
-		lsl.doLocalization(0, -6, 0);	
-		Driver.turn(Direction.RIGHT, 90);
-		Driver.move(-5);
-		lsl.doLocalization(-6, -6, 90);
-		lsl = null;
-				
-		completed();
-		System.out.println("DONE: Localization");
-		
 //--------------------------------------- START ODOMETRY CORRECTION ---------------------------------------
 		
 		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
@@ -80,6 +63,10 @@ public class Commander {
 			}
 		}
 		).start();
+		
+//--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
+		
+		// add localization
 		
 //--------------------------------------- GO TO SHOOTING AREA ---------------------------------------
 				

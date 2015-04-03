@@ -22,9 +22,10 @@ import static util.Utilities.pause;
 public class ObstacleDetection extends SensorManager {
 	private FilteredUltrasonicSensor leftSensor, rightSensor;
 	private final int US_SENSOR_OUTLIER = 255;
-	private final int OBSTACLE_THRESHOLD = 20;
+	private final int OBSTACLE_THRESHOLD = 30;	// Has to be raised when speed is increased
 	
 	private final int DETECTION_PERIOD = 20;
+	private final int PERP_ERROR = 20;
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
 	private double leftDistance = 100, rightDistance = 100;
@@ -113,6 +114,18 @@ public class ObstacleDetection extends SensorManager {
 	
 	public double frontDistance() {
 		return (leftDistance + rightDistance)/2;
+	}
+	
+	public double sideDistance(Direction direction) {
+		if (direction == Direction.RIGHT) {
+			return rightDistance;
+		} else {
+			return leftDistance;
+		}
+	}
+	
+	public boolean perpendicularToWall() {
+		return Math.abs(rightDistance() - leftDistance()) < PERP_ERROR; 
 	}
 	
 	/**

@@ -29,7 +29,7 @@ public class LSLocalizationIntercept extends Localization {
 	 * Distance by which the robot has to move back in order to ensure that the
 	 * light sensor does not see a line that was initially directly under it. 
 	 */
-	private final double LS_WIDTH = 2.0;
+	private final double LS_OFFSET = 6;
 	
 	private final int ITERATIONS = 1;
 	private final int LINE_CHECK_PERIOD = 10;
@@ -45,15 +45,20 @@ public class LSLocalizationIntercept extends Localization {
 	 */
 	@Override
 	public void doLocalization(double x, double y, double theta) {
+		// Cannot perform Light Localization if the robot starts on a gridline.
+		if (grid.lineDetected()) {
+			return;
+		}
 		/*
 		 * Increasing the iterations makes the localization more accurate but takes additional time.
 		 */
 		for(int i = 0; i < ITERATIONS; i++) {
 			//Set up for the next interception
-			Driver.move(-LS_WIDTH);
+			Driver.move(-1.5 * LS_OFFSET);	// To make sure that the LS is behind the gridline
 			triggeredSensor = SensorID.NONE;
 			Driver.move(Direction.FWD);
 			perpendicularToLine();
+			Driver.move(LS_OFFSET);
 		}
 		
 		odo.setX(x);
