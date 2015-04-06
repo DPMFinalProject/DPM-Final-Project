@@ -60,10 +60,10 @@ public class Launcher {
 	}
 	
 	private void shootTo(double targetX, double targetY, int projectiles) {
-		double[] launchingCoordinates = findLaunchingCoordinates(targetX,targetY);
-		nav.travelTo(launchingCoordinates[0], launchingCoordinates[1], false);	
+		//double[] launchingCoordinates = findLaunchingCoordinates(targetX,targetY);
+//		nav.travelTo(launchingCoordinates[0], launchingCoordinates[1], launchingCoordinates[2], false);	
 		
-		Sound.twoBeeps();
+		nav.travelTo(findLaunchingCoordinates(targetX,targetY), false);
 		shoot(projectiles);
 	}
 
@@ -134,7 +134,9 @@ public class Launcher {
 	}
 
 	private void findTheta(double targetX, double targetY, double[] coordinates) {
-		coordinates[2] = (Math.toDegrees(Math.atan2(targetX-odo.getX(), (targetY-odo.getY())))); /*- getRangeTheta() + 360)%360;*/
+		coordinates[2] = nav.adjustRefFrame((Math.toDegrees(Math.atan2(targetY-odo.getY(), (targetX-odo.getX()))))); 
+		System.out.println((int)coordinates[2] + "   "+ (int) odo.getX()+ "     "+ (int) odo.getY());
+		//coordinates[2] = nav.adjustRefFrame((Math.toDegrees(Math.atan2(targetX-odo.getX(), (targetY-odo.getY()))))); 
 	}
 	
 	//return the deviation angle of the projectile trajectory
