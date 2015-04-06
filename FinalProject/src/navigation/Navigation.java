@@ -60,6 +60,7 @@ public class Navigation {
 	 */
 	public void travelToInTiles(double x, double y, double theta, boolean avoiding) {
 		travelTo(x * Measurements.TILE, y * Measurements.TILE, avoiding);
+		Sound.twoBeeps();
 		turnTo(theta);
 	}
 	
@@ -217,7 +218,13 @@ public class Navigation {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
-	private double adjustRefFrame(double angle) {
+	
+	/**
+	 * Adjust an angle from a polar coordinate system to the reference frame of the odometer.
+	 * @param angle
+	 * @return
+	 */
+	public double adjustRefFrame(double angle) {
 		//Convert the destination angle to the same reference frame as the odometer angle
 		if (angle > 0){
 			if (angle < 90) {
@@ -242,5 +249,14 @@ public class Navigation {
 		
 		return xPos < DETECTION_AREA_MIN || yPos < DETECTION_AREA_MIN || 
 				xPos > DETECTION_AREA_MAX || yPos > DETECTION_AREA_MAX;
+	}
+
+		
+	public void travelTo(double[] coordinates, boolean avoiding) {
+		if (coordinates.length == 2) {
+			travelTo(coordinates[0], coordinates[1], avoiding);
+		} else {
+			travelTo(coordinates[0],coordinates[1],coordinates[2], avoiding);
+		}
 	}
 }
