@@ -12,6 +12,7 @@ import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.comm.RConsole;
+import navigation.localization.FullLocalization;
 import navigation.localization.LSLocalizationIntercept;
 import navigation.localization.Localization;
 import navigation.localization.USLocalizationDiagonal;
@@ -29,16 +30,14 @@ public class Commander {
 	private static boolean MAPPED = false;
 	
 	private static double[][] destinations = {
-		{2, 3},
-		{1, 4},
-		{5, 4},
-		{5, 6}
+		{1, 5},
+		{6, 5},
 		};
 	
-	private static int NUMBER_OF_SHOTS = 3;
+	private static int NUMBER_OF_SHOTS = 2;
 	
-	private static double[] target1 = {4, 5};
-	//private static double[] target2 = {9, 9};
+	private static double[] target1 = {9, 6};
+	private static double[] target2 = {8, 1};
 	
 	private static void execute() {
 		
@@ -67,6 +66,8 @@ public class Commander {
 //--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
 		
 		// add localization
+		FullLocalization localization = new FullLocalization(odo, nav);
+		localization.doLocalization(0, 0, 0);
 		
 //--------------------------------------- GO TO SHOOTING AREA ---------------------------------------
 				
@@ -83,37 +84,21 @@ public class Commander {
 		
 //--------------------------------------- LAUNCH BALLS ---------------------------------------
 		
-//		Launcher launcher = new Launcher(odo, nav, 5, 8);//5 and 8 should be variables!!
-//		launcher.shootToInTiles(target1[0], target1[1], NUMBER_OF_SHOTS);
-//		//launcher.shootToInTiles(target2[0], target2[1], NUMBER_OF_SHOTS);
-//		launcher = null;
-//		
-//		completed();
-//		System.out.println("DONE: Launching");
+		Launcher launcher = new Launcher(odo, nav, 4, 7);//5 and 8 should be variables!!
+		launcher.shootToInTiles(target1[0], target1[1], NUMBER_OF_SHOTS);
+		launcher.shootToInTiles(target2[0], target2[1], NUMBER_OF_SHOTS);
+		launcher = null;
+		
 		
 //--------------------------------------- GO BACK TO START ---------------------------------------
 		
-		nav.travelTo(0, 0, true);
-		System.out.println("DONE: Travel Back to Origin");
+		for (int i = destinations.length - 1; i > 0; i--) {
+			nav.travelToInTiles(destinations[i][0], destinations[i][1], !MAPPED);
+		}
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
 		
-//		usl = new USLocalizationDiagonal(odo, nav);
-//		usl.doLocalization(0, 0, 0);
-//		usl = null;
-//
-//		lsl = new LSLocalizationIntercept(odo, nav);
-//		lsl.doLocalization(0, -6, 0);	
-//		Driver.turn(Direction.RIGHT, 90);
-//		Driver.move(-5);
-//		lsl.doLocalization(-6, -6, 90);
-//		lsl = null;
-//				
-//		completed();
-//		
-//		nav.travelTo(0, 0, 0, false);
-//		
-//		System.out.println("DONE: Final Localization");
+		localization.doLocalization(0, 0, 0);
 		
 //--------------------------------------- VICTOIRE ---------------------------------------
 		

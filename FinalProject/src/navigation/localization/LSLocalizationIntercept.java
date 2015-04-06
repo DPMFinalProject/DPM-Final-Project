@@ -47,7 +47,9 @@ public class LSLocalizationIntercept extends Localization {
 	public void doLocalization(double x, double y, double theta) {
 		// Cannot perform Light Localization if the robot starts on a gridline.
 		if (grid.lineDetected()) {
-			return;
+			Driver.turn(Direction.RIGHT);
+			Driver.move(LS_OFFSET);
+			Driver.turn(Direction.LEFT);
 		}
 		/*
 		 * Increasing the iterations makes the localization more accurate but takes additional time.

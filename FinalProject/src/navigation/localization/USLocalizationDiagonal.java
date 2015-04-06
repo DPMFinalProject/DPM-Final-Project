@@ -26,9 +26,9 @@ public class USLocalizationDiagonal extends Localization {
 
 	private final ObstacleDetection obstacleDetection;
 	
-	private final double SENSOR_VIEW_ANGLE = 45;//20;
-	private final double SENSOR_OFFSET = 10.5;//10;//9.3;
-	private final double FRONT_OBSTACLE_THRESHOLD = 60; //45;
+	private final double SENSOR_ORIENTATION = 45;
+	private final double SENSOR_OFFSET = 10.5;
+	private final double FRONT_OBSTACLE_THRESHOLD = 60;
 	
 	
 	public USLocalizationDiagonal(Odometer odo, Navigation nav) {
@@ -68,9 +68,9 @@ public class USLocalizationDiagonal extends Localization {
 		double coord;
 		
 		faceAwayFromWall(dir);
-		Driver.turn(dir, SENSOR_VIEW_ANGLE);
+		Driver.turn(dir, SENSOR_ORIENTATION);
 		coord = obstacleDetection.sideDistance(dir.opposite()) + SENSOR_OFFSET - Measurements.TILE;
-		Driver.turn(dir.opposite(), SENSOR_VIEW_ANGLE);
+		Driver.turn(dir.opposite(), SENSOR_ORIENTATION);
 		
 		return coord;
 	}
@@ -96,13 +96,18 @@ public class USLocalizationDiagonal extends Localization {
 	 */
 	private void faceWall() {
 		// Turn until facing a wall
-
-		Driver.turn(Direction.RIGHT);
+		Direction turnDir = Direction.RIGHT;
+		
+		if (obstacleDetection.isLeftObstacle()) {
+			turnDir = Direction.LEFT;
+		}
+		
+		Driver.turn(turnDir);
 		while(!obstacleDetection.isFrontObstacle(FRONT_OBSTACLE_THRESHOLD)) {
 			pause(20);
 		}
 		Driver.stop();
-		Driver.turn(Direction.RIGHT, 40);
+		Driver.turn(turnDir, 40);
 	}
 	
 	/**

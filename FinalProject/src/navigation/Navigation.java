@@ -8,6 +8,7 @@
  */
 package navigation;
 
+import lejos.nxt.Sound;
 import sensors.managers.ObstacleDetection;
 import util.Direction;
 import util.Measurements;
@@ -31,6 +32,7 @@ public class Navigation {
 	private final double BACKWARDS_THRESHOLD = 15.0;
 	
 	// The following variables describe the range where the robot is considered to be far from a wall.
+	// The units are cm-based coordinates
 	private final double DETECTION_AREA_MIN = 10;
 	private final double DETECTION_AREA_MAX = 6 * Measurements.TILE - DETECTION_AREA_MIN;
 	

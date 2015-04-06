@@ -8,6 +8,7 @@
  */
 package navigation.avoidance;
 
+import lejos.nxt.Sound;
 import navigation.Driver;
 import navigation.odometry.Odometer;
 import sensors.managers.ObstacleDetection;
@@ -56,7 +57,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	 */
 	@Override
 	public void avoid() {
-
+		Sound.beep();
 		Driver.stop();
 		
 		initialOrientation = odo.getTheta();

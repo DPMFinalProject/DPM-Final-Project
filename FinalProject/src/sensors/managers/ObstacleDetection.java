@@ -22,10 +22,13 @@ import static util.Utilities.pause;
 public class ObstacleDetection extends SensorManager {
 	private FilteredUltrasonicSensor leftSensor, rightSensor;
 	private final int US_SENSOR_OUTLIER = 255;
-	private final int OBSTACLE_THRESHOLD = 30;	// Has to be raised when speed is increased
+	private final int OBSTACLE_THRESHOLD = 45;//30;	// Has to be raised when speed is increased
 	
 	private final int DETECTION_PERIOD = 20;
 	private final int PERP_ERROR = 20;
+	
+	// Used after first creating the filtered sensors to make sure the moving window becomes full.
+	private final static int INITIAL_DELAY = 100;
 	
 	private boolean leftObstacle = false, rightObstacle = false, frontObstacle = false;
 	private double leftDistance = 100, rightDistance = 100;
@@ -41,6 +44,7 @@ public class ObstacleDetection extends SensorManager {
 		if (obstDetector == null) {
 			obstDetector = new ObstacleDetection();
 			obstDetector.start();
+			pause(INITIAL_DELAY);
 		}
 		
 		obstDetector.setRunning(true);
