@@ -24,11 +24,10 @@ public class LauncherTest extends TestCase {
 		Odometer odo = new Odometer();
 		(new Thread(odo)).start();
 		Navigation nav = new Navigation(odo);
-		
-		
-		Launcher launcher = new Launcher(odo, nav,0,3 );
+				
+		Launcher launcher = new Launcher(odo, nav,0,3);
 
-		launcher.shootToInTiles(0, 5, 1);
+		launcher.shootToInTiles(0, 5, 2);
 	}
 
 }
