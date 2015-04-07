@@ -9,17 +9,9 @@
 package navigation;
 
 import lejos.nxt.Button;
-import lejos.nxt.LCD;
-import lejos.nxt.Sound;
-import lejos.nxt.comm.RConsole;
 import navigation.localization.FullLocalization;
-import navigation.localization.LSLocalizationIntercept;
-import navigation.localization.Localization;
-import navigation.localization.USLocalizationDiagonal;
 import navigation.odometry.Odometer;
 import navigation.odometry.correction.CorrectionLightSensorSS;
-import util.Direction;
-import util.Utilities;
 
 /**
  *  This class is in charge of decision making and goal evaluation.
@@ -29,15 +21,16 @@ public class Commander {
 	
 	private static boolean MAPPED = false;
 	
-	private static double[][] destinations = {
+	private static int[][] destinations = {
+		{0, 0},
 		{1, 5},
 		{6, 5},
 		};
 	
 	private static int NUMBER_OF_SHOTS = 2;
-	
-	private static double[] target1 = {9, 6};
-	private static double[] target2 = {8, 1};
+	private static int SHOOTING_RANGE_START = 4;
+	private static int SHOOTING_RANGE_END = 7;
+	private static int[][] targets = {{9, 6}, {8, 1}};
 	
 	private static void execute() {
 		
@@ -53,16 +46,6 @@ public class Commander {
 		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
 		(new Thread(correction)).start();
 		
-		(new Thread() {
-			public void run() {
-				while(true) {
-					System.out.println(""+odo.getX()+"\t"+odo.getY()+"\t"+odo.getTheta());
-					Utilities.pause(500);
-				}
-			}
-		}
-		).start();
-		
 //--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
 		
 		FullLocalization localization = new FullLocalization(odo, nav);
@@ -70,8 +53,8 @@ public class Commander {
 		
 //--------------------------------------- GO TO SHOOTING AREA ---------------------------------------
 				
-		for (double[] destination : destinations) {
-			nav.travelToInTiles(destination[0], destination[1], !MAPPED);
+		for (int i = 1; i < destinations.length; i++) {
+			nav.travelToInTiles(destinations[i][0], destinations[i][1], !MAPPED);
 		}
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
@@ -80,14 +63,17 @@ public class Commander {
 		
 //--------------------------------------- LAUNCH BALLS ---------------------------------------
 		
-		Launcher launcher = new Launcher(odo, nav, 4, 7);//5 and 8 should be variables!!
-		launcher.shootToInTiles(target1[0], target1[1], NUMBER_OF_SHOTS);
-		launcher.shootToInTiles(target2[0], target2[1], NUMBER_OF_SHOTS);
+		Launcher launcher = new Launcher(odo, nav, SHOOTING_RANGE_START, SHOOTING_RANGE_END);
+		
+		for (int[] target : targets) {
+			launcher.shootToInTiles(target[0], target[1], NUMBER_OF_SHOTS);
+		}
+		
 		launcher = null;	
 		
 //--------------------------------------- GO BACK TO START ---------------------------------------
 		
-		for (int i = destinations.length - 1; i > 0; i--) {
+		for (int i = destinations.length - 1; i >= 0; i--) {
 			nav.travelToInTiles(destinations[i][0], destinations[i][1], !MAPPED);
 		}
 		
@@ -101,61 +87,60 @@ public class Commander {
 		
 	}
 	
-	private static void completed() {
-		Sound.beep();
-		Utilities.pause(2000);
-	}
-	
-//	public static void main(String[] args) {
-//		
-//		LCD.drawString("    PUSH TO", 0, 3);
-//		LCD.drawString("     START", 0, 4);
-//		
-//		Button.waitForAnyPress();
-//		
-//		(new Thread() {
-//			public void run() {
-//				execute();
-//			}
-//		}).start();
-//		
-//		Button.waitForAnyPress();
-//		System.exit(0);
+//	private static void completed() {
+//		Sound.beep();
+//		Utilities.pause(2000);
 //	}
 	
-	private static void init() {
+	public static void main(String[] args) {
 		
-		LCD.drawString("LEFT FOR NORMAL", 0, 2);
-		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
-		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
-			LCD.clear();
-			
-			RConsole.open();
-			
-			LCD.drawString("Press a button", 0, 3);
-			LCD.drawString("to start", 0, 4);
-			Button.waitForAnyPress();
-			System.setOut(RConsole.getPrintStream());
-		}
-	}
-	
-	private static void done() {		
-		RConsole.close();
+		util.Art.drawInvader();
+		
+		Button.waitForAnyPress();
+		
+		(new Thread() {
+			public void run() {
+				execute();
+			}
+		}).start();
+		
+		Button.waitForAnyPress();
 		System.exit(0);
 	}
 	
-	public static void main(String[] args) {
-		try {
-			init();
-
-			(new Thread() {
-				public void run() {
-					execute();
-				}
-			}).start();
-			Button.waitForAnyPress();
-		} finally {
-			done();
-		}
-	}
+//	private static void init() {
+//		
+//		LCD.drawString("LEFT FOR NORMAL", 0, 2);
+//		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
+//		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
+//			LCD.clear();
+//			
+//			RConsole.open();
+//			
+//			LCD.drawString("Press a button", 0, 3);
+//			LCD.drawString("to start", 0, 4);
+//			Button.waitForAnyPress();
+//			System.setOut(RConsole.getPrintStream());
+//		}
+//	}
+//	
+//	private static void done() {		
+//		RConsole.close();
+//		System.exit(0);
+//	}
+//	
+//	public static void main(String[] args) {
+//		try {
+//			init();
+//
+//			(new Thread() {
+//				public void run() {
+//					execute();
+//				}
+//			}).start();
+//			Button.waitForAnyPress();
+//		} finally {
+//			done();
+//		}
+//	}
 }

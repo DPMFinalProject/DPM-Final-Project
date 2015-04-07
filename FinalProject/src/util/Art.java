@@ -1,7 +1,20 @@
+/**
+ *	DPM Final Project
+ *	Team 10
+ *	ECSE 211: Design Principles and Methods
+ *
+ *	Art.java
+ *	Created On:	Apr 7, 2015
+ */
 package util;
 
 import lejos.nxt.LCD;
 
+/**
+ * 	so artsy
+ * 
+ * @author Auguste
+ */
 public class Art {
 	public static void drawInvader() {
 		LCD.clear();
