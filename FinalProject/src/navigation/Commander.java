@@ -65,7 +65,6 @@ public class Commander {
 		
 //--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
 		
-		// add localization
 		FullLocalization localization = new FullLocalization(odo, nav);
 		localization.doLocalization(0, 0, 0);
 		
@@ -74,9 +73,6 @@ public class Commander {
 		for (double[] destination : destinations) {
 			nav.travelToInTiles(destination[0], destination[1], !MAPPED);
 		}
-		
-		completed();
-		System.out.println("DONE: Travel to Destination");
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
 
@@ -87,8 +83,7 @@ public class Commander {
 		Launcher launcher = new Launcher(odo, nav, 4, 7);//5 and 8 should be variables!!
 		launcher.shootToInTiles(target1[0], target1[1], NUMBER_OF_SHOTS);
 		launcher.shootToInTiles(target2[0], target2[1], NUMBER_OF_SHOTS);
-		launcher = null;
-		
+		launcher = null;	
 		
 //--------------------------------------- GO BACK TO START ---------------------------------------
 		

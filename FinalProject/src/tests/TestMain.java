@@ -19,6 +19,7 @@ import tests.navigation.odometry.*;
 import tests.sensors.*;
 import tests.sensors.filters.*;
 import tests.sensors.ultrasonic.*;
+import util.Art;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
@@ -42,8 +43,11 @@ public class TestMain {
 	 */
 	protected static void init() {
 		
-		LCD.drawString("LEFT FOR NORMAL", 0, 2);
-		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
+//		LCD.drawString("LEFT FOR NORMAL", 0, 2);
+//		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
+		
+		Art.drawInvader();
+		
 		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
 			LCD.clear();
 			
