@@ -13,6 +13,8 @@ import sensors.managers.ObstacleDetection;
 import util.Direction;
 import util.Measurements;
 import navigation.avoidance.BangBangAvoider;
+import navigation.avoidance.DolphinAvoider;
+import navigation.avoidance.ObstacleAvoidance;
 import navigation.odometry.Odometer;
 import static util.Utilities.pause;
 
@@ -25,7 +27,7 @@ import static util.Utilities.pause;
 
 public class Navigation {
 	private final Odometer odo;
-	private BangBangAvoider avoider;
+	private ObstacleAvoidance avoider;
 	
 	private final double ANGLE_ERROR = 10.0;
 	private final double POS_ERROR = 1.0;
@@ -159,11 +161,11 @@ public class Navigation {
 			// Obstacle detection is used if the robot is far from its destination and not near a wall.
 			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 2 * Measurements.TILE && !nearWall()) {
 				if (detection.isLeftObstacle()) {
-					avoider = new BangBangAvoider(odo, Direction.LEFT);
+					avoider = new DolphinAvoider(Direction.LEFT, odo);
 					avoider.avoid();
 					avoider = null;
 				} else if (detection.isRightObstacle()) {
-					avoider = new BangBangAvoider(odo, Direction.RIGHT);
+					avoider = new DolphinAvoider(Direction.RIGHT, odo);
 					avoider.avoid();
 					avoider = null;
 				}

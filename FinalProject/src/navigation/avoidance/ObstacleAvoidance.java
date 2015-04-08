@@ -17,7 +17,6 @@ import navigation.odometry.Odometer;
  */
 public abstract class ObstacleAvoidance {
 	protected Odometer odo;
-	
 	protected int BAND_WIDTH, BAND_CENTER;
 	protected Direction wallDirection;
 	

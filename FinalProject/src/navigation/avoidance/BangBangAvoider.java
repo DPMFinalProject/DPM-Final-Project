@@ -32,14 +32,17 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	private final int LIVE_LOCK_MAX = 5;
 	private Direction lastDirection = null;
 
-	private final int DRIFT_RADIUS = 45;	// drifting radius in cm
+	private final int DRIFT_RADIUS = 25;	// drifting radius in cm
+	private int DRIFT_COUNT = 0;
+	private final int DRIFT_MAX = 100;
+	
 	private final int TURN_AWAY_ANGLE = 15;	// turning angle for going away from wall.
 	private final int INITIAL_TURN_AWAY_ANGLE = 70;
 	private boolean turningAway = false;
 	
-	private final int BANGBANG_PERIOD = 500;	// minimal delay between two consecutive bang-bang avoidance calls
+	private final int BANGBANG_PERIOD = 20;	// minimal delay between two consecutive bang-bang avoidance calls
 
-	private final int AVOIDED_ANGLE_RANGE = 50;
+	private final int AVOIDED_ANGLE_RANGE = 65;
 	
 	public BangBangAvoider(Odometer odo, Direction wallDirection) {
 		super(wallDirection, odo);
@@ -99,7 +102,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		else if (error < 0) {
 			LIVE_LOCK_COUNT = 0;
 			
-			if(turningAway) {
+			if (turningAway) {
 				turningAway = false;
 				Driver.turn(direction.opposite(), TURN_AWAY_ANGLE);
 			}

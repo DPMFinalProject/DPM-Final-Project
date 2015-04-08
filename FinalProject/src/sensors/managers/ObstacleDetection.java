@@ -9,6 +9,7 @@
 package sensors.managers;
 
 import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import sensors.FilteredUltrasonicSensor;
 import sensors.filters.OutlierFilter;
 import util.Direction;
@@ -22,7 +23,7 @@ import static util.Utilities.pause;
 public class ObstacleDetection extends SensorManager {
 	private FilteredUltrasonicSensor leftSensor, rightSensor;
 	private final int US_SENSOR_OUTLIER = 255;
-	private final int OBSTACLE_THRESHOLD = 45;	// Has to be raised when speed is increased
+	private final int OBSTACLE_THRESHOLD = 25;//45;	// Has to be raised when speed is increased
 	
 	private final int DETECTION_PERIOD = 20;
 	private final int PERP_ERROR = 20;
@@ -125,6 +126,14 @@ public class ObstacleDetection extends SensorManager {
 			return rightDistance;
 		} else {
 			return leftDistance;
+		}
+	}
+	
+	public boolean sideObstacle(Direction direction) {
+		if (direction == Direction.RIGHT) {
+			return rightObstacle;
+		} else {
+			return leftObstacle;
 		}
 	}
 	
