@@ -36,15 +36,15 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	private int DRIFT_COUNT = 0;
 	private final int DRIFT_MAX = 100;
 	
-	private final int TURN_AWAY_ANGLE = 15;	// turning angle for going away from wall.
-	private final int INITIAL_TURN_AWAY_ANGLE = 70;
+	private final int TURN_AWAY_ANGLE = 30;	// turning angle for going away from wall.
+
 	private boolean turningAway = false;
 	
 	private final int BANGBANG_PERIOD = 20;	// minimal delay between two consecutive bang-bang avoidance calls
 
 	private final int AVOIDED_ANGLE_RANGE = 65;
 	
-	public BangBangAvoider(Odometer odo, Direction wallDirection) {
+	public BangBangAvoider(Direction wallDirection, Odometer odo) {
 		super(wallDirection, odo);
 		BAND_WIDTH = 6;
 		BAND_CENTER = 22;
@@ -59,7 +59,6 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	 */
 	@Override
 	public void avoid() {
-		Sound.beep();
 		Driver.stop();
 		
 		initialOrientation = odo.getTheta();
@@ -68,7 +67,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			wallDirection = Direction.RIGHT;
 		}
 		
-		Driver.turn(wallDirection.opposite(), INITIAL_TURN_AWAY_ANGLE);
+		faceAwayFromWall(wallDirection);
 		
 		while(!hasAvoided()) {
 			bangBang(wallDirection);
@@ -80,7 +79,12 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			}
 			
 			if(LIVE_LOCK_COUNT >= LIVE_LOCK_MAX) {
-				Driver.move(-BAND_CENTER);
+				if (!checkForFront()) {
+					Driver.move(20);
+				} else {
+					Driver.move(-20);
+					Driver.turn(wallDirection.opposite(), 90);
+				}
 				break;
 			}
 		}
@@ -94,6 +98,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		
 		if (Math.abs(error) < BAND_WIDTH)	{
 			LIVE_LOCK_COUNT = 0;
+			DRIFT_COUNT = 0;
 			turningAway = false;
 			
 			Driver.setDrifting(false);
@@ -108,9 +113,17 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			}
 
 			Driver.setDrifting(true);
-			Driver.drift(direction, DRIFT_RADIUS);
+			
+			if (DRIFT_COUNT < DRIFT_MAX) {
+				Driver.drift(direction, DRIFT_RADIUS);
+			} else {
+				Driver.drift(direction, DRIFT_RADIUS/2);
+			}
+			
+			DRIFT_COUNT++;
 		}
 		else {
+			DRIFT_COUNT = 0;
 			turningAway = true;
 			
 			Driver.turn(direction.opposite(), TURN_AWAY_ANGLE);
@@ -118,6 +131,9 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			if(lastDirection == direction.opposite() || lastDirection == null) {
 				lastDirection = direction;
 				LIVE_LOCK_COUNT++;
+			}
+			else {
+				LIVE_LOCK_COUNT = 0;
 			}
 		}
 	}
@@ -129,16 +145,24 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		return isNear(endAngle , odo.getTheta(), AVOIDED_ANGLE_RANGE);
 	}
 	
-//	private boolean checkForFront() {
-//		Driver.turn(Direction.RIGHT, 45);
-//		
-//		boolean frontObstacle = detector.isLeftObstacle();
-//		
-//		Driver.turn(Direction.LEFT, 45);
-//		
-//		return frontObstacle;
-//	}
-//	
+	private void faceAwayFromWall(Direction direction) {
+		Driver.turn(direction.opposite());
+		while(detector.sideObstacle(direction)) {
+			pause(BANGBANG_PERIOD);
+		}
+		Driver.stop();
+	}
+	
+	private boolean checkForFront() {
+		Driver.turn(Direction.RIGHT, 45);
+		
+		boolean frontObstacle = detector.isLeftObstacle();
+		
+		Driver.turn(Direction.LEFT, 45);
+		
+		return frontObstacle;
+	}
+	
 //	public void setDirection(Direction direction) {
 //		this.wallDirection = direction;
 //	}

@@ -161,11 +161,11 @@ public class Navigation {
 			// Obstacle detection is used if the robot is far from its destination and not near a wall.
 			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 2 * Measurements.TILE && !nearWall()) {
 				if (detection.isLeftObstacle()) {
-					avoider = new DolphinAvoider(Direction.LEFT, odo);
+					avoider = new BangBangAvoider(Direction.LEFT, odo);
 					avoider.avoid();
 					avoider = null;
 				} else if (detection.isRightObstacle()) {
-					avoider = new DolphinAvoider(Direction.RIGHT, odo);
+					avoider = new BangBangAvoider(Direction.RIGHT, odo);
 					avoider.avoid();
 					avoider = null;
 				}
