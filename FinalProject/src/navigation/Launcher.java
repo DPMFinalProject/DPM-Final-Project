@@ -39,8 +39,8 @@ public class Launcher {
 	public Launcher(Odometer odo, Navigation nav, double minShootingArea, double maxShootingArea){
 		this.odo = odo;
 		this.nav = nav;
-		this.minShootingArea = minShootingArea *Measurements.TILE;
-		this.maxShootingArea = maxShootingArea*Measurements.TILE;
+		this.minShootingArea = minShootingArea * Measurements.TILE;
+		this.maxShootingArea = maxShootingArea * Measurements.TILE;
 	}
 	
 	public Launcher(Odometer odo, Navigation nav) {

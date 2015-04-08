@@ -33,9 +33,9 @@ public class BangBangAvoidanceTest extends TestCase {
 	public void runTest() {
 		
 		Navigation nav = new Navigation(odo);
-		odo.setX(5*Measurements.TILE);//this is so that the robot is in the correction range
-		odo.setY(2*Measurements.TILE);
-		nav.travelToInTiles(5, 5, true);
+		odo.setX(5 * Measurements.TILE);//this is so that the robot is in the correction range i.e. not near wall
+		odo.setY(2 * Measurements.TILE);
+		nav.travelToInTiles(5, 9, true);
 		
 	}
 }
