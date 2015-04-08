@@ -25,7 +25,7 @@ public class Launcher {
 	//###############################################
 	//   YOU WANT TO CHANGE THOSE VALUES:
 	//range: (offset, range)
-	private final double[] range = {0,160};
+	private final double[] range = {0,151.9};
 	
 	private final Odometer odo;
 	private final Navigation nav;
@@ -60,9 +60,6 @@ public class Launcher {
 	}
 	
 	private void shootTo(double targetX, double targetY, int projectiles) {
-		//double[] launchingCoordinates = findLaunchingCoordinates(targetX,targetY);
-//		nav.travelTo(launchingCoordinates[0], launchingCoordinates[1], launchingCoordinates[2], false);	
-		System.out.println((int) targetX+"     "+ (int) targetY);
 		nav.travelTo(findLaunchingCoordinates(targetX,targetY), false);
 		shoot(projectiles);
 	}
@@ -107,8 +104,8 @@ public class Launcher {
 			}
 			
 			if(x >= maxShootingArea){										// If x reaches max shooting area without find a y value, the rage is too small, so increment it.
-				flexibleRange[0] += 5*Math.cos(Math.toRadians(getRangeTheta()));
-				flexibleRange[1] += 5*Math.sin(Math.toRadians(getRangeTheta()));
+				flexibleRange[0] += 5*Math.sin(Math.toRadians(getRangeTheta()));
+				flexibleRange[1] += 5*Math.cos(Math.toRadians(getRangeTheta()));
 				return false;												//break the method, and retry until it works
 			}
 			
