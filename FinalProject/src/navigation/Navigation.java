@@ -159,7 +159,7 @@ public class Navigation {
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		while(Driver.isMoving()) {
 			// Obstacle detection is used if the robot is far from its destination and not near a wall.
-			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 2 * Measurements.TILE && !nearWall()) {
+			//if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 2 * Measurements.TILE && !nearWall()) {
 				if (detection.isLeftObstacle()) {
 					avoider = new BangBangAvoider(Direction.LEFT, odo);
 					avoider.avoid();
@@ -169,7 +169,7 @@ public class Navigation {
 					avoider.avoid();
 					avoider = null;
 				}
-			}
+			//}
 			pause(100);
 		}
 	}

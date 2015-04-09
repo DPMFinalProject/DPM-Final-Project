@@ -23,8 +23,8 @@ import lejos.nxt.Motor;
 
 public class Driver {
 
-	private final static int FWD_SPEED = 400; //300
-	private final static int TURN_SPEED = 300; //200
+	private static int FWD_SPEED = 400;//400; //300
+	private static int TURN_SPEED = 300;//300; //200
 	
 	private final static int MOVE_ACCEL = 3000;
 	private final static int STOP_ACCEL = 9000;				// Stopping uses a larger acceleration to avoid overshooting
@@ -349,6 +349,22 @@ public class Driver {
 		leftMotor.rotate(leftDistance, true);
 		rightMotor.rotate(rightDistance);
 		
+	}
+	
+	/**
+	 * Slows down.
+	 */
+	public static void slowDown() {
+		FWD_SPEED -= 100;
+		TURN_SPEED -= 100;
+	}
+	
+	/**
+	 * Speeds up.
+	 */
+	public static void speedUp() {
+		FWD_SPEED += 100;
+		TURN_SPEED += 100;
 	}
 	
 	private static boolean validMoveDirection(Direction direction) {
