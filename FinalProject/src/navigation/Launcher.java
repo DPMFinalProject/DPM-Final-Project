@@ -60,7 +60,7 @@ public class Launcher {
 	}
 	
 	private void shootTo(double targetX, double targetY, int projectiles) {
-		nav.travelTo(findLaunchingCoordinates(targetX,targetY), false);
+		nav.travelTo(findLaunchingCoordinates(targetX, targetY), false);
 		shoot(projectiles);
 	}
 
@@ -92,7 +92,7 @@ public class Launcher {
  *  In doing so, we are hoping for an anomaly that will make the launcher shoot longer.
  */
 	private boolean findXY(double targetX, double targetY, double[] coordinates) {
-		double x = minShootingArea-4,  yUpperCircle, yLowerCircle, temp;   //set x so the code doesnt consider any position before the minimum shootign area
+		double x = minShootingArea - 4,  yUpperCircle, yLowerCircle, temp;   //set x so the code doesnt consider any position before the minimum shootign area
 		
 		do{
 			yLowerCircle = yUpperCircle = maxShootingArea;  				//set to max of shooting area so it wont interfere with the exit condition
@@ -104,8 +104,8 @@ public class Launcher {
 			}
 			
 			if(x >= maxShootingArea){										// If x reaches max shooting area without find a y value, the rage is too small, so increment it.
-				flexibleRange[0] += 5*Math.sin(Math.toRadians(getRangeTheta()));
-				flexibleRange[1] += 5*Math.cos(Math.toRadians(getRangeTheta()));
+				flexibleRange[0] += 5 * Math.sin(Math.toRadians(getRangeTheta()));
+				flexibleRange[1] += 5 * Math.cos(Math.toRadians(getRangeTheta()));
 				return false;												//break the method, and retry until it works
 			}
 			
@@ -136,7 +136,7 @@ public class Launcher {
 //		}else{
 //			coordinates[2] = nav.adjustRefFrame(Math.toDegrees(Math.atan2(targetX-coordinates[0], targetY-coordinates[1]))); 
 //		}
-		System.out.println((int)coordinates[2] + "   "+ (int) coordinates[0]+ "     "+ (int) coordinates[1]+"     "+ (int) targetX+"     "+ (int) targetY);
+		//System.out.println((int)coordinates[2] + "   "+ (int) coordinates[0]+ "     "+ (int) coordinates[1]+"     "+ (int) targetX+"     "+ (int) targetY);
 	}
 	
 	//return the deviation angle of the projectile trajectory

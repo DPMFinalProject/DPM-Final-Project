@@ -62,7 +62,6 @@ public class Navigation {
 	 */
 	public void travelToInTiles(double x, double y, double theta, boolean avoiding) {
 		travelTo(x * Measurements.TILE, y * Measurements.TILE, avoiding);
-		Sound.twoBeeps();
 		turnTo(theta);
 	}
 	

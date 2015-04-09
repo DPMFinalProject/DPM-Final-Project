@@ -122,7 +122,6 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	private void bangBang(Direction direction) {
 		double error = BAND_CENTER - detector.wallDistance(direction);
 		if (Math.abs(error) < BAND_WIDTH)	{
-			Sound.beep();
 			LIVE_LOCK_COUNT = 0;
 			DRIFT_COUNT = 0;
 			turningAway = false;

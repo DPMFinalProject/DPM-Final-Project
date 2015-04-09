@@ -23,14 +23,17 @@ public class Commander {
 	
 	private static int[][] destinations = {
 		{0, 0},
-		{1, 5},
-		{6, 5},
+		{8, 8}
 		};
 	
-	private static int NUMBER_OF_SHOTS = 2;
-	private static int SHOOTING_RANGE_START = 4;
-	private static int SHOOTING_RANGE_END = 7;
-	private static int[][] targets = {{9, 6}, {8, 1}};
+	private static int NUMBER_OF_SHOTS = 1;
+	private static int SHOOTING_RANGE_START = 8;
+	private static int SHOOTING_RANGE_END = 11;
+	private static int[][] targets = {
+		{14, 11}, 
+		{11, 12},
+		{15, 15}
+		};
 	
 	private static void execute() {
 		
@@ -83,7 +86,7 @@ public class Commander {
 		
 //--------------------------------------- VICTOIRE ---------------------------------------
 		
-//		new util.songs.Victory().play();
+		new util.songs.Victory().play();
 		
 	}
 	
