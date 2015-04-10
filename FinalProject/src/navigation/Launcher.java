@@ -77,7 +77,7 @@ public class Launcher {
 	private double[] findLaunchingCoordinates(double targetX, double targetY) {
 		double[] coordinates = new double [3];
 		flexibleRange = range;										//will enable the robot to try to shoot at the target even if this one is out of range
-		while(! findXY(targetX, targetY, coordinates));				//will search for x,y until it finds a suitable value (in our out of range)
+		while(! findXY(targetX, targetY, coordinates));{}   		//will search for x,y until it finds a suitable value (in our out of range)
 		findTheta(targetX, targetY, coordinates);
 		System.out.println(""+coordinates[0]+" - "+coordinates[1]);
 		return coordinates;
@@ -104,15 +104,11 @@ public class Launcher {
 				yLowerCircle = targetY - Math.sqrt(temp);
 			}
 			
-			System.out.println("range: "+rangeNormal());
-			
 			if(x >= maxShootingArea) {										// If x reaches max shooting area without find a y value, the rage is too small, so increment it.
 				flexibleRange[0] += 5 * Math.sin(Math.toRadians(getRangeTheta()));
 				flexibleRange[1] += 5 * Math.cos(Math.toRadians(getRangeTheta()));
 				return false;												//break the method, and retry until it works
 			}
-			System.out.println("      x:"+x+" - "+yUpperCircle+" - "+yLowerCircle);
-			
 		} while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))));
 		
 		coordinates[0] = x; //update coordinates

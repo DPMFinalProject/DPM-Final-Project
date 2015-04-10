@@ -22,7 +22,7 @@ import navigation.odometry.correction.CorrectionLightSensorSS;
  */
 public class Commander {
 	
-	private static boolean MAPPED = true;
+	private static boolean MAPPED = false;
 	
 	private static int[][] destinations = {
 		{0, 0},
@@ -47,27 +47,27 @@ public class Commander {
 		
 		Navigation nav = new Navigation(odo);
 		
-////--------------------------------------- START ODOMETRY CORRECTION ---------------------------------------
-//		
-//		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
-//		(new Thread(correction)).start();
-//		
-////--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
-//		
-//		FullLocalization localization = new FullLocalization(odo, nav);
-//		localization.doLocalization(0, 0, 0);
-//		
-////--------------------------------------- GO TO SHOOTING AREA ---------------------------------------
-//				
-//		for (int i = 1; i < destinations.length; i++) {
-//			nav.travelToInTiles(destinations[i][0], destinations[i][1], !MAPPED);
-//		}
-//		
-//		System.out.println("At destination");
-//		
-////--------------------------------------- RE-LOCALIZE ---------------------------------------
-//
-//		//usl.doLocalization(destination[0], destination[1], 90);
+//--------------------------------------- START ODOMETRY CORRECTION ---------------------------------------
+		
+		CorrectionLightSensorSS correction = new CorrectionLightSensorSS(odo);
+		(new Thread(correction)).start();
+		
+//--------------------------------------- PERFORM LOCALIZATION ---------------------------------------
+		
+		FullLocalization localization = new FullLocalization(odo, nav);
+		localization.doLocalization(0, 0, 0);
+		
+//--------------------------------------- GO TO SHOOTING AREA ---------------------------------------
+				
+		for (int i = 1; i < destinations.length; i++) {
+			nav.travelToInTiles(destinations[i][0], destinations[i][1], !MAPPED);
+		}
+		
+		System.out.println("At destination");
+		
+//--------------------------------------- RE-LOCALIZE ---------------------------------------
+
+		//usl.doLocalization(destination[0], destination[1], 90);
 		
 //--------------------------------------- LAUNCH BALLS ---------------------------------------
 		
@@ -107,55 +107,55 @@ public class Commander {
 //		Utilities.pause(2000);
 //	}
 	
-//	public static void main(String[] args) {
-//		
-//		util.Art.drawInvader();
-//		
-//		Button.waitForAnyPress();
-//		
-//		(new Thread() {
-//			public void run() {
-//				execute();
-//			}
-//		}).start();
-//		
-//		Button.waitForAnyPress();
-//		System.exit(0);
-//	}
-	
-	private static void init() {
+	public static void main(String[] args) {
 		
-		LCD.drawString("LEFT FOR NORMAL", 0, 2);
-		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
-		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
-			LCD.clear();
-			
-			RConsole.open();
-			
-			LCD.drawString("Press a button", 0, 3);
-			LCD.drawString("to start", 0, 4);
-			Button.waitForAnyPress();
-			System.setOut(RConsole.getPrintStream());
-		}
-	}
-	
-	private static void done() {		
-		RConsole.close();
+		util.Art.drawInvader();
+		
+		Button.waitForAnyPress();
+		
+		(new Thread() {
+			public void run() {
+				execute();
+			}
+		}).start();
+		
+		Button.waitForAnyPress();
 		System.exit(0);
 	}
 	
-	public static void main(String[] args) {
-		try {
-			init();
-
-			(new Thread() {
-				public void run() {
-					execute();
-				}
-			}).start();
-			Button.waitForAnyPress();
-		} finally {
-			done();
-		}
-	}
+//	private static void init() {
+//		
+//		LCD.drawString("LEFT FOR NORMAL", 0, 2);
+//		LCD.drawString("RIGHT FOR CONSOLE", 0, 3);
+//		if (Button.waitForAnyPress() == Button.ID_RIGHT) {
+//			LCD.clear();
+//			
+//			RConsole.open();
+//			
+//			LCD.drawString("Press a button", 0, 3);
+//			LCD.drawString("to start", 0, 4);
+//			Button.waitForAnyPress();
+//			System.setOut(RConsole.getPrintStream());
+//		}
+//	}
+//	
+//	private static void done() {		
+//		RConsole.close();
+//		System.exit(0);
+//	}
+//	
+//	public static void main(String[] args) {
+//		try {
+//			init();
+//
+//			(new Thread() {
+//				public void run() {
+//					execute();
+//				}
+//			}).start();
+//			Button.waitForAnyPress();
+//		} finally {
+//			done();
+//		}
+//	}
 }

@@ -38,6 +38,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	
 	private final int TURN_AWAY_ANGLE = 30;	// turning angle for going away from wall.
 	private boolean turningAway = false;
+	private boolean jesusTakeTheWheel = false;
 	
 	private final int CORRIDOR_WIDTH = 10; // Space allowed between robot and a wall on each side.
 	
@@ -48,7 +49,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	public BangBangAvoider(Direction wallDirection, Odometer odo) {
 		super(wallDirection, odo);
 		BAND_WIDTH = 6;//12;//6;
-		BAND_CENTER = 22;//25;
+		BAND_CENTER = 30;//25;
 		
 		detector = ObstacleDetection.getObstacleDetection();
 	}
@@ -61,7 +62,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	@Override
 	public void avoid() {
 		Driver.stop();
-		Driver.slowDown();
+//		Driver.slowDown();
 		
 		initialOrientation = odo.getTheta();
 		
@@ -69,7 +70,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			wallDirection = Direction.RIGHT;
 		}
 		
-		moveToWall();
+//		moveToWall();
 		
 		faceAwayFromWall(wallDirection);
 		pause(BANGBANG_PERIOD * 4);
@@ -116,7 +117,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		
 		Driver.setDrifting(false);
 		Driver.stop();
-		Driver.speedUp();
+//		Driver.speedUp();
 	}
 	
 	private void bangBang(Direction direction) {
@@ -125,6 +126,8 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			LIVE_LOCK_COUNT = 0;
 			DRIFT_COUNT = 0;
 			turningAway = false;
+			jesusTakeTheWheel = true;
+			
 			
 			Driver.setDrifting(false);
 			Driver.move(Direction.FWD);
@@ -136,7 +139,12 @@ public class BangBangAvoider extends ObstacleAvoidance {
 				turningAway = false;
 				Driver.move(Direction.FWD);
 //				Driver.turn(direction.opposite(), TURN_AWAY_ANGLE);
-			} else {
+			} 
+			else if (jesusTakeTheWheel) {
+				jesusTakeTheWheel = false;
+				Driver.move(3);
+			}
+			else {
 
 				Driver.setDrifting(true);
 				
@@ -152,6 +160,7 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		else {
 			DRIFT_COUNT = 0;
 			turningAway = true;
+			jesusTakeTheWheel = false;
 			
 			//Driver.turn(direction.opposite(), TURN_AWAY_ANGLE);
 			faceAwayFromWall(direction);
