@@ -77,8 +77,9 @@ public class Launcher {
 	private double[] findLaunchingCoordinates(double targetX, double targetY) {
 		double[] coordinates = new double [3];
 		flexibleRange = range;										//will enable the robot to try to shoot at the target even if this one is out of range
-		while(! findXY(targetX, targetY, coordinates)) ;			//will search for x,y until it finds a suitable value (in our out of range)
-		findTheta(targetX, targetY, coordinates);				
+		while(! findXY(targetX, targetY, coordinates));				//will search for x,y until it finds a suitable value (in our out of range)
+		findTheta(targetX, targetY, coordinates);
+		System.out.println(""+coordinates[0]+" - "+coordinates[1]);
 		return coordinates;
 	}
 /*
@@ -96,21 +97,23 @@ public class Launcher {
 		
 		do{
 			yLowerCircle = yUpperCircle = maxShootingArea;  				//set to max of shooting area so it wont interfere with the exit condition
-			x+=5;															//if there is no y value at this x, increment x until it find one
+			x += 5;															//if there is no y value at this x, increment x until it find one
 			temp = Math.pow(rangeNormal(), 2) - Math.pow((targetX - x), 2); //calculate the position of the correcponding y value (whithout the square root to prevent imaginaty numbers)
 			if (temp > 0) {													//is no imaginary number, calculate both part of the circle 
 				yUpperCircle = targetY + Math.sqrt(temp);
 				yLowerCircle = targetY - Math.sqrt(temp);
 			}
 			
-			if(x >= maxShootingArea){										// If x reaches max shooting area without find a y value, the rage is too small, so increment it.
+			System.out.println("range: "+rangeNormal());
+			
+			if(x >= maxShootingArea) {										// If x reaches max shooting area without find a y value, the rage is too small, so increment it.
 				flexibleRange[0] += 5 * Math.sin(Math.toRadians(getRangeTheta()));
 				flexibleRange[1] += 5 * Math.cos(Math.toRadians(getRangeTheta()));
 				return false;												//break the method, and retry until it works
 			}
+			System.out.println("      x:"+x+" - "+yUpperCircle+" - "+yLowerCircle);
 			
 		} while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))));
-		
 		
 		coordinates[0] = x; //update coordinates
 		if (isInShootingArea(yUpperCircle)) {

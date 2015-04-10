@@ -48,6 +48,12 @@ public class CorrectionLightSensorSS extends OdometryCorrection {
 			
 			SensorID sensor = grid.whichSensorDetected();
 			
+			if (Driver.isDrifting()) {
+				correctPosition(sensor);
+				setFlags(false);
+				continue;
+			}
+			
 			if (!rightCrossed && !leftCrossed) {
 				correctPosition(sensor);
 			}

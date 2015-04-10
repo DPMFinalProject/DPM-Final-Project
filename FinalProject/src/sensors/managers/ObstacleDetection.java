@@ -23,7 +23,7 @@ import static util.Utilities.pause;
 public class ObstacleDetection extends SensorManager {
 	private FilteredUltrasonicSensor leftSensor, rightSensor;
 	private final int US_SENSOR_OUTLIER = 255;
-	private final int OBSTACLE_THRESHOLD = 30;	// Has to be raised when speed is increased
+	private final int OBSTACLE_THRESHOLD = 40;	// Has to be raised when speed is increased
 	
 	private final int DETECTION_PERIOD = 20;
 	private final int PERP_ERROR = 20;
