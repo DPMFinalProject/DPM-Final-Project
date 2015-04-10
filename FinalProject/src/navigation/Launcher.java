@@ -30,9 +30,11 @@ public class Launcher {
 	private final Odometer odo;
 	private final Navigation nav;
 	private final int LAUNCH_SPEED = 300;
-	private double[] flexibleRange;
-	private double minShootingArea = 9 * Measurements.TILE;
-	private double maxShootingArea = 12 * Measurements.TILE;
+	private double flexibleOffset;
+	private double flexibleRange;
+	private final double minShootingArea;
+	private final double maxShootingArea;
+	private boolean isRangeTooBig;
 	
 	private final static NXTRegulatedMotor shooter = Motor.C;
 	
@@ -46,6 +48,8 @@ public class Launcher {
 	public Launcher(Odometer odo, Navigation nav) {
 		this.odo = odo;
 		this.nav = nav;
+		minShootingArea = 8 * Measurements.TILE;
+		maxShootingArea = 11 * Measurements.TILE;
 	}
 	
 	/**
@@ -60,6 +64,9 @@ public class Launcher {
 	}
 	
 	private void shootTo(double targetX, double targetY, int projectiles) {
+		flexibleRange = range[1];
+		flexibleOffset = range[0];
+		isRangeTooBig=false;
 		nav.travelTo(findLaunchingCoordinates(targetX, targetY), false);
 		shoot(projectiles);
 	}
@@ -76,10 +83,10 @@ public class Launcher {
 
 	private double[] findLaunchingCoordinates(double targetX, double targetY) {
 		double[] coordinates = new double [3];
-		flexibleRange = range;										//will enable the robot to try to shoot at the target even if this one is out of range
-		while(! findXY(targetX, targetY, coordinates));				//will search for x,y until it finds a suitable value (in our out of range)
+												//will enable the robot to try to shoot at the target even if this one is out of range
+		while(! findXY(targetX, targetY, coordinates));	{}			//will search for x,y until it finds a suitable value (in our out of range)
 		findTheta(targetX, targetY, coordinates);
-		System.out.println(""+coordinates[0]+" - "+coordinates[1]);
+		//System.out.println(""+coordinates[0]+" - "+coordinates[1]);
 		return coordinates;
 	}
 /*
@@ -97,21 +104,30 @@ public class Launcher {
 		
 		do{
 			yLowerCircle = yUpperCircle = maxShootingArea;  				//set to max of shooting area so it wont interfere with the exit condition
-			x += 5;															//if there is no y value at this x, increment x until it find one
+			x += 10;															//if there is no y value at this x, increment x until it find one
 			temp = Math.pow(rangeNormal(), 2) - Math.pow((targetX - x), 2); //calculate the position of the correcponding y value (whithout the square root to prevent imaginaty numbers)
 			if (temp > 0) {													//is no imaginary number, calculate both part of the circle 
 				yUpperCircle = targetY + Math.sqrt(temp);
 				yLowerCircle = targetY - Math.sqrt(temp);
 			}
 			
-			System.out.println("range: "+rangeNormal());
+			//System.out.println("range: "+rangeNormal());
 			
-			if(x >= maxShootingArea) {										// If x reaches max shooting area without find a y value, the rage is too small, so increment it.
-				flexibleRange[0] += 5 * Math.sin(Math.toRadians(getRangeTheta()));
-				flexibleRange[1] += 5 * Math.cos(Math.toRadians(getRangeTheta()));
+			if(x >= maxShootingArea && !isRangeTooBig) {										// If x reaches max shooting area without find a y value, the rage is too small, so increment it.
+				flexibleOffset += 10 * Math.sin(Math.toRadians(getRangeTheta()));
+				flexibleRange += 10 * Math.cos(Math.toRadians(getRangeTheta()));
+				if(rangeNormal()> 225){
+					isRangeTooBig = true;
+					flexibleRange = range[1];
+					flexibleOffset = range[0];
+				}
 				return false;												//break the method, and retry until it works
+			}else if(x >= maxShootingArea && isRangeTooBig){
+				flexibleOffset -=  Math.sin(Math.toRadians(getRangeTheta()));
+				flexibleRange  -=  Math.cos(Math.toRadians(getRangeTheta()));
+				return false;
 			}
-			System.out.println("      x:"+x+" - "+yUpperCircle+" - "+yLowerCircle);
+			//System.out.println("      x:"+x+" - "+yUpperCircle+" - "+yLowerCircle);
 			
 		} while(! (isInShootingArea(x) && (isInShootingArea(yUpperCircle) || isInShootingArea(yLowerCircle))));
 		
@@ -149,6 +165,6 @@ public class Launcher {
 
 	//return the eucledian distance the projectile travel.
 	private double rangeNormal() {
-		return Math.sqrt(Math.pow(flexibleRange[0], 2) + Math.pow(flexibleRange[1], 2));
+		return Math.sqrt(Math.pow(flexibleOffset, 2) + Math.pow(flexibleRange, 2));
 	}
 }
