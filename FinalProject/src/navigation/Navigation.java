@@ -35,8 +35,8 @@ public class Navigation {
 	
 	// The following variables describe the range where the robot is considered to be far from a wall.
 	// The units are cm-based coordinates
-	private final double DETECTION_AREA_MIN = 10;
-	private final double DETECTION_AREA_MAX = 6 * Measurements.TILE - DETECTION_AREA_MIN;
+	private final double DETECTION_AREA_MIN = Measurements.TILE/2;
+	private final double DETECTION_AREA_MAX = 10 * Measurements.TILE - DETECTION_AREA_MIN;
 	
 	public Navigation(Odometer odo) {
 		this.odo = odo;
@@ -158,7 +158,7 @@ public class Navigation {
 		ObstacleDetection detection = ObstacleDetection.getObstacleDetection();
 		while(Driver.isMoving()) {
 			// Obstacle detection is used if the robot is far from its destination and not near a wall.
-			//if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 2 * Measurements.TILE && !nearWall()) {
+			if (euclideanDistance(odo.getX(), odo.getY(), x, y) > 2 * Measurements.TILE && !nearWall()) {
 				if (detection.isLeftObstacle()) {
 					avoider = new BangBangAvoider(Direction.LEFT, odo);
 					avoider.avoid();
@@ -168,7 +168,7 @@ public class Navigation {
 					avoider.avoid();
 					avoider = null;
 				}
-			//}
+			}
 			pause(100);
 		}
 	}

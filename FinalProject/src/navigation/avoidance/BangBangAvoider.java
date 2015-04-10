@@ -32,13 +32,12 @@ public class BangBangAvoider extends ObstacleAvoidance {
 	private final int LIVE_LOCK_MAX = 2;
 	private Direction lastDirection = null;
 
-	private final int DRIFT_RADIUS = 25;//35;//30;//25;	// drifting radius in cm
+	private final int DRIFT_RADIUS = 35;//25;//35;//30;//25;	// drifting radius in cm
 	private int DRIFT_COUNT = 0;
 	private final int DRIFT_MAX = 5;
 	
 	private final int TURN_AWAY_ANGLE = 30;	// turning angle for going away from wall.
 	private boolean turningAway = false;
-	private boolean jesusTakeTheWheel = false;
 	
 	private final int CORRIDOR_WIDTH = 10; // Space allowed between robot and a wall on each side.
 	
@@ -126,8 +125,6 @@ public class BangBangAvoider extends ObstacleAvoidance {
 			LIVE_LOCK_COUNT = 0;
 			DRIFT_COUNT = 0;
 			turningAway = false;
-			jesusTakeTheWheel = true;
-			
 			
 			Driver.setDrifting(false);
 			Driver.move(Direction.FWD);
@@ -139,10 +136,6 @@ public class BangBangAvoider extends ObstacleAvoidance {
 				turningAway = false;
 				Driver.move(Direction.FWD);
 //				Driver.turn(direction.opposite(), TURN_AWAY_ANGLE);
-			} 
-			else if (jesusTakeTheWheel) {
-				jesusTakeTheWheel = false;
-				Driver.move(3);
 			}
 			else {
 
@@ -160,7 +153,6 @@ public class BangBangAvoider extends ObstacleAvoidance {
 		else {
 			DRIFT_COUNT = 0;
 			turningAway = true;
-			jesusTakeTheWheel = false;
 			
 			//Driver.turn(direction.opposite(), TURN_AWAY_ANGLE);
 			faceAwayFromWall(direction);

@@ -94,7 +94,7 @@ public class Commander {
 		
 //--------------------------------------- RE-LOCALIZE ---------------------------------------
 		
-		//localization.doLocalization(0, 0, 0);
+		localization.doLocalization(0, 0, 0);
 		
 //--------------------------------------- VICTOIRE ---------------------------------------
 		
